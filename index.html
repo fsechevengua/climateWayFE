@@ -29,19 +29,19 @@
 			fill: none;
 			stroke: #000;
 		}
-		
+
 		.bar {
 			fill: orange;
 		}
-		
+
 		.bar:hover {
 			fill: orangered;
 		}
-		
+
 		.x.axis path {
 			display: none;
 		}
-		
+
 		.d3-tip {
 			line-height: 1;
 			font-weight: bold;
@@ -51,7 +51,7 @@
 			border-radius: 2px;
 		}
 		/* Creates a small triangle extender for the tooltip */
-		
+
 		.d3-tip:after {
 			box-sizing: border-box;
 			display: inline;
@@ -63,25 +63,25 @@
 			text-align: center;
 		}
 		/* Style northward tooltips differently */
-		
+
 		.d3-tip.n:after {
 			margin: -1px 0 0 0;
 			top: 100%;
 			left: 0;
 		}
-		
+
 		.line {
 			fill: none;
 			stroke: steelblue;
 			stroke-width: 1.5px;
 		}
-		
+
 		.grid path,
 		.grid line {
 			fill: none;
 			stroke: rgba(0, 0, 0, 0.25);
 		}
-		
+
 		.table {
 			display: table;
 			border-collapse: separate;
@@ -89,7 +89,7 @@
 			border: 1px solid red;
 			margin-top: 20px;
 		}
-		
+
 		.svg-container {
 			display: inline-block;
 			position: relative;
@@ -99,23 +99,23 @@
 			vertical-align: top;
 			overflow: hidden;
 		}
-		
+
 		.grid-charts {
 			width: 100%;
 			margin-left: 50px;
 		}
-		
+
 		.svg-content-responsive {
 			display: inline-block;
 			position: absolute;
 			top: 10px;
 			left: 0;
 		}
-		
+
 		td:hover {
 			background-color: #C0C0C0;
 		}
-		
+
 		#timeSeriesArea1,
 		#timeSeriesArea2,
 		#timeSeriesArea3,
@@ -125,7 +125,7 @@
 			height: 200px;
 			border: 1px solid #aaaaaa;
 		}
-		
+
 		#timeSeriesArea5 {
 			margin-top: 20px;
 			width: 950px;
@@ -133,31 +133,31 @@
 			text-align: center;
 			border: 1px solid #aaaaaa;
 		}
-		
+
 		.drag-text {
 			line-height: 600px;
-  			text-align: center;
+			text-align: center;
 			font-size: 30px;
 		}
-		
+
 		.larger-icon {
 			font-size: 40px;
 			position: absolute;
 		}
-		
+
 		.celcius-icon {
 			color: #FFFFFF;
 		}
-		
+
 		.celcius-data {
 			display: inline;
 		}
-		
+
 		.celcius-cell {
 			background-color: #3c3636;
 			width: 250px;
 		}
-		
+
 		.weather-icon {
 			font-size: 50px;
 			padding-left: 130px;
@@ -165,7 +165,7 @@
 			color: #FFFFFF;
 			position: absolute;
 		}
-		
+
 		.wind-icon {
 			font-size: 80px;
 			color: #FFFFFF;
@@ -173,7 +173,7 @@
 			padding-top: 20px;
 			position: absolute;
 		}
-		
+
 		.chemistry-icon {
 			font-size: 30px;
 			color: #FFFFFF;
@@ -181,39 +181,39 @@
 			padding-top: 40px;
 			position: absolute;
 		}
-		
+
 		.location-font {
 			font-size: 20px;
 			color: #FFFFFF;
 			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 		}
-		
+
 		.celcius-font {
 			display: inline;
 			font-size: 25px;
 			color: #FFFFFF;
 			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 		}
-		
+
 		.units-font {
 			font-size: 15px;
 			color: #FFFFFF;
 			font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 		}
-		
+
 		.station-title {
 			padding-top: 20px;
 			padding-left: 50px;
 			margin-bottom: 50px;
 			background: #74AFAD;
 		}
-		
+
 		.nav-tabs>li {
 			float: none;
 			display: inline-block;
 			zoom: 1;
 		}
-		
+
 		.nav-tabs {
 			text-align: center;
 		}
@@ -228,15 +228,22 @@
 		}
 
 		@-webkit-keyframes spin2 {
-			from { -webkit-transform: rotate(0deg);}
-			to { -webkit-transform: rotate(360deg);}
+			from {
+				-webkit-transform: rotate(0deg);
+			}
+			to {
+				-webkit-transform: rotate(360deg);
+			}
 		}
 
 		@keyframes spin {
-			from { transform: scale(1) rotate(0deg);}
-			to { transform: scale(1) rotate(360deg);}
+			from {
+				transform: scale(1) rotate(0deg);
+			}
+			to {
+				transform: scale(1) rotate(360deg);
+			}
 		}
-
 	</style>
 </head>
 
@@ -249,14 +256,23 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-5">
+		<div class="col-sm-4">
+		</div>
+		<div class="col-sm-1">
+			<div class="form-group">
+				<select class="form-control" id="selectdatemode">
+					<option value="DD/MM/YYYY">Dia</option>
+					<option value="MM/YYYY">Mês</option>
+					<option value="YYYY">Ano</option>
+				</select>
+			</div>
 		</div>
 		<div class="col-sm-2">
 			<div class="form-group">
 				<div class="input-group date" id="datetimepicker1">
-					<input type="text" class="form-control" />
+					<input type="text" class="form-control"/>
 					<span class="input-group-addon">
-				<span class="glyphicon glyphicon-calendar"></span>
+						<span class="glyphicon glyphicon-calendar"></span>
 					</span>
 				</div>
 			</div>
@@ -335,7 +351,7 @@
 						</div>
 						<div id="minicharttest3" class="minichartWindCO2"></div>
 					</td>
-					<td id="grid4"  data-sensor="7" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+					<td id="grid4" data-sensor="7" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
 						<div class="location-font">Luminosidade</div>
 						<div style="margin-left:60px" class="progress-bar"></div>
 						<div style="padding-top:20px">

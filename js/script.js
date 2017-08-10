@@ -167,7 +167,26 @@ $('#datetimepicker1').datetimepicker({
 
 var changeDate = 0;
 
+$("#selectdatemode").on('change', function() {
+    var format = $("#selectdatemode option:selected").val();
+    var viewModes = {};
+    viewModes['DD/MM/YYYY'] = 'days';
+    viewModes['YYYY'] = 'years';
+    viewModes['MM/YYYY'] = 'years';
+    $('#datetimepicker1').data('DateTimePicker').format(format);
+    $('#datetimepicker1').data('DateTimePicker').viewMode(viewModes[format]);
+});
+
 $("#datetimepicker1").on("dp.change", function(e) {
+    e.preventDefault();
+    var formatConverter = {};
+    formatConverter['YYYY'] = 'YYYY'
+    formatConverter['MM/YYYY'] = 'YYYY-MM';
+    formatConverter['DD/MM/YYYY'] = 'YYYY-MM-DD';
+
+    var format = $("#datetimepicker1").data("DateTimePicker").date()._f;
+    var date = $("#datetimepicker1").data("DateTimePicker").date().format(formatConverter[format]);
+
     if (changeDate === 0) {
         changeDate = 1;
         generateLightnessBar(200);
@@ -175,7 +194,8 @@ $("#datetimepicker1").on("dp.change", function(e) {
         changeDate = 0;
         generateLightnessBar(560);
     }
-    weatherDate = $.format.date(new Date(e.date), "yyyy-MM-dd");
+
+    weatherDate = date;
 
     loadTableData();
 });
@@ -292,7 +312,6 @@ function getWeatherDataFromResult(data, sensorCode){
 };
 
 function initApp(){
-    
     var weatherDataCall = $.ajax({
         url: "http://localhost:9000/weatherData",
         type: "GET",
