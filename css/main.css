@@ -1,0 +1,232 @@
+.axis path,
+.axis line {
+	fill: none;
+	stroke: #000;
+}
+
+.app {
+	margin-top: 60px;
+}
+
+.bar {
+	fill: orange;
+}
+
+.bar:hover {
+	fill: orangered;
+}
+
+.x.axis path {
+	display: none;
+}
+
+.title-project {
+	margin-left: 400px !important;
+}
+
+.d3-tip {
+	line-height: 1;
+	font-weight: bold;
+	padding: 12px;
+	background: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	border-radius: 2px;
+}
+
+
+/* Creates a small triangle extender for the tooltip */
+
+.d3-tip:after {
+	box-sizing: border-box;
+	display: inline;
+	font-size: 10px;
+	line-height: 1;
+	color: rgba(0, 0, 0, 0.8);
+	content: "\25BC";
+	position: absolute;
+	text-align: center;
+}
+
+
+/* Style northward tooltips differently */
+
+.d3-tip.n:after {
+	margin: -1px 0 0 0;
+	top: 100%;
+	left: 0;
+}
+
+.line {
+	fill: none;
+	stroke: steelblue;
+	stroke-width: 1.5px;
+}
+
+.grid path,
+.grid line {
+	fill: none;
+	stroke: rgba(0, 0, 0, 0.25);
+}
+
+.table {
+	display: table;
+	border-collapse: separate;
+	border-color: grey;
+	border: 1px solid red;
+	margin-top: 20px;
+}
+
+.svg-container {
+	display: inline-block;
+	position: relative;
+	width: 100%;
+	padding-bottom: 100%;
+	/* aspect ratio */
+	vertical-align: top;
+	overflow: hidden;
+}
+
+.grid-charts {
+	width: 100%;
+	margin-left: 50px;
+}
+
+.svg-content-responsive {
+	display: inline-block;
+	position: absolute;
+	top: 10px;
+	left: 0;
+}
+
+td:hover {
+	background-color: #C0C0C0;
+}
+
+#timeSeriesArea1,
+#timeSeriesArea2,
+#timeSeriesArea3,
+#timeSeriesArea4 {
+	margin-top: 20px;
+	width: 950px;
+	height: 200px;
+	border: 1px solid #aaaaaa;
+}
+
+#timeSeriesArea5 {
+	margin-top: 20px;
+	width: 950px;
+	height: 710px;
+	text-align: center;
+	border: 1px solid #aaaaaa;
+}
+
+.drag-text {
+	line-height: 600px;
+	text-align: center;
+	font-size: 30px;
+}
+
+.larger-icon {
+	font-size: 40px;
+	position: absolute;
+}
+
+.celcius-icon {
+	color: #FFFFFF;
+}
+
+.celcius-data {
+	display: inline;
+}
+
+.celcius-cell {
+	background-color: #3c3636;
+	width: 250px;
+}
+
+.weather-icon {
+	font-size: 50px;
+	padding-left: 130px;
+	padding-top: 20px;
+	color: #FFFFFF;
+	position: absolute;
+}
+
+.wind-icon {
+	font-size: 80px;
+	color: #FFFFFF;
+	padding-right: 130px;
+	padding-top: 20px;
+	position: absolute;
+}
+
+.chemistry-icon {
+	font-size: 30px;
+	color: #FFFFFF;
+	padding-left: 110px;
+	padding-top: 40px;
+	position: absolute;
+}
+
+.location-font {
+	font-size: 20px;
+	color: #FFFFFF;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.celcius-font {
+	display: inline;
+	font-size: 25px;
+	color: #FFFFFF;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.units-font {
+	font-size: 15px;
+	color: #FFFFFF;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.station-title {
+	padding-top: 20px;
+	padding-left: 50px;
+	margin-bottom: 50px;
+	background: #74AFAD;
+}
+
+.nav-tabs>li {
+	float: none;
+	display: inline-block;
+	zoom: 1;
+}
+
+.nav-tabs {
+	text-align: center;
+}
+
+.minichartWindCO2 {
+	margin-top: 25px;
+}
+
+.glyphicon-refresh-animate {
+	-animation: spin 1s infinite linear;
+	-webkit-animation: spin2 1s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}
+
+@keyframes spin {
+	from {
+		transform: scale(1) rotate(0deg);
+	}
+	to {
+		transform: scale(1) rotate(360deg);
+	}
+}
