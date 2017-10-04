@@ -213,6 +213,10 @@ td:hover {
 	-webkit-animation: spin2 1s infinite linear;
 }
 
+#step-chart {
+	margin-top: 100px;
+}
+
 @-webkit-keyframes spin2 {
 	from {
 		-webkit-transform: rotate(0deg);
