@@ -1,47 +1,22 @@
 $(document).ready(function () {
     $('.thermal-amplitude').click(function (e) {
         $('.weather-app').load("/view/thermal-amplitude.html", function () {
-            generateStepChart();
-            generateHeatmap();
+            var margin = {
+                top: 50,
+                right: 0,
+                bottom: 100,
+                left: 30
+            };
+            var configYear = { 
+                // 146 pixel cada mês
+                width: (146*12) - margin.left - margin.right,
+                height: 300 - margin.top - margin.bottom,
+                days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+                months: ['Ja', 'Fe', 'Ma', 'Ab', 'Ma', 'Ju', 'Ju', 'Ag', 'Se', 'Ou', 'No', 'De']
+            };
+            generateHeatmap("#heat-map-months", configYear, true);
         });
     });
-
-    function generateStepChart() {
-        /**
-         * c > 35
-         * c <= 35 && c >= 25
-         * c <= 25 && c >= 12
-         * c < 12
-         */
-        var chart = c3.generate({
-            bindto: "#step-chart",
-            data: {
-                columns: [
-                    ['MuitoQuente', 0, 0, 0, 0, 41],
-                    ['Quente', 0, 0, 0, 32, 0],
-                    ['Normal', 0, 0, 22, 0, 0],
-                    ['Frio', 5, 4, 7, 0, 0]
-                ],
-                types: {
-                    MuitoQuente: 'area-step',
-                    Quente: 'area-step',
-                    Normal: 'area-step',
-                    Frio: 'area-step'
-                },
-                colors: {
-                    'data': function (d) {
-                        return d.value < 150 ? '#f44242' : '#62f441';
-                    }
-                }
-            },
-            axis: {
-                x: {
-                    type: 'category',
-                    categories: ['11:00', '12:00', '13:00', '14:00', '15:00']
-                }
-            }
-        });
-    }
 
     function getThermalAmplitude() {
         var weatherDataCall = $.ajax({
@@ -58,45 +33,42 @@ $(document).ready(function () {
     }
 
     // Monta o Heatmap
-    function generateHeatmap() {
+    function generateHeatmap(id, config, isMonths) {
         var margin = {
-                top: 50,
-                right: 0,
-                bottom: 100,
-                left: 30
-            },
-            width = 600 - margin.left - margin.right,
-            height = 300 - margin.top - margin.bottom,
-            gridSize = Math.floor(width / 24),
-            legendElementWidth = gridSize * 2,
-            buckets = 9,
-            colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"], // alternatively colorbrewer.YlGnBu[9]
-            days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-            months = ['Ja', 'Fe', 'Ma', 'Ab', 'Ma', 'Ju', 'Ju', 'Ag', 'Se', 'Ou', 'No', 'De'];
+            top: 50,
+            right: 0,
+            bottom: 100,
+            left: 30
+        },
+        gridSize = 23,
+        legendElementWidth =  gridSize * 2,
+        colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"], // alternatively colorbrewer.YlGnBu[9]
+        buckets = 9;       
 
         //Monta espaços dos meses
-        var j = 0;
-        var k = 1;
-        for (i = 1; i <= 12; i++) {
-            if (i == 1) {
-                months.splice.apply(months, [1, 0].concat(collumnsInThisMonth(1)));
-            } else {
-                j += collumnsInThisMonth(i).length + i - k;
-                k++;
-                months.splice.apply(months, [j, 0].concat(collumnsInThisMonth(i)));
+        if(isMonths){
+            var j = 0;
+            var k = 1;
+            for (i = 1; i <= 12; i++) {
+                if (i == 1) {
+                    config.months.splice.apply(config.months, [1, 0].concat(collumnsInThisMonth(1)));
+                } else {
+                    j += collumnsInThisMonth(i).length + i - k;
+                    k++;
+                    config.months.splice.apply(config.months, [j, 0].concat(collumnsInThisMonth(i)));
+                }
             }
         }
-
         datasets = ["data.tsv", "data2.tsv"];
 
-        var svg = d3.select("#chart").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+        var svg = d3.select(id).append("svg")
+            .attr("width", config.width + margin.left + margin.right)
+            .attr("height", config.height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         var dayLabels = svg.selectAll(".dayLabel")
-            .data(days)
+            .data(config.days)
             .enter().append("text")
             .text(function (d) {
                 return d;
@@ -112,7 +84,7 @@ $(document).ready(function () {
             });
 
         var timeLabels = svg.selectAll(".timeLabel")
-            .data(months)
+            .data(config.months)
             .enter().append("text")
             .text(function (d) {
                 return d;
@@ -129,31 +101,35 @@ $(document).ready(function () {
 
         var data = [{
             day: 1,
-            hour: 1,
+            week: 1,
             value: 100
         }, {
             day: 1,
-            hour: 2,
+            week: 2,
             value: 100
         }, {
             day: 1,
-            hour: 3,
+            week: 3,
             value: 100
         }, {
             day: 1,
-            hour: 4,
+            week: 4,
             value: 100
         }, {
             day: 1,
-            hour: 5,
+            week: 5,
             value: 100
         }, {
             day: 1,
-            hour: 6,
+            week: 6,
             value: 100
         }, {
             day: 1,
-            hour: 7,
+            week: 7,
+            value: 100
+        }, {
+            day: 3,
+            week: 45,
             value: 100
         }];
 
@@ -164,25 +140,25 @@ $(document).ready(function () {
                 })])
                 .range(colors);
 
-            var cards = svg.selectAll(".hour")
+            var cards = svg.selectAll(".week")
                 .data(data, function (d) {
-                    return d.day + ':' + d.hour;
+                    return d.day + ':' + d.week;
                 });
 
             cards.append("title");
 
             cards.enter().append("rect")
                 .attr("x", function (d) {
-                    return (d.hour - 1) * gridSize;
+                    return (d.week - 1) * gridSize;
                 })
                 .attr("y", function (d) {
                     return (d.day - 1) * gridSize;
                 })
                 .attr("rx", 4)
                 .attr("ry", 4)
-                .attr("class", "hour bordered day-cell")
+                .attr("class", "week bordered day-cell")
                 .attr("data-cell", function (d) {
-                    return d.day + '-' + d.hour;
+                    return d.day + '-' + d.week;
                 })
                 .attr("width", gridSize)
                 .attr("height", gridSize)
@@ -211,7 +187,7 @@ $(document).ready(function () {
                 .attr("x", function (d, i) {
                     return legendElementWidth * i;
                 })
-                .attr("y", height)
+                .attr("y", config.height)
                 .attr("width", legendElementWidth)
                 .attr("height", gridSize / 2)
                 .style("fill", function (d, i) {
@@ -226,7 +202,7 @@ $(document).ready(function () {
                 .attr("x", function (d, i) {
                     return legendElementWidth * i;
                 })
-                .attr("y", height + gridSize);
+                .attr("y", config.height + gridSize);
 
             legend.exit().remove();
         };
@@ -254,9 +230,22 @@ $(document).ready(function () {
         var collumnsInMonth = Math.ceil(numberOfDaysInCurrentMonth / 7);
         return Array(collumnsInMonth).join(".").split(".");
     }
-
+    
     $('body').on('click', '.day-cell', function () {
-        $this = $(this);
-        alert($this.data('cell'));
+        var margin = {
+            top: 50,
+            right: 0,
+            bottom: 100,
+            left: 30
+        };
+        var configDay = { 
+            // 146 pixel cada mês
+            width: 600 - margin.left - margin.right,
+            height: 300 - margin.top - margin.bottom,
+            days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+            months: ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"],
+        };
+
+        generateHeatmap("#heat-map-months", configDay, false);
     });
 });
