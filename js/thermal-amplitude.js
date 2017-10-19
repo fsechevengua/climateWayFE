@@ -1,19 +1,34 @@
 $(document).ready(function () {
+
+    var margin = {
+        top: 50,
+        right: 0,
+        bottom: 100,
+        left: 30
+    };
+
+    var legendHeight = 70;
+
+    var configYear = { 
+        // 146 pixel cada mês
+        width: (146*12) - margin.left - margin.right,
+        height: 240 - margin.top - margin.bottom,
+        days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+        months: ['Ja', 'Fe', 'Ma', 'Ab', 'Ma', 'Ju', 'Ju', 'Ag', 'Se', 'Ou', 'No', 'De']
+    };
+
+    var configDay = { 
+        // 146 pixel cada mês
+        width: 600 - margin.left - margin.right,
+        height: 300 - margin.top - margin.bottom,
+        days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+        months: ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"],
+    };
+
     $('.thermal-amplitude').click(function (e) {
         $('.weather-app').load("/view/thermal-amplitude.html", function () {
-            var margin = {
-                top: 50,
-                right: 0,
-                bottom: 100,
-                left: 30
-            };
-            var configYear = { 
-                // 146 pixel cada mês
-                width: (146*12) - margin.left - margin.right,
-                height: 300 - margin.top - margin.bottom,
-                days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-                months: ['Ja', 'Fe', 'Ma', 'Ab', 'Ma', 'Ju', 'Ju', 'Ag', 'Se', 'Ou', 'No', 'De']
-            };
+            $.getScript("js/meteogram.js", function () {
+            });
             generateHeatmap("#heat-map-months", configYear, true);
         });
     });
@@ -131,6 +146,10 @@ $(document).ready(function () {
             day: 3,
             week: 45,
             value: 100
+        }, {
+            day: 7,
+            week: 1,
+            value: 100
         }];
 
         var heatmapChart = function (tsvFile) {
@@ -187,7 +206,7 @@ $(document).ready(function () {
                 .attr("x", function (d, i) {
                     return legendElementWidth * i;
                 })
-                .attr("y", config.height)
+                .attr("y", config.height+legendHeight)
                 .attr("width", legendElementWidth)
                 .attr("height", gridSize / 2)
                 .style("fill", function (d, i) {
@@ -202,26 +221,12 @@ $(document).ready(function () {
                 .attr("x", function (d, i) {
                     return legendElementWidth * i;
                 })
-                .attr("y", config.height + gridSize);
+                .attr("y", config.height + gridSize+legendHeight);
 
             legend.exit().remove();
         };
 
         heatmapChart(datasets[0]);
-
-        var datasetpicker = d3.select("#dataset-picker").selectAll(".dataset-button")
-            .data(datasets);
-
-        datasetpicker.enter()
-            .append("input")
-            .attr("value", function (d) {
-                return "Dataset " + d
-            })
-            .attr("type", "button")
-            .attr("class", "dataset-button")
-            .on("click", function (d) {
-                heatmapChart(d);
-            });
     };
     //Retorna um array com as colunas dos meses para o heatmap
     function collumnsInThisMonth(month) {
@@ -232,20 +237,15 @@ $(document).ready(function () {
     }
     
     $('body').on('click', '.day-cell', function () {
-        var margin = {
-            top: 50,
-            right: 0,
-            bottom: 100,
-            left: 30
-        };
-        var configDay = { 
-            // 146 pixel cada mês
-            width: 600 - margin.left - margin.right,
-            height: 300 - margin.top - margin.bottom,
-            days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-            months: ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"],
-        };
-
+        d3.selectAll("svg").remove();
+        $(".back-heatmonth").remove();
         generateHeatmap("#heat-map-months", configDay, false);
+        $("#heat-map-months").append("<button type='button' class='btn btn-default back-heatmonth'>Voltar</button>");
+    });
+
+    $('body').on('click', '.back-heatmonth', function () {
+        d3.selectAll("svg").remove();
+        $(".back-heatmonth").remove();
+        generateHeatmap("#heat-map-months", configYear, false);
     });
 });
