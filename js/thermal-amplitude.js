@@ -25,16 +25,16 @@ $(document).ready(function () {
         months: ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"],
     };
 
+    generateHeatmap("#heat-map-months", configYear, true);
+
     $('.thermal-amplitude').click(function (e) {
         $('.weather-app').load("/view/thermal-amplitude.html", function () {
-            $.getScript("js/meteogram.js", function () {
-            });
             generateHeatmap("#heat-map-months", configYear, true);
         });
     });
 
     // Monta o Heatmap
-    async function generateHeatmap(id, config, isMonths) {
+    async function generateHeatmap(id, config, isMonths, dateCell) {
         var margin = {
             top: 50,
             right: 0,
@@ -99,16 +99,29 @@ $(document).ready(function () {
         .attr("class", function (d, i) {
             return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis");
         });
+
+        let heatmapFetch;
+        let data;
         
-        let heatmapFetch = $.ajax({
-            url: "http://localhost:9000/heatmap",
-            type: "GET",
-        });
-    
-        let data = await Promise.resolve(heatmapFetch).then(function (data) {
+        // Pega dados para o calendário
+        if(isMonths){
+            heatmapFetch = $.ajax({
+                url: "http://localhost:9000/heatmap",
+                type: "GET",
+            });
+        }
+        else{
+            // Pega os dados para mensal
+            heatmapFetch = $.ajax({
+                url: "http://localhost:9000/heatmap?date=" + dateCell,
+                type: "GET",
+            });
+        }
+
+        data = await Promise.resolve(heatmapFetch).then(function (data) {
             return data;
         });
-
+        
         var heatmapChart = function (tsvFile) {
             var colorScale = d3.scale.quantile()
                 .domain([0, buckets - 1, d3.max(data, function (d) {
@@ -138,6 +151,9 @@ $(document).ready(function () {
                 .attr("rx", 4)
                 .attr("ry", 4)
                 .attr("class", "week bordered day-cell")
+                .attr("data-date", function (d) {
+                    return d.fullDate;
+                })
                 .attr("data-cell", function (d) {
                     return d.day + '-' + d.week;
                 })
@@ -147,9 +163,12 @@ $(document).ready(function () {
 
             texts.enter().append('text')
                 .text( function (d) { 
-                    return d.date;
+                    return d.dateDay;
                 })
                 .attr("class", "week bordered day-cell")
+                .attr("data-date", function (d) {
+                    return d.fullDate;
+                })
                 .attr("x", function (d) {
                     return (d.week) * gridSize - 20;
                 })
@@ -214,8 +233,23 @@ $(document).ready(function () {
     $('body').on('click', '.day-cell', function () {
         d3.selectAll("svg").remove();
         $(".back-heatmonth").remove();
-        generateHeatmap("#heat-map-months", configDay, false);
-        $("#heat-map-months").append("<button type='button' class='btn btn-default back-heatmonth'>Voltar</button>");
+        
+        $('#meteogram').append(
+            '<div class="row">' +
+                '<div class="col-sm-12">' +
+                    '<div id="container" style="width: 800px; height: 310px">' +
+                        '<div style="text-align: center" id="loading">' +
+                            '<i class="fa fa-spinner fa-spin"></i> Loading data from external source' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>'
+        );
+
+        $.getScript("js/meteogram.js", function () {
+        });
+
+        $("#heat-map-months").append("<button type='button' class='btn btn-default back-heatmonth'><i class='fa fa-arrow-left'></i> Voltar</button>");
     });
 
     $('body').on('click', '.back-heatmonth', function () {
