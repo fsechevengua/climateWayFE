@@ -1,10 +1,11 @@
 var dataX = [];
-var weatherDate = $.format.date(new Date(), "yyyy-MM-dd");
+//var weatherDate = $.format.date(new Date(), "yyyy-MM-dd");
+var weatherDate = "2017-09-18";
 var weatherCache;
 var sensorOrder = [2, 6, 32, 3, 7, 7, 7, 4, 34, 33, 7];
 
 $(document).ready(function () {
-    initApp();
+    makeWeatherData();
 });
 //Gerar gráfico em diálogo
 var dialogData;
@@ -147,6 +148,15 @@ function drop(ev, ui) {
     var sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
     getWeatherData(weatherVarName, sensor_code, ev.currentTarget.id);
 }
+
+$('body').on('click', '.clear-drag-area', function(){
+    viewData = [];
+    $('.chart-area').html(
+        '<div id="timeSeriesArea5" ondrop="drop(event)" ondragover="allowDrop(event)" class="drag-text">'+
+            '<span>Drag Here to generate chart</span>'+
+        '</div>'
+    );
+});
 
 function generateLightnessBar(data) {
     var light = data;
@@ -313,12 +323,17 @@ function getWeatherDataFromResult(data, sensorCode) {
     return result;
 };
 
-function initApp() {
+function makeWeatherData(dateParam) {
+
+    if(!dateParam){
+        dateParam = weatherDate;
+    }
+
     var weatherDataCall = $.ajax({
         url: "http://localhost:9000/weatherData",
         type: "GET",
         data: {
-            date: weatherDate,
+            date: dateParam,
         }
     });
 

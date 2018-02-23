@@ -57,13 +57,13 @@
 				</div>
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
-						<li><a class='thermal-amplitude'>Amplitude Térmica</a></li>
+						<li><a class='thermal-amplitude' style="display:none;">Amplitude Térmica</a></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
 		<div class='weather-app'>
-			<div class="row">
+			<div class="row" style="display:none;">
 				<div class="col-sm-4">
 				</div>
 				<div class="col-sm-1">
@@ -86,43 +86,15 @@
 					</div>
 				</div>
 			</div>
-			<div>
-				<ul class="nav nav-tabs" id="dayslist" role="tablist">
-					<li role="presentation">
-						<a href="#dayone" aria-controls="dayone" role="tab" data-toggle="tab"></a>
-					</li>
-					<li role="presentation">
-						<a href="#daytwo" aria-controls="daytwo" role="tab" data-toggle="tab"></a>
-					</li>
-					<li role="presentation">
-						<a href="#daythree" aria-controls="daythree" role="tab" data-toggle="tab"></a>
-					</li>
-					<li role="presentation">
-						<a href="#dayfour" aria-controls="dayfour" role="tab" data-toggle="tab"></a>
-					</li>
-					<li role="presentation">
-						<a href="#dayfive" aria-controls="dayfive" role="tab" data-toggle="tab"></a>
-					</li>
-					<li role="presentation">
-						<a href="#daysix" aria-controls="daysix" role="tab" data-toggle="tab"></a>
-					</li>
-					<li role="presentation" class="active">
-						<a href="#dayseven" aria-controls="dayseven" role="tab" data-toggle="tab"></a>
-					</li>
-				</ul>
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane fade" id="dayone"></div>
-					<div role="tabpanel" class="tab-pane fade" id="daytwo"></div>
-					<div role="tabpanel" class="tab-pane fade" id="daythree"></div>
-					<div role="tabpanel" class="tab-pane fade" id="dayfour"></div>
-					<div role="tabpanel" class="tab-pane fade" id="dayfive"></div>
-					<div role="tabpanel" class="tab-pane fade" id="daysix"></div>
-					<div role="tabpanel" class="tab-pane fade in active" id="dayseven"></div>
-				</div>
-			</div>
-			<div class="row" style="overflow: auto">
+			<div class="row text-center" style="overflow: auto">
 				<div class="col-sm-12">
 					<div id="heat-map-months"></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-8"></div>
+				<div class="col-sm-2">
+					<button class="btn btn-primary clear-drag-area">Clear</button>
 				</div>
 			</div>
 			<div style="float:left">
@@ -266,7 +238,6 @@
 								<div id="chart-modal">
 									<script type="text/javascript" src="js/script.js"></script>
 									<script type="text/javascript" src="js/thermal-amplitude.js"></script>
-									<script type="text/javascript" src="js/meteogram.js"></script>										
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

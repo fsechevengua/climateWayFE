@@ -11,7 +11,7 @@ $(document).ready(function () {
 
     var configYear = { 
         // 146 pixel cada mês
-        width: (146*12) - margin.left - margin.right,
+        width: (110*12) - margin.left - margin.right,
         height: 240 - margin.top - margin.bottom,
         days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
         months: ['Ja', 'Fe', 'Ma', 'Ab', 'Ma', 'Ju', 'Ju', 'Ag', 'Se', 'Ou', 'No', 'De']
@@ -91,13 +91,14 @@ $(document).ready(function () {
             return d;
         })
         .attr("x", function (d, i) {
-            return i * gridSize;
+            return i * (gridSize-6) + 45;
         })
         .attr("y", 0)
         .style("text-anchor", "middle")
-        .attr("transform", "translate(" + gridSize / 2 + ", -6)")
+        .attr("transform", "translate(0, -6)")
         .attr("class", function (d, i) {
-            return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis");
+            //return ((i >= 7 && i <= 16) ? "timeLabel mono axis axis-worktime" : "timeLabel mono axis");
+            return "timeLabel mono axis axis-worktime";
         });
 
         let heatmapFetch;
@@ -121,7 +122,7 @@ $(document).ready(function () {
         data = await Promise.resolve(heatmapFetch).then(function (data) {
             return data;
         });
-        
+
         var heatmapChart = function (tsvFile) {
             var colorScale = d3.scale.quantile()
                 .domain([0, buckets - 1, d3.max(data, function (d) {
@@ -139,9 +140,12 @@ $(document).ready(function () {
                 return d.day + ':' + d.week;
             });
 
-            cards.append("title");
+            svg.selectAll(".week")
+            .data(data, function (d) {
+                return d.day + ':' + d.week;
+            });
 
-            cards.enter().append("rect")
+            var cardsEnter = cards.enter().append("rect")
                 .attr("x", function (d) {
                     return (d.week - 1) * gridSize;
                 })
@@ -160,11 +164,12 @@ $(document).ready(function () {
                 .attr("width", gridSize)
                 .attr("height", gridSize)
                 .style("fill", colors[0]);
-
+        
             texts.enter().append('text')
                 .text( function (d) { 
-                    return d.dateDay;
+                    return  d.dateDay;
                 })
+                .attr('pointer-events', 'none')
                 .attr("class", "week bordered day-cell")
                 .attr("data-date", function (d) {
                     return d.fullDate;
@@ -181,11 +186,13 @@ $(document).ready(function () {
                 .style("fill", function (d) {
                     return colorScale(d.value);
                 });
+                
+            cardsEnter.append("title").text((d) => d.value);
 
             cards.select("title").text(function (d) {
-                return d.value;
+                return "Temperatura: " + Math.round(d.value) + "C°";
             });
-
+            
             cards.exit().remove();
 
             var legend = svg.selectAll(".legend")
@@ -231,25 +238,10 @@ $(document).ready(function () {
     }
     
     $('body').on('click', '.day-cell', function () {
-        d3.selectAll("svg").remove();
-        $(".back-heatmonth").remove();
-        
-        $('#meteogram').append(
-            '<div class="row">' +
-                '<div class="col-sm-12">' +
-                    '<div id="container" style="width: 800px; height: 310px">' +
-                        '<div style="text-align: center" id="loading">' +
-                            '<i class="fa fa-spinner fa-spin"></i> Loading data from external source' +
-                        '</div>' +
-                    '</div>' +
-                '</div>' +
-            '</div>'
-        );
-
-        $.getScript("js/meteogram.js", function () {
-        });
-
-        $("#heat-map-months").append("<button type='button' class='btn btn-default back-heatmonth'><i class='fa fa-arrow-left'></i> Voltar</button>");
+        var $this = $(this);
+        var date = $this.data('date').substr(0,10);
+        weatherDate = $this.data('date').substr(0,10);
+        makeWeatherData(date);
     });
 
     $('body').on('click', '.back-heatmonth', function () {
@@ -270,11 +262,5 @@ $(document).ready(function () {
         var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
         // Return array of year and week number
         return weekNo;
-    }
-
-    let heatmapData = [];
-    
-    function getHeatmapData(type){
-        
     }
 });

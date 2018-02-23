@@ -155,9 +155,8 @@ td:hover {
 .wind-icon {
 	font-size: 80px;
 	color: #FFFFFF;
-	padding-right: 130px;
-	padding-top: 20px;
 	position: absolute;
+	margin-left: 100px;
 }
 
 .chemistry-icon {
@@ -215,6 +214,14 @@ td:hover {
 
 #step-chart {
 	margin-top: 100px;
+}
+
+.day-cell{
+	cursor: pointer;
+}
+
+rect.day-cell:hover {
+    fill: green!important;
 }
 
 @-webkit-keyframes spin2 {
