@@ -7,6 +7,7 @@ var sensorOrder = [2, 6, 32, 3, 7, 7, 7, 4, 34, 33, 7];
 $(document).ready(function () {
     makeWeatherData();
 });
+
 //Gerar gráfico em diálogo
 var dialogData;
 var dataYDialog;
@@ -48,7 +49,7 @@ function generateChartDialog(DropAreaId, chartType, dataY) {
 };
 
 //Trocar tipo de gráfico
-$(".chart-type").on('change', function () {
+/*$(".chart-type").on('change', function () {
     $("select option:selected").each(function () {
         var dataWihoutLabel = dataYDialog.splice(1, dataYDialog.length);
         c3.generate({
@@ -81,8 +82,11 @@ $(".chart-type").on('change', function () {
             }
         });
     });
-});
+});*/
 
+$(".chart-type").on('change', function () {
+    generateChartDrop('timeSeriesArea5', $(this).val(), new Array);
+});
 
 //Cruzamento de dados
 var viewData = [];
@@ -98,7 +102,8 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
         data: {
             x: 'x',
             xFormat: '%H:%M',
-            columns: viewData
+            columns: viewData,
+            type: chartType ? chartType : 'area'
         },
         zoom: {
             enabled: true
@@ -136,12 +141,34 @@ function allowDrop(ev) {
     ev.preventDefault();
 }
 
+$('.weather-cell').click( function(){
+    $this = $(this);
+    if(!$this.hasClass('cell-selected')){
+        $this.addClass('cell-selected');
+        $('.chart-area').html("<div id=\"timeSeriesArea5\" ondrop=\"drop(event)\" ondragover=\"allowDrop(event)\" class=\"drag-text\"><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>");
+        var gridNumber = $this.attr('id');
+        var weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
+        var sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
+        getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5');
+    } else {
+        var dataCellName = $this.find('.location-font').text();
+        for(var i = 0; i < viewData.length; i++){
+            if(viewData[i][0] == dataCellName){
+                viewData.splice(i,1);
+            }
+        }
+        generateChartDrop('timeSeriesArea5', "area", new Array);
+        $this.removeClass('cell-selected');
+    }
+})
+
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
 }
 
 function drop(ev, ui) {
     ev.preventDefault();
+    $('#'+ev.dataTransfer.getData("text")).addClass('cell-selected');
     $('.chart-area').html("<div id=\"timeSeriesArea5\" ondrop=\"drop(event)\" ondragover=\"allowDrop(event)\" class=\"drag-text\"><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>");
     var gridNumber = ev.dataTransfer.getData("text");
     var weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
@@ -150,6 +177,7 @@ function drop(ev, ui) {
 }
 
 $('body').on('click', '.clear-drag-area', function(){
+    $('.grid-charts').find('.weather-cell').removeClass('cell-selected');
     viewData = [];
     $('.chart-area').html(
         '<div id="timeSeriesArea5" ondrop="drop(event)" ondragover="allowDrop(event)" class="drag-text">'+

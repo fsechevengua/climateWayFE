@@ -92,16 +92,23 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-8"></div>
+				<div class="col-sm-6"></div>
 				<div class="col-sm-2">
 					<button class="btn btn-primary clear-drag-area">Clear</button>
+				</div>
+				<div class="col-sm-1">
+					<select class="form-control chart-type">
+						<option value="area" selected="selected">Line chart</option>
+						<option value="bar">Bar chart</option>
+						<option value="spline">Spline chart</option>
+					</select>
 				</div>
 			</div>
 			<div style="float:left">
 				<table class="table table-bordered grid-charts">
 					<tbody>
-						<tr height="150px" width="150px">
-							<td id="grid0" data-sensor="2" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+						<tr>
+							<td id="grid0" data-sensor="2" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Temperatura</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font celcius-data"></div>
@@ -109,7 +116,7 @@
 								</div>
 								<div id="minicharttest0"></div>
 							</td>
-							<td id="grid1" data-sensor="6" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+							<td id="grid1" data-sensor="6" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Pressao Atmosférica</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font pressure-data"></div>
@@ -117,7 +124,7 @@
 								</div>
 								<div id="minicharttest1"></div>
 							</td>
-							<td id="grid2" data-sensor="32" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+							<td id="grid2" data-sensor="32" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Umidade relativa do ar</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font humidity-data"></div>
@@ -126,8 +133,8 @@
 							</td>
 
 						</tr>
-						<tr height="150px">
-							<td id="grid3" data-sensor="3" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+						<tr>
+							<td id="grid3" data-sensor="3" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Vento</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font wind-direction-data"></div>
@@ -136,7 +143,7 @@
 								</div>
 								<div id="minicharttest3" class="minichartWindCO2"></div>
 							</td>
-							<td id="grid4" data-sensor="7" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+							<td id="grid4" data-sensor="7" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Luminosidade</div>
 								<div style="margin-left:60px" class="progress-bar"></div>
 								<div style="padding-top:20px">
@@ -146,7 +153,7 @@
 								<i class="units-font">UV</i>
 								<div id="minicharttest4"></div>
 							</td>
-							<td id="grid5" data-sensor="7" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+							<td id="grid5" data-sensor="7" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Concentração de CO2</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font co2-data"></div>
@@ -155,8 +162,8 @@
 								<div id="minicharttest5" class="minichartWindCO2"></div>
 							</td>
 						</tr>
-						<tr height="150px">
-							<td id="grid6" data-sensor="7" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+						<tr>
+							<td id="grid6" data-sensor="7" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Concentração de SO2</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font so2-data"></div>
@@ -164,7 +171,7 @@
 								</div>
 								<div id="minicharttest6"></div>
 							</td>
-							<td id="grid7" data-sensor="4" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+							<td id="grid7" data-sensor="4" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Material Particulado</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font pm-data"></div>
@@ -172,7 +179,7 @@
 								</div>
 								<div id="minicharttest7"></div>
 							</td>
-							<td id="grid8" data-sensor="34" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+							<td id="grid8" data-sensor="34" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Nível da Água</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font water-level-data"></div>
@@ -181,8 +188,8 @@
 								<div id="minicharttest8"></div>
 							</td>
 						</tr>
-						<tr height="150px">
-							<td id="grid9" data-sensor="33" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+						<tr>
+							<td id="grid9" data-sensor="33" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Precipitação</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font pricipitation-data"></div>
@@ -190,7 +197,7 @@
 								</div>
 								<div id="minicharttest9"></div>
 							</td>
-							<td id="grid10" data-sensor="7" draggable="true" ondragstart="drag(event)" data-toggle="modal" data-target="#myModal" class="center-chart celcius-cell">
+							<td id="grid10" data-sensor="7" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Concentração de CO</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font co-data"></div>
@@ -198,7 +205,7 @@
 								</div>
 								<div id="minicharttest10"></div>
 							</td>
-							<td class="center-chart celcius-cell">
+							<td class="center-chart weather-cell">
 								<div class="location-font">Chuva</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font raining-data"></div>

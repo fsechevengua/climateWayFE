@@ -17,14 +17,6 @@ $(document).ready(function () {
         months: ['Ja', 'Fe', 'Ma', 'Ab', 'Ma', 'Ju', 'Ju', 'Ag', 'Se', 'Ou', 'No', 'De']
     };
 
-    var configDay = { 
-        // 146 pixel cada mês
-        width: 600 - margin.left - margin.right,
-        height: 300 - margin.top - margin.bottom,
-        days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-        months: ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"],
-    };
-
     generateHeatmap("#heat-map-months", configYear, true);
 
     $('.thermal-amplitude').click(function (e) {

@@ -139,8 +139,13 @@ td:hover {
 	display: inline;
 }
 
-.celcius-cell {
+.weather-cell {
 	background-color: #3c3636;
+	width: 250px;
+}
+
+.cell-selected{
+	background-color: #8f7880;
 	width: 250px;
 }
 
