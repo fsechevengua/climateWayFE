@@ -3,6 +3,14 @@ var dataX = [];
 var weatherDate = "2017-09-18";
 var weatherCache;
 var sensorOrder = [2, 6, 32, 3, 7, 7, 7, 4, 34, 33, 7];
+var device = getUrlParameter('device');
+
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+};
 
 $(document).ready(function () {
     makeWeatherData();
@@ -84,7 +92,7 @@ function generateChartDialog(DropAreaId, chartType, dataY) {
     });
 });*/
 
-$(".chart-type").on('change', function () {
+$(document).on('change', ".chart-type", function () {
     generateChartDrop('timeSeriesArea5', $(this).val(), new Array);
 });
 
@@ -141,7 +149,7 @@ function allowDrop(ev) {
     ev.preventDefault();
 }
 
-$('.weather-cell').click( function(){
+$(document).on('click', '.weather-cell', function(){
     $this = $(this);
     if(!$this.hasClass('cell-selected')){
         $this.addClass('cell-selected');
@@ -176,7 +184,7 @@ function drop(ev, ui) {
     getWeatherData(weatherVarName, sensor_code, ev.currentTarget.id);
 }
 
-$('body').on('click', '.clear-drag-area', function(){
+$(document).on('click', '.clear-drag-area', function(){
     $('.grid-charts').find('.weather-cell').removeClass('cell-selected');
     viewData = [];
     $('.chart-area').html(
@@ -206,7 +214,7 @@ $('#datetimepicker1').datetimepicker({
 
 var changeDate = 0;
 
-$("#selectdatemode").on('change', function () {
+$(document).on('change', "#selectdatemode", function () {
     var format = $("#selectdatemode option:selected").val();
     var viewModes = {};
     viewModes['DD/MM/YYYY'] = 'days';
@@ -295,7 +303,7 @@ function getRaining() {
 }
 
 function loadTableData() {
-    // Line one 
+    // Line one
     $(".celcius-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[0])[1]);
     $(".pressure-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[1])[1]);
     $(".humidity-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[2])[1]);
@@ -362,6 +370,7 @@ function makeWeatherData(dateParam) {
         type: "GET",
         data: {
             date: dateParam,
+            device: device
         }
     });
 

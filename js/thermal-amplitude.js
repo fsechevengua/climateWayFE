@@ -9,12 +9,21 @@ $(document).ready(function () {
 
     var legendHeight = 70;
 
-    var configYear = { 
+    var configYear = {
         // 146 pixel cada mês
         width: (110*12) - margin.left - margin.right,
         height: 240 - margin.top - margin.bottom,
         days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
         months: ['Ja', 'Fe', 'Ma', 'Ab', 'Ma', 'Ju', 'Ju', 'Ag', 'Se', 'Ou', 'No', 'De']
+    };
+
+    var device = getUrlParameter('device');
+
+    function getUrlParameter(name) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     };
 
     generateHeatmap("#heat-map-months", configYear, true);
@@ -36,7 +45,7 @@ $(document).ready(function () {
         gridSize = 23,
         legendElementWidth =  gridSize * 2,
         colors = ["#ffffd9", "#edf8b1", "#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#253494", "#081d58"], // alternatively colorbrewer.YlGnBu[9]
-        buckets = 9;       
+        buckets = 9;
 
         //Monta espaços dos meses
         if(isMonths){
@@ -95,12 +104,15 @@ $(document).ready(function () {
 
         let heatmapFetch;
         let data;
-        
+
         // Pega dados para o calendário
         if(isMonths){
             heatmapFetch = $.ajax({
                 url: "http://localhost:9000/heatmap",
                 type: "GET",
+                data: {
+                    device: device
+                }
             });
         }
         else{
@@ -156,9 +168,9 @@ $(document).ready(function () {
                 .attr("width", gridSize)
                 .attr("height", gridSize)
                 .style("fill", colors[0]);
-        
+
             texts.enter().append('text')
-                .text( function (d) { 
+                .text( function (d) {
                     return  d.dateDay;
                 })
                 .attr('pointer-events', 'none')
@@ -178,13 +190,13 @@ $(document).ready(function () {
                 .style("fill", function (d) {
                     return colorScale(d.value);
                 });
-                
+
             cardsEnter.append("title").text((d) => d.value);
 
             cards.select("title").text(function (d) {
                 return "Temperatura: " + Math.round(d.value) + "C°";
             });
-            
+
             cards.exit().remove();
 
             var legend = svg.selectAll(".legend")
@@ -228,7 +240,7 @@ $(document).ready(function () {
         var collumnsInMonth = Math.ceil(numberOfDaysInCurrentMonth / 7);
         return Array(collumnsInMonth).join(".").split(".");
     }
-    
+
     $('body').on('click', '.day-cell', function () {
         var $this = $(this);
         var date = $this.data('date').substr(0,10);
