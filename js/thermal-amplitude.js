@@ -1,6 +1,20 @@
 $(document).ready(function () {
 
-    var margin = {
+    var sensorCodeObjects = [
+        {id:2, name:"Temperatura", measure: "C°"},
+        {id:6,name:"Pressão", measure:"bar"},
+        {id:32,name:"Umidade", measure:"?"},
+        {id:3,name:"Vento", measure:"°"},
+        {id:7,name:"Luminosidade", measure:"uv"},
+        {id:7,name:"CO2", measure:"ppm"},
+        {id:7,name:"SO2", measure:"ppm"},
+        {id:4,name:"Material Particulado", measure:"ppm"},
+        {id:34,name:"Nível da água", measure:"m"},
+        {id:33,name:"Precipitação", measure:"mm"},
+        {id:7,name:"CO", measure:"ppm"},
+    ];
+
+    var marginYear = {
         top: 50,
         right: 0,
         bottom: 100,
@@ -11,11 +25,19 @@ $(document).ready(function () {
 
     var configYear = {
         // 146 pixel cada mês
-        width: (110*12) - margin.left - margin.right,
-        height: 240 - margin.top - margin.bottom,
+        width: (110*12) - marginYear.left - marginYear.right,
+        height: 240 - marginYear.top - marginYear.bottom,
         days: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
         months: ['Ja', 'Fe', 'Ma', 'Ab', 'Ma', 'Ju', 'Ju', 'Ag', 'Se', 'Ou', 'No', 'De']
     };
+
+    function search(nameKey, prop, myArray){
+        for (var i=0; i < myArray.length; i++) {
+            if (myArray[i][prop] === nameKey) {
+                return myArray[i];
+            }
+        }
+    }
 
     var device = getUrlParameter('device');
 
@@ -26,16 +48,23 @@ $(document).ready(function () {
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     };
 
-    generateHeatmap("#heat-map-months", configYear, true);
+    generateHeatmap("#heat-map-months", configYear, true, 2);
 
-    $('.thermal-amplitude').click(function (e) {
+    /*$('.thermal-amplitude').click(function (e) {
         $('.weather-app').load("/view/thermal-amplitude.html", function () {
             generateHeatmap("#heat-map-months", configYear, true);
         });
+    });*/
+
+    $(document).on('change', ".heatmap-type", function () {
+        $("#heat-map-months").empty();
+        generateHeatmap("#heat-map-months", configYear, true, $(this).val());
     });
 
     // Monta o Heatmap
-    async function generateHeatmap(id, config, isMonths, dateCell) {
+    async function generateHeatmap(id, config, isMonths, sensorCode) {
+        var configHeatmap = jQuery.extend(true, {}, config);
+
         var margin = {
             top: 50,
             right: 0,
@@ -53,24 +82,24 @@ $(document).ready(function () {
             var k = 1;
             for (i = 1; i <= 12; i++) {
                 if (i == 1) {
-                    config.months.splice.apply(config.months, [1, 0].concat(collumnsInThisMonth(1)));
+                    configHeatmap.months.splice.apply(configHeatmap.months, [1, 0].concat(collumnsInThisMonth(1)));
                 } else {
                     j += collumnsInThisMonth(i).length + i - k;
                     k++;
-                    config.months.splice.apply(config.months, [j, 0].concat(collumnsInThisMonth(i)));
+                    configHeatmap.months.splice.apply(configHeatmap.months, [j, 0].concat(collumnsInThisMonth(i)));
                 }
             }
         }
         datasets = ["data.tsv", "data2.tsv"];
 
         var svg = d3.select(id).append("svg")
-            .attr("width", config.width + margin.left + margin.right)
-            .attr("height", config.height + margin.top + margin.bottom)
+            .attr("width", configHeatmap.width + margin.left + margin.right)
+            .attr("height", configHeatmap.height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         var dayLabels = svg.selectAll(".dayLabel")
-            .data(config.days)
+            .data(configHeatmap.days)
             .enter().append("text")
             .text(function (d) {
                 return d;
@@ -86,7 +115,7 @@ $(document).ready(function () {
             });
 
         var timeLabels = svg.selectAll(".timeLabel")
-        .data(config.months)
+        .data(configHeatmap.months)
         .enter().append("text")
         .text(function (d) {
             return d;
@@ -106,22 +135,14 @@ $(document).ready(function () {
         let data;
 
         // Pega dados para o calendário
-        if(isMonths){
-            heatmapFetch = $.ajax({
-                url: "http://localhost:9000/heatmap",
-                type: "GET",
-                data: {
-                    device: device
-                }
-            });
-        }
-        else{
-            // Pega os dados para mensal
-            heatmapFetch = $.ajax({
-                url: "http://localhost:9000/heatmap?date=" + dateCell,
-                type: "GET",
-            });
-        }
+        heatmapFetch = $.ajax({
+            url: "http://localhost:9000/heatmap",
+            type: "GET",
+            data: {
+                device: device,
+                sensorCode : sensorCode
+            }
+        });
 
         data = await Promise.resolve(heatmapFetch).then(function (data) {
             return data;
@@ -194,7 +215,10 @@ $(document).ready(function () {
             cardsEnter.append("title").text((d) => d.value);
 
             cards.select("title").text(function (d) {
-                return "Temperatura: " + Math.round(d.value) + "C°";
+                var name = search("sensorCode", "id", sensorCodeObjects);//sensorCodeObjects.find(x => x.id === sensorCode).name;
+                var measure = search("sensorCode", "measure", sensorCodeObjects);//sensorCodeObjects.find(x => x.id === sensorCode).measure;
+
+                return name+": " + Math.round(d.value) + measure;
             });
 
             cards.exit().remove();
@@ -211,7 +235,7 @@ $(document).ready(function () {
                 .attr("x", function (d, i) {
                     return legendElementWidth * i;
                 })
-                .attr("y", config.height+legendHeight)
+                .attr("y", configHeatmap.height+legendHeight)
                 .attr("width", legendElementWidth)
                 .attr("height", gridSize / 2)
                 .style("fill", function (d, i) {
@@ -226,7 +250,7 @@ $(document).ready(function () {
                 .attr("x", function (d, i) {
                     return legendElementWidth * i;
                 })
-                .attr("y", config.height + gridSize+legendHeight);
+                .attr("y", configHeatmap.height + gridSize+legendHeight);
 
             legend.exit().remove();
         };

@@ -56,42 +56,6 @@ function generateChartDialog(DropAreaId, chartType, dataY) {
     });
 };
 
-//Trocar tipo de gráfico
-/*$(".chart-type").on('change', function () {
-    $("select option:selected").each(function () {
-        var dataWihoutLabel = dataYDialog.splice(1, dataYDialog.length);
-        c3.generate({
-            bindto: "#chart-modal",
-            size: {
-                height: 600,
-                width: 950
-            },
-            data: {
-                x: 'x',
-                xFormat: '%H:%M',
-                columns: dialogData,
-                type: $(this).val()
-            },
-            zoom: {
-                enabled: true
-            },
-            axis: {
-                x: {
-                    type: 'timeseries',
-                    localtime: true,
-                    tick: {
-                        format: '%H:%M'
-                    },
-                    y: {
-                        max: Math.max.apply(Math, dataWihoutLabel) + 1,
-                        min: Math.min.apply(Math, dataWihoutLabel),
-                    }
-                }
-            }
-        });
-    });
-});*/
-
 $(document).on('change', ".chart-type", function () {
     generateChartDrop('timeSeriesArea5', $(this).val(), new Array);
 });
