@@ -29,10 +29,21 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="bootstrap/js/bootstrap.min.js"></script>
-	<script src="http://d3js.org/d3.v3.min.js"></script>
-	<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+	
+	<script data-require="d3@4.0.0" data-semver="4.0.0" src="https://d3js.org/d3.v4.js"></script>
+	<script>
+        d3version4 = d3;
+        window.d3 = null;
+    </script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script>
+        d3version3 = d3;
+        window.d3 = null;
+    </script>
+
+	<script src="js/d3.tip.v0.6.3.js"></script>
 	<script src="js/jquery-dateFormat.js"></script>
-	<script src="c3-0.4.11/c3.min.js"></script>
+	<script src="c3-0.4.11/c3.js"></script>
 	<script src="js/gradient-progress-bar.js"></script>
 
 	<script src="js/moment.js"></script>
@@ -56,7 +67,7 @@
 						<span class="icon-bar"></span>
 								<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
-          						</button>
+					</button>
 					<a class="navbar-brand title-project" href="">Weather Workstation</a>
 				</div>
 				<div id="navbar" class="collapse navbar-collapse">
@@ -91,25 +102,37 @@
 				</div>
 			</div>
 			<div class="row text-center">
-				<div class="col-sm-offset-5 col-sm-1">
-					<select class="form-control heatmap-type">
-						<option value="2" selected="selected">Temperatura</option>
-						<option value="6">Pressão</option>
-						<option value="32">Umidade</option>
-						<option value="3">Vento</option>
-						<option value="7">Luminosidade</option>
-						<option value="7">CO2</option>
-						<option value="7">SO2</option>
-						<option value="4">Material Particulado</option>
-						<option value="34">Nível da água</option>
-						<option value="33">Precipitação</option>
-						<option value="7">CO</option>
-					</select>
-				</div>
+				
 			</div>
 			<div class="row text-center" style="overflow: auto">
-				<div class="col-sm-12">
+				<div class="col-sm-6">
+						<div class="col-sm-offset-1 col-sm-2">
+							<select class="form-control heatmap-type">
+								<option value="2" selected="selected">Temperatura</option>
+								<option value="6">Pressão</option>
+								<option value="32">Umidade</option>
+								<option value="3">Vento</option>
+								<option value="7">Luminosidade</option>
+								<option value="7">CO2</option>
+								<option value="7">SO2</option>
+								<option value="4">Material Particulado</option>
+								<option value="34">Nível da água</option>
+								<option value="33">Precipitação</option>
+								<option value="7">CO</option>
+							</select>
+						</div>
+						<div class="col-sm-2">
+							<button class="btn btn-primary" id="refresh-heatmap">
+								<i class="glyphicon glyphicon-refresh"></i>
+							</button>
+						</div>
 					<div id="heat-map-months"></div>
+				</div>
+				<div class="col-sm-offset-1 col-sm-5">
+					<div id="spiral-chart">
+						
+					</div>
+					<script type="text/javascript" src="js/spiral.js"></script>
 				</div>
 			</div>
 			<div class="row">
@@ -123,6 +146,10 @@
 						<option value="bar">Bar chart</option>
 						<option value="spline">Spline chart</option>
 					</select>
+				</div>
+				<div class="col-sm-2">
+					<button type="button" class="btn btn-default show-media active">Média</button>
+					<button type="button" class="btn btn-default show-min-max active">Mínimo - Máximo</button>
 				</div>
 			</div>
 			<div style="float:left">
@@ -252,7 +279,7 @@
 								<div class="col-sm-5">
 									<div class="btn btn-mini" style="float:right;">
 										<select class="form-control chart-type">
-										<option value="area" selected="selected">Line chart</option>
+										<option value="line" selected="selected">Line chart</option>
 										<option value="bar">Bar chart</option>
 										<option value="spline">Spline chart</option>
 									</select>

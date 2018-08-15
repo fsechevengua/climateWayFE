@@ -1,3 +1,4 @@
+var appHost = window.location.host;
 var dataX = [];
 //var weatherDate = $.format.date(new Date(), "yyyy-MM-dd");
 var weatherDate = "2017-09-18";
@@ -60,22 +61,121 @@ $(document).on('change', ".chart-type", function () {
     generateChartDrop('timeSeriesArea5', $(this).val(), new Array);
 });
 
+function indexOfMax(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+
+    var max = arr[1];
+    var maxIndex = 0;
+
+    for (var i = 2; i < arr.length; i++) {
+        if (arr[i] > max) {
+            maxIndex = i;
+            max = arr[i];
+        }
+    }
+
+    return maxIndex - 1;
+}
+
+function indexOfMin(arr) {
+    if (arr.length === 0) {
+        return -1;
+    }
+
+    var min = arr[1];
+    var minIndex = 0;
+
+    for (var i = 2; i < arr.length; i++) {
+        if (arr[i] < min) {
+            minIndex = i;
+            min = arr[i];
+        }
+    }
+
+    return minIndex - 1;
+}
+
 //Cruzamento de dados
 var viewData = [];
 
 function generateChartDrop(DropAreaId, chartType, dataY) {
+    
     if (viewData.length == 0)
         viewData = [dataX];
-    var dataYAux = dataY.slice();
-    var dataWihoutLabel = dataYAux.splice(1, dataYAux.length);
+    //Remove o x para substituir pelo novo eixo x que veio do servidor
+    viewData.shift();
+    viewData.unshift(dataX);
+
+    let dataYAux = dataY.slice();
+    let dataWihoutLabel = dataYAux.splice(1, dataYAux.length);
     viewData.push(dataY);
+    
+    let total = 0;
+    let media = 0;
+    // Cálcula o total e média dos valores do gráfico
+
+    let medias = [];
+    for(let i = 1; i < viewData.length; i++)
+    {
+        total = viewData[i].reduce(function(Acumulador, valorAtual, indice) {
+            if(indice != 1)
+                return Acumulador + valorAtual;
+            else 
+                return valorAtual;
+        });
+        media = total / (viewData[1].length - 1);
+
+        medias.push({value: media, class: 'linha-media', text: 'Média: '+media.toFixed(2)});
+    }
+
+    //const min = indexOfMin(viewData[1]);
+    //const max = indexOfMax(viewData[1]);
+    
+    const max = d3version3.max(viewData, function(arrayMax,index) {
+        if(index != 0){
+            let dataYAuxMax = arrayMax.slice();
+            let dataWihoutLabelMax = dataYAuxMax.splice(1, dataYAuxMax.length);
+            return d3version3.max(dataWihoutLabelMax);
+        }
+    });
+
+    const min = d3version3.min(viewData, function(arrayMin, index) {
+        if(index != 0){
+            let dataYAuxMin = arrayMin.slice();
+            let dataWihoutLabelMin = dataYAuxMin.splice(1, dataYAuxMin.length);
+            return d3version3.min(dataWihoutLabelMin);
+        }
+    });
+
+    if(dataYAux[0] == 'Vento'){
+        dotDirecao = $('.c3-shapes-Vento circle')
+    }
+
     c3.generate({
         bindto: "#" + DropAreaId,
         data: {
             x: 'x',
-            xFormat: '%H:%M',
+            xFormat: '%Y/%m/%d %H:%M',
             columns: viewData,
-            type: chartType ? chartType : 'area'
+            type: chartType ? chartType : 'area',
+            color: function (color, d) {
+                return d.value === max ? "red" : (d.value === min ? "yellow" : "#1f77b4");
+            },
+        },
+        point: {
+            r: function(d) { 
+               return d.value === max || d.value === min ? 10 : 2;
+            }
+        },
+        grid: {
+            x: {
+                lines: [{value: '2017/09/18 01:20', text: '2017/09/18'}]
+            },
+            y: {
+                lines: medias//[{value: media, class: 'linha-media', text: 'Média: '+media.toFixed(2)}]
+            }
         },
         zoom: {
             enabled: true
@@ -85,7 +185,11 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
                 type: 'timeseries',
                 localtime: true,
                 tick: {
-                    format: '%H:%M'
+                    rotate: 75,
+                    format: '%d/%m/%Y %H:%M',
+                    culling: {
+                        max: 12 // the number of tick texts will be adjusted to less than this value
+                    }
                 },
                 y: {
                     max: Math.max.apply(Math, dataWihoutLabel) + 1,
@@ -94,10 +198,21 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
             }
         }
     });
+
+    d3.selectAll(".c3-shapes-Vento circle")
+    .attr('font-family', 'FontAwesome')
+    .attr('font-size', function(d) { return d.size+'em'} )
+    .text(function(d) { return '&#x2713;' });
+    
+
+    // Remove array vazio da estrutura
+    if(dataY !== undefined && dataY.length === 0){
+        viewData.pop(viewData.length);
+    }
 }
 
 $("#myModal").on('show.bs.modal', function (ev) {
-    d3.select("#chart-modal svg").remove();
+    d3version3.select("#chart-modal svg").remove();
     var gridNumber = ev.relatedTarget.id
     var weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
     var sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
@@ -106,30 +221,31 @@ $("#myModal").on('show.bs.modal', function (ev) {
 });
 
 $("#myModal").on('hidden.bs.modal', function () {
-    d3.select("#chart-modal svg").remove();
+    d3version3.select("#chart-modal svg").remove();
 });
 
 function allowDrop(ev) {
     ev.preventDefault();
 }
 
+// Gera gráfico ao clicar na célula
 $(document).on('click', '.weather-cell', function(){
     $this = $(this);
     if(!$this.hasClass('cell-selected')){
         $this.addClass('cell-selected');
         $('.chart-area').html("<div id=\"timeSeriesArea5\" ondrop=\"drop(event)\" ondragover=\"allowDrop(event)\" class=\"drag-text\"><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>");
-        var gridNumber = $this.attr('id');
-        var weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
-        var sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
+        const gridNumber = $this.attr('id');
+        const weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
+        const sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
         getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5');
     } else {
-        var dataCellName = $this.find('.location-font').text();
-        for(var i = 0; i < viewData.length; i++){
+        const dataCellName = $this.find('.location-font').text();
+        for(let i = 0; i < viewData.length; i++){
             if(viewData[i][0] == dataCellName){
                 viewData.splice(i,1);
             }
         }
-        generateChartDrop('timeSeriesArea5', "area", new Array);
+        generateChartDrop('timeSeriesArea5', "line", new Array);
         $this.removeClass('cell-selected');
     }
 })
@@ -219,7 +335,7 @@ document.addEventListener("getWeatherData", function (e) {
     dataX.push("x");
     dataX = dataX.concat(result.dates);
     if (result.target == "timeSeriesArea5") {
-        generateChartDrop(result.target, "area", dataY);
+        generateChartDrop(result.target, "line", dataY);
         $("#timeSeriesArea5").removeClass("drag-text");
     } else {
         generateChartDialog(result.target, "area", dataY);
@@ -227,14 +343,30 @@ document.addEventListener("getWeatherData", function (e) {
 });
 
 function getWeatherData(weatherVarName, sensor_code, target) {
+    // Considera range de data selecionado no heatmap
+    let dateRange = {
+        begin: '',
+        end: ''
+    }
+
+    // Coleta o início e o fim das datas marcadas no heatmap, se foram marcadas
+    if(typeof beginSelection != 'undefined' && typeof endSelection != 'undefined'){
+        if(beginSelection != ''){
+            dateRange.begin = beginSelection.data('date');
+            dateRange.end = endSelection.data('date');
+        }
+    }
+
     var weatherDataCall = $.ajax({
         url: "http://localhost:9000/dateWeatherData",
         type: "POST",
         data: {
             date: weatherDate,
-            sensor_code: sensor_code
+            sensor_code: sensor_code,
+            dateRange: dateRange
         }
     });
+    
     var targetCellDrop = target;
     var weatherName = weatherVarName;
     var weatherDataPromise = Promise.resolve(weatherDataCall).then(function (data) {
@@ -247,9 +379,8 @@ function getWeatherData(weatherVarName, sensor_code, target) {
         resObject.name = weatherName;
         data.payload.forEach(function (result) {
             resObject.data.push(result.payload);
-            resObject.dates.push($.format.date(result.ts, "HH:mm"));
+            resObject.dates.push($.format.date(result.ts, "yyyy/MM/dd HH:mm"));
         });
-
         //Trigger event to send data to create chart
         var event = new CustomEvent("getWeatherData", {
             "detail": resObject
@@ -324,6 +455,19 @@ function getWeatherDataFromResult(data, sensorCode) {
 };
 
 function makeWeatherData(dateParam) {
+    // Considera range de data selecionado no heatmap
+    let dateRange = {
+        begin: '',
+        end: ''
+    }
+
+    // Coleta o início e o fim das datas marcadas no heatmap, se foram marcadas
+    if(typeof beginSelection != 'undefined' && typeof endSelection != 'undefined'){
+        if(beginSelection != ''){
+            dateRange.begin = beginSelection.data('date');
+            dateRange.end = endSelection.data('date');
+        }
+    }
 
     if(!dateParam){
         dateParam = weatherDate;
@@ -334,7 +478,8 @@ function makeWeatherData(dateParam) {
         type: "GET",
         data: {
             date: dateParam,
-            device: device
+            device: device,
+            dateRange: dateRange
         }
     });
 
@@ -378,3 +523,25 @@ function makeWeatherData(dateParam) {
         loadTableData();
     });
 };
+
+$(document).on('click', ".show-media", function () {
+    const $this = $(this);
+    if(!$this.hasClass('active')){
+        $this.addClass('active');
+        $('.linha-media').show();
+    } else {
+        $this.removeClass('active');
+        $('.linha-media').hide();
+    }
+});
+
+$(document).on('click', ".show-min-max", function () {
+    const $this = $(this);
+    if(!$this.hasClass('active')){
+        $this.addClass('active');
+        $('.linha-min-max').show();
+    } else {
+        $this.removeClass('active');
+        $('.linha-min-max').hide();
+    }
+});

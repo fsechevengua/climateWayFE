@@ -225,10 +225,6 @@ td:hover {
 	cursor: pointer;
 }
 
-rect.day-cell:hover {
-    fill: green!important;
-}
-
 @-webkit-keyframes spin2 {
 	from {
 		-webkit-transform: rotate(0deg);

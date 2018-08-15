@@ -1,4 +1,6 @@
 (function (window) {
+
+    d3 = d3version3;
     'use strict';
 
     /*global define, module, exports, require */

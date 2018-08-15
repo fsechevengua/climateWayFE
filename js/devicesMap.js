@@ -1,4 +1,6 @@
 var map;
+var appHost = window.location.host;
+
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -30.0380933, lng: -51.1239859},
@@ -17,7 +19,8 @@ function loadDevices() {
                 map: map
             });
             marker.addListener('click', function() {
-                window.open("http://localhost:8081/app?device="+device.device_code);
+                
+                window.open("http://"+ appHost + "/app?device="+device.device_code);
             });
         });
     });
