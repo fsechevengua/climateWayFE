@@ -101,7 +101,6 @@ function indexOfMin(arr) {
 var viewData = [];
 
 function generateChartDrop(DropAreaId, chartType, dataY) {
-    
     if (viewData.length == 0)
         viewData = [dataX];
     //Remove o x para substituir pelo novo eixo x que veio do servidor
@@ -148,7 +147,7 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
             return d3version3.min(dataWihoutLabelMin);
         }
     });
-
+    
     if(dataYAux[0] == 'Vento'){
         dotDirecao = $('.c3-shapes-Vento circle')
     }
@@ -166,7 +165,7 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
         },
         point: {
             r: function(d) { 
-               return d.value === max || d.value === min ? 10 : 2;
+               return d.value === max || d.value === min ? 10 : 5;
             }
         },
         grid: {
@@ -199,10 +198,46 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
         }
     });
 
-    d3.selectAll(".c3-shapes-Vento circle")
-    .attr('font-family', 'FontAwesome')
-    .attr('font-size', function(d) { return d.size+'em'} )
-    .text(function(d) { return '&#x2713;' });
+    pontosVento = d3.selectAll(".c3-circles-Vento circle");
+    pontosVento[0].forEach(function (point, index) {
+        d3.select(".c3-circles-Vento").append('svg:foreignObject')
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("x", function(d){
+            return d3.select(point).attr("cx") - 10
+        })
+        .attr("y", function(d){
+            return d3.select(point).attr("cy") - 10
+        })
+        .append("xhtml:body")
+        .style("background-color", "transparent")
+        .html(function(d) { return '<i class="wi wi-wind towards-'+d.values[index].value+'-deg" style="color:#000000; font-size: 20px"></i>' });
+    });
+
+    $(document).on( 'scroll', function(){
+        pontosVento = d3.selectAll(".c3-circles-Vento circle");
+        pontosVento[0].forEach(function (point, index) {
+            d3.select(".c3-circles-Vento").append('svg:foreignObject')
+            .attr("width", 20)
+            .attr("height", 20)
+            .attr("x", function(d){
+                return d3.select(point).attr("cx") - 10
+            })
+            .attr("y", function(d){
+                return d3.select(point).attr("cy") - 10
+            })
+            .append("xhtml:body")
+            .style("background-color", "transparent")
+            .html(function(d) { return '<i class="wi wi-wind towards-'+d.values[index].value+'-deg" style="color:#000000; font-size: 20px"></i>' });
+        });
+    });
+
+    /*
+    .append('text')
+    .attr('font-family', 'weathericons')
+    .attr('font-size', function(d) { return 20+'em'} )
+    .text(function(d) { return '\uf001' });
+     */
     
 
     // Remove array vazio da estrutura
