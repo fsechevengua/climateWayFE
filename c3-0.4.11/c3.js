@@ -5708,6 +5708,7 @@
 
         $$.zoom = d3.behavior.zoom()
             .on("zoomstart", function () {
+                $('foreignObject').remove();
                 startEvent = d3.event.sourceEvent;
                 $$.zoom.altDomain = d3.event.sourceEvent.altKey ? $$.x.orgDomain() : null;
                 config.zoom_onzoomstart.call($$.api, d3.event.sourceEvent);
@@ -5724,6 +5725,7 @@
                 $$.redrawEventRect();
                 $$.updateZoom();
                 config.zoom_onzoomend.call($$.api, $$.x.orgDomain());
+                $(document).trigger('zoomStart');
             });
         $$.zoom.scale = function (scale) {
             return config.axis_rotated ? this.y(scale) : this.x(scale);

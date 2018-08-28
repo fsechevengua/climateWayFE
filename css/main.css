@@ -161,7 +161,8 @@ td:hover {
 	font-size: 80px;
 	color: #FFFFFF;
 	position: absolute;
-	margin-left: 100px;
+	margin-left: 50px;
+	margin-top: -50px;
 }
 
 .chemistry-icon {

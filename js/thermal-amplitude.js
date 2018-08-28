@@ -379,7 +379,7 @@ $(document).ready(function () {
                     $('.chart-area').html("<div id=\"timeSeriesArea5\" ondrop=\"drop(event)\" ondragover=\"allowDrop(event)\" class=\"drag-text\"><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>");
                     const weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
                     const sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
-                    getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5');
+                    getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5', 'heatmap');
                 });
                 makeWeatherData();
             }
@@ -390,7 +390,7 @@ $(document).ready(function () {
                 $('.chart-area').html("<div id=\"timeSeriesArea5\" ondrop=\"drop(event)\" ondragover=\"allowDrop(event)\" class=\"drag-text\"><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>");
                 const weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
                 const sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
-                getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5');
+                getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5', 'heatmap');
             });
             makeWeatherData(date);
         }

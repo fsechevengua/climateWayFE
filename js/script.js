@@ -3,8 +3,10 @@ var dataX = [];
 //var weatherDate = $.format.date(new Date(), "yyyy-MM-dd");
 var weatherDate = "2017-09-18";
 var weatherCache;
-var sensorOrder = [2, 6, 32, 3, 7, 7, 7, 4, 34, 33, 7];
+var sensorOrder = [2, 4, 3, 6, 7, 7, 7, 4, 34, 33, 7];
 var device = getUrlParameter('device');
+
+
 
 function getUrlParameter(name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -14,6 +16,7 @@ function getUrlParameter(name) {
 };
 
 $(document).ready(function () {
+    $('#data-hoje').html($.format.date(new Date(), "dd/MM/yyyy"));
     makeWeatherData();
 });
 
@@ -114,23 +117,21 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
     let total = 0;
     let media = 0;
     // Cálcula o total e média dos valores do gráfico
-
     let medias = [];
     for(let i = 1; i < viewData.length; i++)
     {
-        total = viewData[i].reduce(function(Acumulador, valorAtual, indice) {
-            if(indice != 1)
-                return Acumulador + valorAtual;
-            else 
-                return valorAtual;
-        });
-        media = total / (viewData[1].length - 1);
-
-        medias.push({value: media, class: 'linha-media', text: 'Média: '+media.toFixed(2)});
+        if(viewData[i].length > 0){
+            total = viewData[i].reduce(function(Acumulador, valorAtual, indice) {
+                if(indice != 1)
+                    return Acumulador + valorAtual;
+                else 
+                    return valorAtual;
+            });
+            media = total / (viewData[1].length - 1);
+    
+            medias.push({value: media, class: 'linha-media', text: 'Média: '+media.toFixed(2)});
+        }
     }
-
-    //const min = indexOfMin(viewData[1]);
-    //const max = indexOfMax(viewData[1]);
     
     const max = d3version3.max(viewData, function(arrayMax,index) {
         if(index != 0){
@@ -147,10 +148,6 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
             return d3version3.min(dataWihoutLabelMin);
         }
     });
-    
-    if(dataYAux[0] == 'Vento'){
-        dotDirecao = $('.c3-shapes-Vento circle')
-    }
 
     c3.generate({
         bindto: "#" + DropAreaId,
@@ -198,23 +195,9 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
         }
     });
 
-    pontosVento = d3.selectAll(".c3-circles-Vento circle");
-    pontosVento[0].forEach(function (point, index) {
-        d3.select(".c3-circles-Vento").append('svg:foreignObject')
-        .attr("width", 20)
-        .attr("height", 20)
-        .attr("x", function(d){
-            return d3.select(point).attr("cx") - 10
-        })
-        .attr("y", function(d){
-            return d3.select(point).attr("cy") - 10
-        })
-        .append("xhtml:body")
-        .style("background-color", "transparent")
-        .html(function(d) { return '<i class="wi wi-wind towards-'+d.values[index].value+'-deg" style="color:#000000; font-size: 20px"></i>' });
-    });
+    
 
-    $(document).on( 'scroll', function(){
+    $(document).on('zoomStart', function() {
         pontosVento = d3.selectAll(".c3-circles-Vento circle");
         pontosVento[0].forEach(function (point, index) {
             d3.select(".c3-circles-Vento").append('svg:foreignObject')
@@ -228,17 +211,25 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
             })
             .append("xhtml:body")
             .style("background-color", "transparent")
-            .html(function(d) { return '<i class="wi wi-wind towards-'+d.values[index].value+'-deg" style="color:#000000; font-size: 20px"></i>' });
+            .html(function(d) { return '<i class="wi wi-wind towards-'+getWeatherDataFromResult(weatherCache.payload, 7)[index + 1]+'-deg" style="color:#000000; font-size: 20px"></i>' });
         });
     });
-
-    /*
-    .append('text')
-    .attr('font-family', 'weathericons')
-    .attr('font-size', function(d) { return 20+'em'} )
-    .text(function(d) { return '\uf001' });
-     */
     
+    pontosVento = d3.selectAll(".c3-circles-Vento circle");
+    pontosVento[0].forEach(function (point, index) {
+        d3.select(".c3-circles-Vento").append('svg:foreignObject')
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("x", function(d){
+            return d3.select(point).attr("cx") - 10
+        })
+        .attr("y", function(d){
+            return d3.select(point).attr("cy") - 10
+        })
+        .append("xhtml:body")
+        .style("background-color", "transparent")
+        .html(function(d) { return '<i class="wi wi-wind towards-'+getWeatherDataFromResult(weatherCache.payload, 7)[index + 1]+'-deg" style="color:#000000; font-size: 20px"></i>' });
+    });
 
     // Remove array vazio da estrutura
     if(dataY !== undefined && dataY.length === 0){
@@ -436,12 +427,11 @@ function loadTableData() {
     // Line one
     $(".celcius-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[0])[1]);
     $(".pressure-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[1])[1]);
-    $(".humidity-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[2])[1]);
+    $(".humidity-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[2])[1] + '%');
 
     // Line two
-    $('.towards-90-deg').removeClass('towards-90-deg').addClass('towards-' + getWeatherDataFromResult(weatherCache.payload, sensorOrder[3])[0] + '-deg');
-    $(".wind-direction-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[3])[1]);
-    $(".wind-speed-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[3])[1]);
+    $('.towards-90-deg').removeClass('towards-90-deg').addClass('towards-' + getWeatherDataFromResult(weatherCache.payload, 7)[1] + '-deg');
+    $(".wind-direction-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[3])[1] + '(m/s)');
     generateLightnessBar(635);
     $(".luminocity-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[4])[1]);
     $(".uv-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[4])[1]);
