@@ -109,11 +109,27 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
     //Remove o x para substituir pelo novo eixo x que veio do servidor
     viewData.shift();
     viewData.unshift(dataX);
-
+    
     let dataYAux = dataY.slice();
     let dataWihoutLabel = dataYAux.splice(1, dataYAux.length);
-    viewData.push(dataY);
-    
+
+    // Verifica se não tem repetição de dados
+    var substituiu = false;
+    for(let i = 0; i < viewData.length; i++)
+    {
+        if(dataY[0] == viewData[i][0]){
+            viewData.splice(i, 1);
+            viewData.push(dataY);
+            substituiu = true;
+        } else {
+            // se for o último elemento do viewData, efetua push
+            if(i == (viewData.length-1) && !substituiu){
+                viewData.push(dataY);
+                break;
+            }
+        }
+    }
+
     let total = 0;
     let media = 0;
     // Cálcula o total e média dos valores do gráfico
