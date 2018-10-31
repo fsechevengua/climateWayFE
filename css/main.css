@@ -243,3 +243,18 @@ td:hover {
 		transform: scale(1) rotate(360deg);
 	}
 }
+
+#box-plot-modal {
+	position: relative;
+}
+  
+#box-plot-modal .modal-dialog {
+	position: fixed;
+	margin: 0;
+	padding: 10px;
+	width: 40%;
+}
+
+.modal-open {
+	overflow-y: auto;
+}

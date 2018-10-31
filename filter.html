@@ -1,0 +1,39 @@
+<div class="row">
+    <!--<div class="col-sm-2">-->
+        <!--<select name="tipo-dado[]" class="form-control input-sm tipo-dado">-->
+        <!--    <option selected="">Value</option>-->
+        <!--    <option>Date</option>-->
+    <!--    </select>-->
+    <!--</div>-->
+    <div class="col-sm-4">
+        <select name="tipo-valor[]"class="form-control input-sm tipo-valor">
+            <option value="Temperatura" selected="selected">Temperatura</option>
+            <option value="Pressão">Pressão</option>
+            <option value="Umidade relativa do ar">Umidade</option>
+            <option value="Vento">Vento</option>
+            <option value="Luminosidade">Luminosidade</option>
+            <option value="CO2">CO2</option>
+            <option value="SO2">SO2</option>
+            <option value="Material Particulado">Material Particulado</option>
+            <option value="Nível da água">Nível da água</option>
+            <option value="Precipitação">Precipitação</option>
+            <option value="CO">CO</option>
+        </select>
+    </div>
+    <div class="col-sm-2">
+        <select name="comparacao[]"  class="form-control input-sm comparacao">
+            <option selected="">></option>
+            <option><</option>
+            <option >>=</option>
+            <option><=</option>
+        </select>
+    </div>
+    <div class="col-sm-2">
+        <input type="text" class="form-control input-sm valor" name="valor-dado[]" placeholder="Valor">
+    </div>
+    <div class="col-sm-1">
+        <button type="button" class="btn btn-primary adicionar-form-filtro">
+            <i class="glyphicon glyphicon-plus"></i>
+        </button>
+    </div>
+</div>

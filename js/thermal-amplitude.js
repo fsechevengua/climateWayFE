@@ -239,9 +239,9 @@ $(document).ready(function () {
                 .style("stroke","#000000")
                 .style("stroke-width","4px");
                 const date = moment(d.fullDate).format('YYYY-MM-DD');
-
-                oldColor = d3version3.select("#b"+ date).style("fill");
-
+                if(d3version3.select("#b"+ date)[0][0] != null){
+                    oldColor = d3version3.select("#b"+ date).style("fill");
+                }
                 d3version3.select("#b"+ date)
                 .style("stroke","#000000")
                 .style("stroke-width","2px");

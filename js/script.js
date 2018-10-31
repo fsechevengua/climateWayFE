@@ -5,8 +5,9 @@ var weatherDate = "2017-09-18";
 var weatherCache;
 var sensorOrder = [2, 4, 3, 6, 7, 7, 7, 4, 34, 33, 7];
 var device = getUrlParameter('device');
-
-
+var _filtro = [];
+var _array_posicoes_filtradas = []; // Posições no viewData a serem filtradas
+var _elementos_filtrados = []; // Controle de filtro para cada dado
 
 function getUrlParameter(name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -100,6 +101,14 @@ function indexOfMin(arr) {
     return minIndex - 1;
 }
 
+
+var condicional = {
+    '>': function(a, b) { return  parseFloat(a) >  parseFloat(b) },
+    '<': function(a, b) { return  parseFloat(a) <  parseFloat(b) },
+    '>=': function(a, b) { return  parseFloat(a) >=  parseFloat(b) },
+    '<=': function(a, b) { return  parseFloat(a) <=  parseFloat(b) }
+};
+
 //Cruzamento de dados
 var viewData = [];
 
@@ -165,6 +174,51 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
         }
     });
 
+    // Filtro
+    if(dataY.length != 0){ // Não faz filtragem quando está tirando uma célula selecionada
+        const filtro = _filtro;
+        let array_posicoes_filtradas = [];//_array_posicoes_filtradas.slice();
+        filtro.forEach(function (elem, index) {
+            for(let i = 0; i < viewData.length; i++){
+                if(elem.tipoValor){
+                    // Busca array de valores do tipo de valor selecionado no filtro
+                    if(elem.tipoValor == viewData[i][0]){
+                        //filtra os valores
+                        for(let j = 1; j < viewData[i].length; j++){
+                            if(!condicional[elem.comparacao](viewData[i][j], elem.valor)){
+                                array_posicoes_filtradas.push(j);
+                            }
+                        }
+                    }
+                } else {
+                    inicio = moment(elem.dataInicio).format("YYYY/MM/DD h:mm")
+                    fim = moment(elem.dataFim).format("YYYY/MM/DD h:mm") 
+                    for(let i = 1; i < viewData[0].length; i++){
+                        if(!(viewData[0][i] >= inicio && viewData[0][i] <= fim)){
+                            //viewData[0].splice(i,1);
+                        }
+                    }                
+                }
+            }
+        });
+
+        if(array_posicoes_filtradas.length > 0){
+            _array_posicoes_filtradas = array_posicoes_filtradas.slice();
+        }
+        
+        // Remove as posições salvar no array de filtragem
+        let corretor = 0;
+        for(let j = 0; j < _array_posicoes_filtradas.length; j++){
+            for(let k = 0; k < viewData.length; k++ ){
+                if(_elementos_filtrados.indexOf(viewData[k][0]) == -1 ){
+                    viewData[k].splice(_array_posicoes_filtradas[j] - corretor, 1);
+                }
+            }
+            corretor++;
+        }
+        // Elementos controlam a saida e entrada de dados filtrados para corrigir problemas nos filtros
+        _elementos_filtrados.push(viewData[viewData.length-1][0]);
+    }
     c3.generate({
         bindto: "#" + DropAreaId,
         data: {
@@ -253,18 +307,18 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
     }
 }
 
-$("#myModal").on('show.bs.modal', function (ev) {
+/*$("#myModal").on('show.bs.modal', function (ev) {
     d3version3.select("#chart-modal svg").remove();
     var gridNumber = ev.relatedTarget.id
     var weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
     var sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
     $('#chart-modal').html("<div style='text-align: center; width: 950px; height: 600px; line-height: 600px; font-size: 30px;'><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>");
     getWeatherData(weatherVarName, sensor_code, "chart-modal");
-});
+});*/
 
-$("#myModal").on('hidden.bs.modal', function () {
+/*$("#myModal").on('hidden.bs.modal', function () {
     d3version3.select("#chart-modal svg").remove();
-});
+});*/
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -285,6 +339,12 @@ $(document).on('click', '.weather-cell', function(){
         for(let i = 0; i < viewData.length; i++){
             if(viewData[i][0] == dataCellName){
                 viewData.splice(i,1);
+                //percorre e remove da lista de filtrados o elemento descelecionado
+                for(let j = 0; j < _elementos_filtrados.length; j++){
+                    if(dataCellName == _elementos_filtrados[j]){
+                        _elementos_filtrados.splice(j,1);
+                    }
+                }
             }
         }
         generateChartDrop('timeSeriesArea5', "line", new Array);
@@ -326,13 +386,6 @@ function generateLightnessBar(data) {
         }
     });
 }
-
-$('#datetimepicker1').datetimepicker({
-    keepOpen: false,
-    format: 'DD/MM/YYYY',
-    useCurrent: true,
-    defaultDate: new Date()
-});
 
 var changeDate = 0;
 
@@ -390,7 +443,7 @@ function getWeatherData(weatherVarName, sensor_code, target) {
         begin: '',
         end: ''
     }
-
+    
     // Coleta o início e o fim das datas marcadas no heatmap, se foram marcadas
     if(typeof beginSelection != 'undefined' && typeof endSelection != 'undefined'){
         if(beginSelection != ''){
@@ -585,4 +638,103 @@ $(document).on('click', ".show-min-max", function () {
         $this.removeClass('active');
         $('.linha-min-max').hide();
     }
+});
+
+// Filtro
+$(document).on('click', ".modal-filtro", function () {
+    $("#filtro").modal();
+});
+
+// Filtro
+$(document).on('click', ".adicionar-form-filtro", function () {
+    $this = $(this);
+    countForms = $(this).length;
+    
+    $.get("filter.html", function(data){
+        $(".form-filtro").append(data);
+    });
+
+    // Remove os outros botões de adivionar duplicados;
+    $this.each(function( index ) {
+        if(index < countForms){
+            $(this).replaceWith("<button type='button' class='btn btn-danger remover-form-filtro' color='red'><i class='glyphicon glyphicon-remove'></i></button>");
+        }
+    });
+});
+
+$(document).on('click', ".remover-form-filtro", function () {
+    $(this).parents('.row').remove();
+});
+
+$(document).on('change', ".tipo-dado", function () {
+    $this = $(this);
+    if($this.val() == 'Date'){
+        $this.parents('.row').find('.tipo-valor').parent().hide();
+        $this.parents('.row').find('.comparacao').parent().replaceWith("<div class='col-md-4 data1'>" +
+            "<div class='form-group'>" +
+                "<input type='text' class='form-control input-sm data-inicio' id='datetimepicker6' />" +
+            "</div>" +
+        "</div>");
+        $this.parents('.row').find('.valor').parent().replaceWith("<div class='col-md-4 data2'>" +
+            "<div class='form-group'>" +
+                "<input type='text' class='form-control input-sm data-fim' id='datetimepicker7' />" +
+            "</div>" +
+        "</div>");
+    } else {
+        $this.parents('.row').find('.tipo-valor').parent().show();
+        $this.parents('.row').find('.data1').replaceWith("<div class='col-sm-2'>" +
+            "<select name='comparacao[]' class='form-control input-sm comparacao'>" +
+                "<option selected=''>></option>" +
+                "<option><</option>" +
+                "<option >>=</option>" +
+                "<option><=</option>" +
+                "<option>between</option>" +
+            "</select>" +
+        "</div>");
+        $this.parents('.row').find('.data2').replaceWith( "<div class='col-sm-2'>" +
+            "<input type='text' class='form-control input-sm valor' name='valor-dado[]' placeholder='Valor'>" +
+        "</div>");
+    }
+
+    $datetimepicker1 = $this.parents('.row').find('#datetimepicker6');
+    $datetimepicker2 = $this.parents('.row').find('#datetimepicker7');
+    $datetimepicker1.datetimepicker();
+    
+    $datetimepicker2.datetimepicker({
+        useCurrent: false
+    });
+    $datetimepicker1.on("dp.change", function (e) {
+        $datetimepicker2.data("DateTimePicker").minDate(e.date);
+    });
+    $datetimepicker2.on("dp.change", function (e) {
+        $datetimepicker1.data("DateTimePicker").maxDate(e.date);
+    });
+    
+
+});
+
+$(document).on('click', ".apply-filter", function () {
+    var $this = $(this);
+    var $btn = $(this).button('loading');
+
+    // Linhas do filtro
+    var $filtroLinhas = $this.parents('.modal-content').find('.form-filtro .row');
+    $filtroLinhas
+    var $filtro = [];
+    $filtroLinhas.each(function( index ) {
+        //if($(this).find('.tipo-dado').val() == 'Value'){
+            tipoValor = $(this).find('.tipo-valor option:selected').val();
+            comparacao = $(this).find('.comparacao option:selected').val();
+            valor = $(this).find('.valor').val();
+            $filtro.push( {tipoDado: 'Value', tipoValor : tipoValor, comparacao: comparacao, valor: valor} );
+        /*} else {
+            dataInicio = $(this).find('.data-inicio').val();
+            dataFim = $(this).find('.data-fim').val();
+            $filtro.push( {tipoDado: 'Date', dataInicio : dataInicio, dataFim: dataFim} );
+        }*/
+    });
+    _filtro = $filtro;
+
+    $btn.button('reset');
+    $('#filtro').modal('hide');
 });
