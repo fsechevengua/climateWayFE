@@ -5,17 +5,17 @@ let endSelection = '';
 $(document).ready(function () {
 
     var sensorCodeObjects = [
-        {id:2, name:"Temperatura", measure: "C°"},
-        {id:6,name:"Pressão", measure:"bar"},
-        {id:32,name:"Umidade", measure:"?"},
+        {id:0, name:"Temperatura", measure: "C°"},
+        {id:1,name:"Pressão", measure:"bar"},
+        {id:2,name:"Umidade", measure:"?"},
         {id:3,name:"Vento", measure:"°"},
-        {id:7,name:"Luminosidade", measure:"uv"},
-        {id:7,name:"CO2", measure:"ppm"},
-        {id:7,name:"SO2", measure:"ppm"},
-        {id:4,name:"Material Particulado", measure:"ppm"},
-        {id:34,name:"Nível da água", measure:"m"},
-        {id:33,name:"Precipitação", measure:"mm"},
-        {id:7,name:"CO", measure:"ppm"},
+        {id:4,name:"Luminosidade", measure:"uv"},
+        {id:5,name:"CO2", measure:"ppm"},
+        {id:6,name:"SO2", measure:"ppm"},
+        {id:6,name:"Material Particulado", measure:"ppm"},
+        {id:6,name:"Nível da água", measure:"m"},
+        {id:6,name:"Precipitação", measure:"mm"},
+        {id:6,name:"CO", measure:"ppm"},
     ];
 
     var marginYear = {
@@ -52,13 +52,7 @@ $(document).ready(function () {
         return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
     };
 
-    generateHeatmap("#heat-map-months", configYear, true, 2);
-
-    /*$('.thermal-amplitude').click(function (e) {
-        $('.weather-app').load("/view/thermal-amplitude.html", function () {
-            generateHeatmap("#heat-map-months", configYear, true);
-        });
-    });*/
+    generateHeatmap("#heat-map-months", configYear, true, 0);
 
     $(document).on('change', ".heatmap-type", function () {
         $("#heat-map-months").empty();
@@ -362,7 +356,7 @@ $(document).ready(function () {
         beginSelection = '';
         endSelection = '';
         $('#heat-map-months').empty();
-        generateHeatmap("#heat-map-months", configYear, true, 2);
+        generateHeatmap("#heat-map-months", configYear, true, 0);
     });
 
     $('body').on('click', '.day-cell', function () {
@@ -394,12 +388,6 @@ $(document).ready(function () {
             });
             makeWeatherData(date);
         }
-    });
-
-    $('body').on('click', '.back-heatmonth', function () {
-        d3version3.selectAll("svg").remove();
-        $(".back-heatmonth").remove();
-        generateHeatmap("#heat-map-months", configYear, false);
     });
 
     function getWeekNumber(d) {

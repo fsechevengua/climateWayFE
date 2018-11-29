@@ -50,7 +50,7 @@ async function makeSpiral() {
       type: "GET",
       data: {
           device: getUrlParameter('device'),
-          sensorCode : 2
+          sensorCode : 0
       }
     });
 
@@ -59,8 +59,8 @@ async function makeSpiral() {
     for (var i = 0; i < N; i++) {
       var currentDate = new Date(new Date().getFullYear(), 0, 1);
       
-      currentDate.setMonth(currentDate.getMonth() - 12);
-      currentDate.setDate(currentDate.getDate() + i + 8);
+      currentDate.setMonth(currentDate.getMonth());
+      currentDate.setDate(currentDate.getDate() + i + 7);
 
       someData.push({
         date: currentDate,
@@ -68,7 +68,6 @@ async function makeSpiral() {
         group: currentDate.getMonth()
       });
     }
-
     var timeScale = d3version4.scaleTime()
       .domain(d3version4.extent(someData, function(d){
         return d.date;

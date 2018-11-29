@@ -53,7 +53,7 @@
 	<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
 	<script src="js/bootstrap-switch.min.js"></script>
 	<script src="js/plotly.min.js"></script>
-
+	<script src="js/echarts.min.js"></script>
 	<script type="text/javascript" src="js/script.js"></script>
 	<script type="text/javascript" src="js/thermal-amplitude.js"></script>
 	<script type="text/javascript" src="js/box-plot-window.js"></script>
@@ -111,17 +111,17 @@
 				<div class="col-sm-6">
 						<div class="col-sm-offset-1 col-sm-2">
 							<select class="form-control heatmap-type">
-								<option value="2" selected="selected">Temperatura</option>
-								<option value="6">Pressão</option>
-								<option value="32">Umidade</option>
+								<option value="0" selected="selected">Temperatura</option>
+								<option value="1">Pressão</option>
+								<option value="2">Umidade</option>
 								<option value="3">Vento</option>
-								<option value="7">Luminosidade</option>
-								<option value="7">CO2</option>
-								<option value="7">SO2</option>
-								<option value="4">Material Particulado</option>
-								<option value="34">Nível da água</option>
-								<option value="33">Precipitação</option>
-								<option value="7">CO</option>
+								<option value="4">Luminosidade</option>
+								<option value="5">CO2</option>
+								<option value="6">SO2</option>
+								<option value="6">Material Particulado</option>
+								<option value="6">Nível da água</option>
+								<option value="6">Precipitação</option>
+								<option value="6">CO</option>
 							</select>
 						</div>
 						<div class="col-sm-1">
@@ -169,7 +169,7 @@
 				<table class="table table-bordered grid-charts">
 					<tbody>
 						<tr>
-							<td id="grid0" data-sensor="2" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
+							<td id="grid0" data-sensor="0" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Temperatura</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font celcius-data"></div>
@@ -177,7 +177,7 @@
 								</div>
 								<div id="minicharttest0"></div>
 							</td>
-							<td id="grid1" data-sensor="4" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
+							<td id="grid1" data-sensor="1" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Pressao Atmosférica</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font pressure-data"></div>
@@ -185,7 +185,7 @@
 								</div>
 								<div id="minicharttest1"></div>
 							</td>
-							<td id="grid2" data-sensor="3" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
+							<td id="grid2" data-sensor="2" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Umidade relativa do ar</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font humidity-data"></div>
@@ -195,7 +195,7 @@
 
 						</tr>
 						<tr>
-							<td id="grid3" data-sensor="6" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
+							<td id="grid3" data-sensor="3" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Vento</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font wind-direction-data"></div>
@@ -203,7 +203,7 @@
 								</div>
 								<div id="minicharttest3" class="minichartWindCO2"></div>
 							</td>
-							<td id="grid4" data-sensor="7" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
+							<td id="grid4" data-sensor="4" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Luminosidade</div>
 								<div style="margin-left:60px" class="progress-bar"></div>
 								<div style="padding-top:20px">
@@ -213,7 +213,7 @@
 								<i class="units-font">UV</i>
 								<div id="minicharttest4"></div>
 							</td>
-							<td id="grid5" data-sensor="7" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
+							<td id="grid5" data-sensor="5" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Concentração de CO2</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font co2-data"></div>
@@ -223,53 +223,13 @@
 							</td>
 						</tr>
 						<tr>
-							<td id="grid6" data-sensor="7" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
+							<td id="grid6" data-sensor="6" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Concentração de SO2</div>
 								<div style="padding-top:30px">
 									<div class="celcius-font so2-data"></div>
 									<i class="units-font">ppm</i>
 								</div>
 								<div id="minicharttest6"></div>
-							</td>
-							<td id="grid7" data-sensor="4" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Material Particulado</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font pm-data"></div>
-									<i class="units-font">ppm</i>
-								</div>
-								<div id="minicharttest7"></div>
-							</td>
-							<td id="grid8" data-sensor="34" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Nível da Água</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font water-level-data"></div>
-									<i class="units-font">m</i>
-								</div>
-								<div id="minicharttest8"></div>
-							</td>
-						</tr>
-						<tr>
-							<td id="grid9" data-sensor="33" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Precipitação</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font pricipitation-data"></div>
-									<i class="units-font">mm</i>
-								</div>
-								<div id="minicharttest9"></div>
-							</td>
-							<td id="grid10" data-sensor="7" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Concentração de CO</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font co-data"></div>
-									<i class="units-font">ppm</i>
-								</div>
-								<div id="minicharttest10"></div>
-							</td>
-							<td class="center-chart weather-cell">
-								<div class="location-font">Chuva</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font raining-data"></div>
-								</div>
 							</td>
 						</tr>
 					</tbody>

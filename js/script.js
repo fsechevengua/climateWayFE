@@ -1,9 +1,9 @@
 var appHost = window.location.host;
 var dataX = [];
 //var weatherDate = $.format.date(new Date(), "yyyy-MM-dd");
-var weatherDate = "2017-09-18";
+var weatherDate = "2018-10-31";
 var weatherCache;
-var sensorOrder = [2, 4, 3, 6, 7, 7, 7, 4, 34, 33, 7];
+var sensorOrder = [0, 1, 2, 3, 4, 5, 6];
 var device = getUrlParameter('device');
 var _filtro = [];
 var _array_posicoes_filtradas = []; // Posições no viewData a serem filtradas
@@ -118,9 +118,12 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
     //Remove o x para substituir pelo novo eixo x que veio do servidor
     viewData.shift();
     viewData.unshift(dataX);
-    
+
     let dataYAux = dataY.slice();
     let dataWihoutLabel = dataYAux.splice(1, dataYAux.length);
+
+    let dataXAux = dataX.slice();
+    let dataXWihoutLabel = dataXAux.splice(1, dataXAux.length);
 
     // Verifica se não tem repetição de dados
     var substituiu = false;
@@ -219,7 +222,10 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
         // Elementos controlam a saida e entrada de dados filtrados para corrigir problemas nos filtros
         _elementos_filtrados.push(viewData[viewData.length-1][0]);
     }
-    c3.generate({
+    
+    generateCanvasChart(dataWihoutLabel, dataXWihoutLabel);
+
+    /*c3.generate({
         bindto: "#" + DropAreaId,
         data: {
             x: 'x',
@@ -299,7 +305,7 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
         .append("xhtml:body")
         .style("background-color", "transparent")
         .html(function(d) { return '<i class="wi wi-wind towards-'+getWeatherDataFromResult(weatherCache.payload, 7)[index + 1]+'-deg" style="color:#000000; font-size: 20px"></i>' });
-    });
+    });*/
 
     // Remove array vazio da estrutura
     if(dataY !== undefined && dataY.length === 0){
@@ -326,6 +332,7 @@ function allowDrop(ev) {
 
 // Gera gráfico ao clicar na célula
 $(document).on('click', '.weather-cell', function(){
+    //generateCanvasChart();
     $this = $(this);
     if(!$this.hasClass('cell-selected')){
         $this.addClass('cell-selected');
@@ -474,7 +481,7 @@ function getWeatherData(weatherVarName, sensor_code, target) {
         resObject.name = weatherName;
         data.payload.forEach(function (result) {
             resObject.data.push(result.payload);
-            resObject.dates.push($.format.date(result.ts, "yyyy/MM/dd HH:mm"));
+            resObject.dates.push($.format.date(result.timestamp, "yyyy/MM/dd HH:mm"));
         });
         //Trigger event to send data to create chart
         var event = new CustomEvent("getWeatherData", {
@@ -548,6 +555,36 @@ function getWeatherDataFromResult(data, sensorCode) {
     return result;
 };
 
+function getWeatherDataFromResultCanvas(data, sensorCode){
+    var result = ['sample'];
+    $.each(data, function (i, val) {
+        switch(sensorCode){
+            case 0:
+                result.push(val.temperature);
+                break
+            case 1:
+                result.push(val.humidity);
+                break
+            case 2:
+                result.push(val.windSpeed);
+                break
+            case 3:
+                result.push(val.windDirection);
+                break
+            case 4:
+                result.push(val.precipitation);
+                break
+            case 5:
+                result.push(val.barometricPressure);
+                break
+            default:
+                result.push(val.solarIrradiation);
+                break
+        }
+    });
+    return result;
+}
+
 function makeWeatherData(dateParam) {
     // Considera range de data selecionado no heatmap
     let dateRange = {
@@ -580,8 +617,9 @@ function makeWeatherData(dateParam) {
     var weatherDataPromise = Promise.resolve(weatherDataCall).then(function (data) {
         weatherCache = data;
         var colors = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5'];
-        for (i = 0; i < 11; i++) {
-            var weatherDta = getWeatherDataFromResult(data.payload, sensorOrder[i]);
+        for (i = 0; i < 7; i++) {
+            var weatherDta = getWeatherDataFromResultCanvas(data.payload, sensorOrder[i]);
+            console.log(weatherDta);
             var minichart = c3.generate({
                 bindto: "#minicharttest" + i,
                 size: {
@@ -738,3 +776,64 @@ $(document).on('click', ".apply-filter", function () {
     $btn.button('reset');
     $('#filtro').modal('hide');
 });
+
+function generateCanvasChart(data, date){
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            position: function (pt) {
+                return [pt[0], '10%'];
+            }
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                restore: {},
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: date
+        },
+        yAxis: {
+            type: 'value',
+            boundaryGap: [0, '100%']
+        },
+        dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 10
+        }, {
+            start: 0,
+            end: 10,
+            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+            handleSize: '80%',
+            handleStyle: {
+                color: '#fff',
+                shadowBlur: 3,
+                shadowColor: 'rgba(0, 0, 0, 0.6)',
+                shadowOffsetX: 2,
+                shadowOffsetY: 2
+            }
+        }],
+        series: [
+            {
+                name:'Temperatura',
+                type:'line',
+                sampling: 'average',
+                itemStyle: {
+                    color: 'rgb(255, 70, 131)'
+                },
+                data: data
+            }
+        ]
+    };
+
+    var chart_id = document.getElementById('timeSeriesArea5');
+    var chart = echarts.init(chart_id);
+    
+    chart.setOption(option);
+}

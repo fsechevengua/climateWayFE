@@ -52,7 +52,7 @@ function removeAcento (text)
     return text;                 
 }
 
-$(document).on('click', '.chart-area', function(){
+$(document).on('dblclick', '.chart-area', function(){
     // reset modal if it isn't visible
     if(viewData.length > 0){
         if (!($('.modal.in').length)) {
@@ -70,8 +70,6 @@ $(document).on('click', '.chart-area', function(){
             $('.nav-tabs').empty();
             $('.tab-content').empty();
         });
-        // Box-plot
-        console.log(viewData);
 
         // Montagem das tabs na modal para recebimento dos box-plots
         for(let i = 1; i < viewData.length; i++){
