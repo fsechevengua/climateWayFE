@@ -19,6 +19,30 @@ function getUrlParameter(name) {
 $(document).ready(function () {
     $('#data-hoje').html($.format.date(new Date(), "dd/MM/yyyy"));
     makeWeatherData();
+    
+    // Inicia mix e max de cada variável
+    const getMinMaxCall = $.ajax({
+        url: "http://localhost:9000/min-max",
+        type: "get"
+    });
+    
+    Promise.resolve(getMinMaxCall).then(function (data) {
+        console.log(data);
+    });
+
+    /*const $minMax = $('.min-max-item');
+    const minMaxData = [];
+    const tiposData = ['temperatura', 'pressao', 'umidade', 'vento', 'luminosidade', 'co2', 'so2'];
+    
+    $this.button('loading');
+
+    $.each($minMax, function (i, $elem) {
+        minMaxData.push({
+            tipo: tiposData[i],
+            min : $(this).find('input[name="min"]').val(),
+            max : $(this).find('input[name="max"]').val(),
+        });
+    });*/
 });
 
 //Gerar gráfico em diálogo
@@ -111,6 +135,7 @@ var condicional = {
 
 //Cruzamento de dados
 var viewData = [];
+let viewDataCanvas = [];
 
 function generateChartDrop(DropAreaId, chartType, dataY) {
     if (viewData.length == 0)
@@ -222,8 +247,10 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
         // Elementos controlam a saida e entrada de dados filtrados para corrigir problemas nos filtros
         _elementos_filtrados.push(viewData[viewData.length-1][0]);
     }
-    
-    generateCanvasChart(dataWihoutLabel, dataXWihoutLabel);
+
+    viewDataCanvas.push(dataWihoutLabel);
+    console.log(viewDataCanvas);
+    generateCanvasChart(viewDataCanvas, dataXWihoutLabel);
 
     /*c3.generate({
         bindto: "#" + DropAreaId,
@@ -312,19 +339,6 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
         viewData.pop(viewData.length);
     }
 }
-
-/*$("#myModal").on('show.bs.modal', function (ev) {
-    d3version3.select("#chart-modal svg").remove();
-    var gridNumber = ev.relatedTarget.id
-    var weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
-    var sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
-    $('#chart-modal').html("<div style='text-align: center; width: 950px; height: 600px; line-height: 600px; font-size: 30px;'><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>");
-    getWeatherData(weatherVarName, sensor_code, "chart-modal");
-});*/
-
-/*$("#myModal").on('hidden.bs.modal', function () {
-    d3version3.select("#chart-modal svg").remove();
-});*/
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -545,13 +559,28 @@ $("li[role='presentation'] a").each(function (index) {
     this.append(now);
 });
 
+function getWeatherValue(result, code){
+    switch(code){
+        case 0:
+            return result.temperature != null ? result.temperature : 0;
+        case 1:
+            return result.humidity != null ? result.humidity : 0;
+        case 2:
+            return result.windSpeed != null ? result.windSpeed : 0;
+        case 3:
+            return result.windDirection != null ? result.windDirection : 0;
+        case 4:
+            return result.precipitation != null ? result.precipitation : 0;
+        case 5:
+            return result.barometricPressure != null ? result.barometricPressure : 0;
+        default:
+            return  result.solarIrradiation != null ? result.solarIrradiation : 0;
+    }
+}
 
 function getWeatherDataFromResult(data, sensorCode) {
     var result = ['sample'];
-    $.each(data, function (i, val) {
-        if (val.sensor_code == sensorCode)
-            result.push(val.payload);
-    });
+    result.push(Math.round(getWeatherValue(data[data.length-1], sensorCode) * 100) / 100);
     return result;
 };
 
@@ -617,42 +646,143 @@ function makeWeatherData(dateParam) {
     var weatherDataPromise = Promise.resolve(weatherDataCall).then(function (data) {
         weatherCache = data;
         var colors = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5'];
-        for (i = 0; i < 7; i++) {
-            var weatherDta = getWeatherDataFromResultCanvas(data.payload, sensorOrder[i]);
-            console.log(weatherDta);
-            var minichart = c3.generate({
-                bindto: "#minicharttest" + i,
-                size: {
-                    height: 60,
-                    width: 200
-                },
-                data: {
-                    columns: [
-                        weatherDta
-                    ],
-                    type: 'area-spline',
-                },
-                axis: {
-                    x: {
-                        show: false
-                    },
-                    y: {
-                        show: false
+        var stringFormatter = ['°C', 'bar', '%', 'm/s', 'uv', 'ppm', 'ppm']
+        const dataNames = ['Temperatura', 'Pressão Atmosférica', 'Umidade Relativa do Ar', 'Velocidade', 'Luminosidade', 'Concentração de CO2', 'Concentração de SO2']
+        const tiposData = ['temperatura', 'pressao', 'umidade', 'vento', 'luminosidade', 'co2', 'so2'];
+        
+        // Inicia mix e max de cada variável
+        const getMinMaxCall = $.ajax({
+            url: "http://localhost:9000/min-max",
+            type: "get"
+        });
+        
+        Promise.resolve(getMinMaxCall).then(function (data) {
+            for (i = 0; i < 7; i++) {
+                let windDirection;
+                if(i == 3){
+                    windDirection = { 
+                        name: 'Direção',
+                        type: 'gauge',
+                        center: ['60%', '35%'],
+                        radius: '22%',
+                        min: data[i].min,
+                        max: data[i].max,
+                        startAngle: 90,
+                        endAngle: -269.9999,
+                        splitNumber: 12,
+                        animation: 0,
+                        pointer: { 
+                            show: 1,
+                            length: '60%',
+                            width: 3
+                        },
+                        itemStyle: {
+                            normal: {
+                                color: '#00b0b0',
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                shadowBlur: 10,
+                                shadowOffsetX: 2,
+                                shadowOffsetY: 2
+                            }
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: [
+                                    [1, '#337ab7']
+                                ],
+                                width: 3
+                            }
+                        },
+                        splitLine: {
+                            show: 1,
+                            length: 6,
+                            lineStyle: {
+                                width: 1
+                            }
+                        },
+                        axisTick: {
+                            show: false
+                        }, 
+                        axisLabel: { 
+                            show: 1,
+                            distance: 1, 
+                            textStyle: {
+                                color: '#ffffff',
+                                fontSize: 6
+                            },
+                            formatter: function(t) {
+                                switch (t + '') {
+                                    case '0':
+                                        return '0';
+                                    case '60':
+                                        return '60';
+                                    case '120':
+                                        return '120';
+                                    case '180':
+                                        return '180';
+                                    case '240':
+                                        return '240';  
+                                    case '300':
+                                        return '300';                                   
+                                }
+                            }
+                        },
+                        detail: {
+                            offsetCenter: [0, 60],
+                            textStyle: {
+                                fontSize: 1
+                            }
+                        },
+                        data: [{
+                            value: getWeatherDataFromResult(weatherCache.payload, sensorOrder[4])[1],
+                            name: ''
+                        }]
                     }
-                },
-                legend: {
-                    show: false
-                },
-                color: {
-                    pattern: [colors[Math.floor(Math.random() * colors.length)]]
-                },
-                point: {
-                    show: false
                 }
 
-            });
-        }
-        loadTableData();
+                option = {
+                    tooltip : {
+                        formatter: "{a} <br/>{b} : {c}"
+                    },
+                    series: [
+                        {
+                            name: dataNames[i],
+                            type: 'gauge',
+                            min: data[i].min,
+                            max: data[i].max,
+                            axisLine: { // Grossura do círculo   
+                                lineStyle: {
+                                    width: 7
+                                }
+                            },
+                            pointer: { // seta
+                                width:4
+                            },
+                            detail: {
+                                formatter:'{value} '+stringFormatter[i],
+                                textStyle: {
+                                    fontSize: 25,
+                                },
+                                offsetCenter: [0,'80%']
+                            },
+                            splitLine: {
+                                length: 6,
+                                lineStyle: {
+                                    width: 1
+                                }
+                            },
+                            data: [{value: getWeatherDataFromResult(weatherCache.payload, sensorOrder[i])[1]}]
+                        },
+                        windDirection
+                    ]
+                };
+
+                var chart_id = document.getElementById("minicharttest" + i);
+                var chart = echarts.init(chart_id);
+                chart.setOption(option);
+            }
+            loadTableData();
+        });
     });
 };
 
@@ -778,6 +908,20 @@ $(document).on('click', ".apply-filter", function () {
 });
 
 function generateCanvasChart(data, date){
+    let dataElements = [];
+    const dataNames = ['Temperatura', 'Pressão Atmosférica', 'Umidade Relativa do Ar', 'Velocidade', 'Luminosidade', 'Concentração de CO2', 'Concentração de SO2']
+    for(let i = 0; i < data.length; i++){
+        dataElements.push({
+            name: dataNames[i],
+            type:'line',
+            sampling: 'average',
+            itemStyle: {
+                color: 'rgb(255, 70, 131)'
+            },
+            data: data[i]
+        });
+    }
+
     option = {
         tooltip: {
             trigger: 'axis',
@@ -802,34 +946,39 @@ function generateCanvasChart(data, date){
             type: 'value',
             boundaryGap: [0, '100%']
         },
-        dataZoom: [{
-            type: 'inside',
-            start: 0,
-            end: 10
-        }, {
-            start: 0,
-            end: 10,
-            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-            handleSize: '80%',
-            handleStyle: {
-                color: '#fff',
-                shadowBlur: 3,
-                shadowColor: 'rgba(0, 0, 0, 0.6)',
-                shadowOffsetX: 2,
-                shadowOffsetY: 2
-            }
-        }],
-        series: [
+        dataZoom: [
             {
-                name:'Temperatura',
-                type:'line',
-                sampling: 'average',
-                itemStyle: {
-                    color: 'rgb(255, 70, 131)'
-                },
-                data: data
+                id: 'dataZoomX',
+                type: 'slider',
+                xAxisIndex: [0],
+                filterMode: 'filter'
+            },
+            {
+                id: 'dataZoomY',
+                type: 'slider',
+                yAxisIndex: [0],
+                filterMode: 'empty'
+            },
+            {
+                type: 'inside',
+                start: 0,
+                end: 10
+            }, {
+                start: 0,
+                end: 10,
+                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
             }
-        ]
+        ],
+        series: dataElements
+        
     };
 
     var chart_id = document.getElementById('timeSeriesArea5');
@@ -837,3 +986,33 @@ function generateCanvasChart(data, date){
     
     chart.setOption(option);
 }
+
+$(document).on('click', "#save-min-max", function () {
+    let $this = $(this);
+    const $minMax = $('.min-max-item');
+    const minMaxData = [];
+    const tiposData = ['temperatura', 'pressao', 'umidade', 'vento', 'luminosidade', 'co2', 'so2'];
+    
+    $this.button('loading');
+
+    $.each($minMax, function (i, $elem) {
+        minMaxData.push({
+            tipo: tiposData[i],
+            min : $(this).find('input[name="min"]').val(),
+            max : $(this).find('input[name="max"]').val(),
+        });
+    });
+
+    const saveMinMaxCall = $.ajax({
+        url: "http://localhost:9000/save-min-max",
+        type: "POST",
+        data: {
+            minMax: minMaxData,
+        }
+    });
+    
+    Promise.resolve(saveMinMaxCall).then(function (data) {
+        $this.button('reset');
+    });
+});
+

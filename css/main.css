@@ -73,7 +73,6 @@
 	border-collapse: separate;
 	border-color: grey;
 	border: 1px solid red;
-	margin-top: 20px;
 }
 
 .svg-container {
@@ -87,7 +86,6 @@
 }
 
 .grid-charts {
-	width: 100%;
 	margin-left: 50px;
 }
 
@@ -102,33 +100,22 @@ td:hover {
 	background-color: #C0C0C0;
 }
 
-#timeSeriesArea1,
-#timeSeriesArea2,
-#timeSeriesArea3,
-#timeSeriesArea4 {
-	margin-top: 20px;
-	width: 950px;
-	height: 200px;
-	border: 1px solid #aaaaaa;
+.chart-area {
+	height: 50%;
 }
-
 #timeSeriesArea5 {
-	margin-top: 20px;
-	width: 950px;
-	height: 710px;
-	text-align: center;
+	margin: 50px;
+	height: 500px;
 	border: 1px solid #aaaaaa;
 }
 
 .drag-text {
-	line-height: 600px;
 	text-align: center;
 	font-size: 30px;
 }
 
 .larger-icon {
 	font-size: 40px;
-	position: absolute;
 }
 
 .celcius-icon {
@@ -207,10 +194,6 @@ td:hover {
 
 .nav-tabs {
 	text-align: center;
-}
-
-.minichartWindCO2 {
-	margin-top: 25px;
 }
 
 .glyphicon-refresh-animate {

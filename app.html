@@ -57,6 +57,7 @@
 	<script type="text/javascript" src="js/script.js"></script>
 	<script type="text/javascript" src="js/thermal-amplitude.js"></script>
 	<script type="text/javascript" src="js/box-plot-window.js"></script>
+	<script type="text/javascript" src="js/min-max.js"></script>
 </head>
 
 <body>
@@ -134,6 +135,13 @@
 								<i class="glyphicon glyphicon-filter"></i>
 							</button>
 						</div>
+						<div class="col-sm-1">
+							<button class="btn btn-primary modal-min-max">
+								<i class="glyphicon glyphicon-plus">
+								</i>
+								<span>Min Max</span>
+							</button>
+						</div>
 					<div id="heat-map-months"></div>
 				</div>
 				<div class="col-sm-offset-1 col-sm-5">
@@ -165,77 +173,48 @@
 					<button type="button" class="btn btn-default show-min-max active">Mínimo - Máximo</button>
 				</div>
 			</div>
-			<div style="float:left">
+			<div class="row" style="overflow-y: scroll;">
 				<table class="table table-bordered grid-charts">
 					<tbody>
 						<tr>
 							<td id="grid0" data-sensor="0" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Temperatura</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font celcius-data"></div>
-									<i class="larger-icon celcius-icon wi wi-celsius"></i>
-								</div>
-								<div id="minicharttest0"></div>
+								<div id="minicharttest0" style="height:250px; width:250px"></div>
 							</td>
 							<td id="grid1" data-sensor="1" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Pressao Atmosférica</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font pressure-data"></div>
-									<i class="units-font">bar</i>
-								</div>
-								<div id="minicharttest1"></div>
+								<div id="minicharttest1" style="height:250px; width:250px"></div>
 							</td>
 							<td id="grid2" data-sensor="2" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Umidade relativa do ar</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font humidity-data"></div>
-								</div>
-								<div id="minicharttest2"></div>
+								<div id="minicharttest2" style="height:250px; width:250px"></div>
 							</td>
-
-						</tr>
-						<tr>
+							
 							<td id="grid3" data-sensor="3" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Vento</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font wind-direction-data"></div>
+								<!--<div style="">
 									<i class="wind-icon wi wi-wind towards-90-deg"></i>
-								</div>
-								<div id="minicharttest3" class="minichartWindCO2"></div>
+								</div>-->
+								<div id="minicharttest3" class="minichartWindCO2" style="height:250px; width:250px"></div>
 							</td>
 							<td id="grid4" data-sensor="4" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Luminosidade</div>
-								<div style="margin-left:60px" class="progress-bar"></div>
-								<div style="padding-top:20px">
-									<div class="celcius-font luminocity-data"></div>
-								</div>
-								<div class="celcius-font uv-data"></div>
-								<i class="units-font">UV</i>
-								<div id="minicharttest4"></div>
+								<div id="minicharttest4" style="height:250px; width:250px"></div>
 							</td>
 							<td id="grid5" data-sensor="5" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Concentração de CO2</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font co2-data"></div>
-									<i class="units-font">ppm</i>
-								</div>
-								<div id="minicharttest5" class="minichartWindCO2"></div>
+								<div id="minicharttest5" class="minichartWindCO2" style="height:250px; width:250px"></div>
 							</td>
-						</tr>
-						<tr>
 							<td id="grid6" data-sensor="6" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Concentração de SO2</div>
-								<div style="padding-top:30px">
-									<div class="celcius-font so2-data"></div>
-									<i class="units-font">ppm</i>
-								</div>
-								<div id="minicharttest6"></div>
+								<div id="minicharttest6" style="height:250px; width:250px"></div>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			<div style="float:right; margin-right: 90px;">
+			<div id="testando"></div>
+			<div class="row">
 				<div class="chart-area">
 					<div id="timeSeriesArea5" ondrop="drop(event)" ondragover="allowDrop(event)" class="drag-text">
 						<span>Drag Here to generate chart</span>
@@ -319,6 +298,103 @@
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 								<button id="loadpage" type="button" class="btn btn-primary">Save</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!--Modal de cadastro mínimos e máximos-->
+				<div id="min-max" class="modal fade">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+								 <h4 class="modal-title">Minimum and Maximum</h4>  
+							</div>
+							<div class="modal-body">
+								<div class="form-min-max">
+									<div class="row min-max-item">
+										<div class="col-sm-4">
+											<label> Temperatura: </label>
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm temperatura" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm temperatura" name="max" placeholder="Max">
+										</div>
+									</div>
+									<div class="row min-max-item">
+										<div class="col-sm-4">
+											<label> Pressão: </label>
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm pressao" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm pressao" name="max" placeholder="Max">
+										</div>
+									</div>
+									<div class="row min-max-item">
+										<div class="col-sm-4">
+											<label> Umidade relativa do ar: </label>
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm umidade" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm umidade" name="max" placeholder="Max">
+										</div>
+									</div>
+									<div class="row min-max-item">
+										<div class="col-sm-4">
+											<label> Vento: </label>
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm vento" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm vento" name="max" placeholder="Max">
+										</div>
+									</div>
+									<div class="row min-max-item">
+										<div class="col-sm-4">
+											<label> Luminosidade: </label>
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm luminosidade" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm luminosidade" name="max" placeholder="Max">
+										</div>
+									</div>
+									<div class="row min-max-item">
+										<div class="col-sm-4">
+											<label> CO2: </label>
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm co2" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm co2" name="max" placeholder="Max">
+										</div>
+									</div>
+									<div class="row min-max-item">
+										<div class="col-sm-4">
+											<label> SO2: </label>
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm so2" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm so2" name="max" placeholder="Max">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+								<button id="save-min-max" type="button" class="btn btn-primary">Save</button>
 							</div>
 						</div>
 					</div>

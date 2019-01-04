@@ -1,0 +1,24 @@
+<div class="row min-max-item">
+    <div class="col-sm-4">
+        <select class="form-control input-sm tipo-valor" name="tipo">
+            <option value="Temperatura" selected="selected">Temperatura</option>
+            <option value="Pressão">Pressão</option>
+            <option value="Umidade relativa do ar">Umidade</option>
+            <option value="Vento">Vento</option>
+            <option value="Luminosidade">Luminosidade</option>
+            <option value="CO2">CO2</option>
+            <option value="SO2">SO2</option>
+        </select>
+    </div>
+    <div class="col-sm-2">
+        <input type="text" class="form-control input-sm valor" name="min" placeholder="Min">
+    </div>
+    <div class="col-sm-2">
+        <input type="text" class="form-control input-sm valor" name="max" placeholder="Max">
+    </div>
+    <div class="col-sm-1">
+        <button type="button" class="btn btn btn-danger remover-form-min-max">
+            <i class="glyphicon glyphicon-remove"></i>
+        </button>
+    </div>
+</div>
