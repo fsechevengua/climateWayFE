@@ -134,7 +134,7 @@ $(document).ready(function () {
 
         // Pega dados para o calendário
         heatmapFetch = $.ajax({
-            url: "http://localhost:9000/heatmap",
+            url: "http://178.128.15.73:9000/heatmap",
             type: "GET",
             data: {
                 device: device,

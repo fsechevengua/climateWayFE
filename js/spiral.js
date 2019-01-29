@@ -46,7 +46,7 @@ async function makeSpiral() {
 
     // Pega dados para o espiral
     spiralFetch = $.ajax({
-      url: "http://localhost:9000/heatmap",
+      url: "http://178.128.15.73:9000/heatmap",
       type: "GET",
       data: {
           device: getUrlParameter('device'),

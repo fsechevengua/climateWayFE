@@ -22,7 +22,7 @@ $(document).ready(function () {
     
     // Inicia mix e max de cada variável
     const getMinMaxCall = $.ajax({
-        url: "http://localhost:9000/min-max",
+        url: "http://178.128.15.73:9000/min-max",
         type: "get"
     });
     
@@ -474,7 +474,7 @@ function getWeatherData(weatherVarName, sensor_code, target) {
     }
 
     var weatherDataCall = $.ajax({
-        url: "http://localhost:9000/dateWeatherData",
+        url: "http://178.128.15.73:9000/dateWeatherData",
         type: "POST",
         data: {
             date: weatherDate,
@@ -634,7 +634,7 @@ function makeWeatherData(dateParam) {
     }
 
     var weatherDataCall = $.ajax({
-        url: "http://localhost:9000/weatherData",
+        url: "http://178.128.15.73:9000/weatherData",
         type: "GET",
         data: {
             date: dateParam,
@@ -652,7 +652,7 @@ function makeWeatherData(dateParam) {
         
         // Inicia mix e max de cada variável
         const getMinMaxCall = $.ajax({
-            url: "http://localhost:9000/min-max",
+            url: "http://178.128.15.73:9000/min-max",
             type: "get"
         });
         
@@ -1004,7 +1004,7 @@ $(document).on('click', "#save-min-max", function () {
     });
 
     const saveMinMaxCall = $.ajax({
-        url: "http://localhost:9000/save-min-max",
+        url: "http://178.128.15.73:9000/save-min-max",
         type: "POST",
         data: {
             minMax: minMaxData,
