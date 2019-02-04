@@ -1,10 +1,10 @@
-async function makeSpiral() {
-  var width = 400,
-      height = 400,
+async function makeSpiral(device) {
+  var width = 330,
+      height = 330,
       start = 0,
       end = 2.80,
       numSpirals = 3
-      margin = {top:10,bottom:1,left:10,right:10};
+      margin = {top:10,bottom:1,left:1,right:1};
 
     var theta = function(r) {
       return numSpirals * Math.PI * r;
@@ -49,7 +49,7 @@ async function makeSpiral() {
       url: "http://178.128.15.73:9000/heatmap",
       type: "GET",
       data: {
-          device: getUrlParameter('device'),
+          device: device,
           sensorCode : 0
       }
     });
@@ -194,6 +194,7 @@ async function makeSpiral() {
         tooltip.style('opacity',0);
     });
 }
-makeSpiral();
+
+makeSpiral(getUrlParameter('device'));
 
   

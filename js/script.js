@@ -16,10 +16,28 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 };
 
-$(document).ready(function () {
-    $('#data-hoje').html($.format.date(new Date(), "dd/MM/yyyy"));
-    makeWeatherData();
+function loadDevicesCombo(){
+    const getDevices = $.ajax({
+        url: "http://178.128.15.73:9000/loadDevices",
+        type: "get"
+    });
     
+    Promise.resolve(getDevices).then(function (data) {
+        //$('.devices').append()
+        data.forEach(function (elem, index) {
+            $('.devices').append("<option value='"+elem+"' >"+elem+"</option>")
+        });
+        /*<option value="area" selected="selected">Line chart</option>
+        <option value="bar">Bar chart</option>
+        <option value="spline">Spline chart</option>
+        console.log(data);*/
+    });
+}
+
+$(document).ready(function () {
+    $('#data-hoje').html($.format.date(new Date(), "dd/MM/yyyy hh:mm:ss"));
+    makeWeatherData();
+    loadDevicesCombo();
     // Inicia mix e max de cada variável
     const getMinMaxCall = $.ajax({
         url: "http://178.128.15.73:9000/min-max",
@@ -27,7 +45,6 @@ $(document).ready(function () {
     });
     
     Promise.resolve(getMinMaxCall).then(function (data) {
-        console.log(data);
     });
 
     /*const $minMax = $('.min-max-item');
@@ -43,8 +60,16 @@ $(document).ready(function () {
             max : $(this).find('input[name="max"]').val(),
         });
     });*/
-});
 
+    
+    
+});
+$(document).on('change', ".devices", function(){
+    $("#heat-map-months").empty();
+    generateHeatmap("#heat-map-months", configYear, true, 0, $(this).val());
+    $('#spiral-chart').empty();
+    makeSpiral($(this).val());
+});
 //Gerar gráfico em diálogo
 var dialogData;
 var dataYDialog;
@@ -1015,4 +1040,6 @@ $(document).on('click', "#save-min-max", function () {
         $this.button('reset');
     });
 });
+
+
 

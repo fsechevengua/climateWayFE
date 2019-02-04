@@ -54,8 +54,8 @@
 	<script src="js/bootstrap-switch.min.js"></script>
 	<script src="js/plotly.min.js"></script>
 	<script src="js/echarts.min.js"></script>
-	<script type="text/javascript" src="js/script.js"></script>
 	<script type="text/javascript" src="js/thermal-amplitude.js"></script>
+	<script type="text/javascript" src="js/script.js"></script>
 	<script type="text/javascript" src="js/box-plot-window.js"></script>
 	<script type="text/javascript" src="js/min-max.js"></script>
 </head>
@@ -109,8 +109,8 @@
 				
 			</div>
 			<div class="row text-center" style="overflow: auto">
-				<div class="col-sm-6">
-						<div class="col-sm-offset-1 col-sm-2">
+				<div class="col-sm-4" style="margin-left: 1%;">
+						<div class="col-sm-offset-1 col-sm-4">
 							<select class="form-control heatmap-type">
 								<option value="0" selected="selected">Temperatura</option>
 								<option value="1">Pressão</option>
@@ -144,33 +144,11 @@
 						</div>
 					<div id="heat-map-months"></div>
 				</div>
-				<div class="col-sm-offset-1 col-sm-5">
+				<div class="col-sm-offset-5 col-sm-2">
 					<div id="spiral-chart">
 						
 					</div>
 					<script type="text/javascript" src="js/spiral.js"></script>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-2">
-				</div>
-				<div class="col-sm-4">
-					<h3 id="data-hoje">
-					</h3>
-				</div>
-				<div class="col-sm-2">
-					<button class="btn btn-primary clear-drag-area">Clear</button>
-				</div>
-				<div class="col-sm-1">
-					<select class="form-control chart-type">
-						<option value="area" selected="selected">Line chart</option>
-						<option value="bar">Bar chart</option>
-						<option value="spline">Spline chart</option>
-					</select>
-				</div>
-				<div class="col-sm-2">
-					<button type="button" class="btn btn-default show-media active">Média</button>
-					<button type="button" class="btn btn-default show-min-max active">Mínimo - Máximo</button>
 				</div>
 			</div>
 			<div class="row" style="overflow-y: scroll;">
@@ -213,9 +191,40 @@
 					</tbody>
 				</table>
 			</div>
+
+			<div class="row" style="margin-top: 1%; margin-left: 2%; margin-right: 2%">
+				<div class="panel panel-default">
+					<div class="panel-heading">Funções</div>
+					<div class="panel-body">
+						<div class="col-sm-2">
+						</div>
+						<div class="col-sm-4">
+							<b id="data-hoje"></b>
+						</div>
+						<div class="col-sm-2">
+							<button class="btn btn-primary clear-drag-area">Clear</button>
+						</div>
+						<div class="col-sm-1">
+							<select class="form-control devices">
+							</select>
+						</div>
+						<div class="col-sm-1">
+							<select class="form-control chart-type">
+								<option value="area" selected="selected">Line chart</option>
+								<option value="bar">Bar chart</option>
+								<option value="spline">Spline chart</option>
+							</select>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-default show-media active">Média</button>
+							<button type="button" class="btn btn-default show-min-max active">Mínimo - Máximo</button>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div id="testando"></div>
 			<div class="row">
-				<div class="chart-area">
+				<div class="chart-area" style="line-height: 15;">
 					<div id="timeSeriesArea5" ondrop="drop(event)" ondragover="allowDrop(event)" class="drag-text">
 						<span>Drag Here to generate chart</span>
 					</div>
