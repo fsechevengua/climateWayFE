@@ -273,9 +273,17 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
         _elementos_filtrados.push(viewData[viewData.length-1][0]);
     }
 
-    viewDataCanvas.push(dataWihoutLabel);
-    console.log(viewDataCanvas);
-    generateCanvasChart(viewDataCanvas, dataXWihoutLabel);
+    // Monta array para a canvas
+    let dataCanvas = [];
+    let dataXCanvas = [];
+    let dataAuxCanvas = JSON.parse(JSON.stringify(viewData));// Clone array
+
+    for(let i = 1; i < dataAuxCanvas.length; i++){
+        dataCanvas.push(dataAuxCanvas[i].splice(1, dataAuxCanvas[0].length)); // Valores de cada elemento do eixo y
+    }
+    dataXCanvas = dataAuxCanvas[0].splice(1, dataAuxCanvas[0].length); // Valores das datas do eixo x
+
+    generateCanvasChart(dataCanvas, dataXCanvas, chartType);
 
     /*c3.generate({
         bindto: "#" + DropAreaId,
@@ -682,6 +690,7 @@ function makeWeatherData(dateParam) {
         });
         
         Promise.resolve(getMinMaxCall).then(function (data) {
+            console.log(data);
             for (i = 0; i < 7; i++) {
                 let windDirection;
                 if(i == 3){
@@ -690,8 +699,8 @@ function makeWeatherData(dateParam) {
                         type: 'gauge',
                         center: ['60%', '35%'],
                         radius: '22%',
-                        min: data[i].min,
-                        max: data[i].max,
+                        min: data[i] ? data[i].min : 0,
+                        max: data[i] ? data[i].max : 100,
                         startAngle: 90,
                         endAngle: -269.9999,
                         splitNumber: 12,
@@ -773,10 +782,15 @@ function makeWeatherData(dateParam) {
                         {
                             name: dataNames[i],
                             type: 'gauge',
-                            min: data[i].min,
-                            max: data[i].max,
+                            min: data[i] ? data[i].min : 0,
+                            max: data[i] ? data[i].max : 100,
                             axisLine: { // Grossura do círculo   
                                 lineStyle: {
+                                    color: [
+                                        [0.2, '#67e0e3'],
+                                        [0.6, '#37a2da'],
+                                        [1, '#fd666d']
+                                    ],
                                     width: 7
                                 }
                             },
@@ -786,16 +800,17 @@ function makeWeatherData(dateParam) {
                             detail: {
                                 formatter:'{value} '+stringFormatter[i],
                                 textStyle: {
-                                    fontSize: 25,
+                                    fontSize: 20,
                                 },
                                 offsetCenter: [0,'80%']
                             },
                             splitLine: {
-                                length: 6,
+                                length: 10,
                                 lineStyle: {
                                     width: 1
                                 }
                             },
+                            splitNumber: 5,
                             data: [{value: getWeatherDataFromResult(weatherCache.payload, sensorOrder[i])[1]}]
                         },
                         windDirection
@@ -915,16 +930,10 @@ $(document).on('click', ".apply-filter", function () {
     $filtroLinhas
     var $filtro = [];
     $filtroLinhas.each(function( index ) {
-        //if($(this).find('.tipo-dado').val() == 'Value'){
-            tipoValor = $(this).find('.tipo-valor option:selected').val();
-            comparacao = $(this).find('.comparacao option:selected').val();
-            valor = $(this).find('.valor').val();
-            $filtro.push( {tipoDado: 'Value', tipoValor : tipoValor, comparacao: comparacao, valor: valor} );
-        /*} else {
-            dataInicio = $(this).find('.data-inicio').val();
-            dataFim = $(this).find('.data-fim').val();
-            $filtro.push( {tipoDado: 'Date', dataInicio : dataInicio, dataFim: dataFim} );
-        }*/
+        tipoValor = $(this).find('.tipo-valor option:selected').val();
+        comparacao = $(this).find('.comparacao option:selected').val();
+        valor = $(this).find('.valor').val();
+        $filtro.push( {tipoDado: 'Value', tipoValor : tipoValor, comparacao: comparacao, valor: valor} );
     });
     _filtro = $filtro;
 
@@ -932,13 +941,13 @@ $(document).on('click', ".apply-filter", function () {
     $('#filtro').modal('hide');
 });
 
-function generateCanvasChart(data, date){
+function generateCanvasChart(data, date, type){
     let dataElements = [];
     const dataNames = ['Temperatura', 'Pressão Atmosférica', 'Umidade Relativa do Ar', 'Velocidade', 'Luminosidade', 'Concentração de CO2', 'Concentração de SO2']
     for(let i = 0; i < data.length; i++){
         dataElements.push({
             name: dataNames[i],
-            type:'line',
+            type: type,
             sampling: 'average',
             itemStyle: {
                 color: 'rgb(255, 70, 131)'
@@ -1038,8 +1047,31 @@ $(document).on('click', "#save-min-max", function () {
     
     Promise.resolve(saveMinMaxCall).then(function (data) {
         $this.button('reset');
+        $('#min-max').modal('hide');
+        makeWeatherData();
     });
 });
 
+$(document).on('click', '.hide-data', function() {
+    const $this = $(this);
+    const $bar = $('.data-bar'); 
+    if($bar.is(":visible")){
+        $bar.hide();
+        $(this).text('Show Data');
+    } else {
+        $bar.show();
+        $(this).text('Hide Data');
+    }
+});
 
-
+$(document).on('click', '.hide-functions', function() {
+    const $this = $(this);
+    const $bar = $('.functions-bar'); 
+    if($bar.is(":visible")){
+        $bar.hide();
+        $(this).text('Show Functions');
+    } else {
+        $bar.show();
+        $(this).text('Hide Funtions');
+    }
+});

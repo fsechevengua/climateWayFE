@@ -71,7 +71,6 @@ function getRaining(){
 }
 
 $(document).ready(function(){
- console.log(changeDate)
  $(".celcius-data").append(getCelcius());
  $(".pressure-data").append(getPressure());
  $(".humidity-data").append(getHumidity());

@@ -151,21 +151,29 @@
 					<script type="text/javascript" src="js/spiral.js"></script>
 				</div>
 			</div>
-			<div class="row" style="overflow-y: scroll;">
+			<div class="row">
+				<div class="col-sm-1" style="margin-left: 50px; margin-bottom:5px;">
+					<button class="btn btn-primary hide-data">Hide Data</button>
+				</div>
+				<div class="col-sm-1">
+					<button class="btn btn-primary hide-functions">Hide Functions</button>
+				</div>
+			</div>
+			<div class="row data-bar">
 				<table class="table table-bordered grid-charts">
 					<tbody>
 						<tr>
 							<td id="grid0" data-sensor="0" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Temperatura</div>
-								<div id="minicharttest0" style="height:250px; width:250px"></div>
+								<div id="minicharttest0" style="height:200px; width:200px"></div>
 							</td>
 							<td id="grid1" data-sensor="1" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Pressao Atmosférica</div>
-								<div id="minicharttest1" style="height:250px; width:250px"></div>
+								<div id="minicharttest1" style="height:200px; width:200px"></div>
 							</td>
 							<td id="grid2" data-sensor="2" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Umidade relativa do ar</div>
-								<div id="minicharttest2" style="height:250px; width:250px"></div>
+								<div id="minicharttest2" style="height:200px; width:200px"></div>
 							</td>
 							
 							<td id="grid3" data-sensor="3" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
@@ -173,26 +181,25 @@
 								<!--<div style="">
 									<i class="wind-icon wi wi-wind towards-90-deg"></i>
 								</div>-->
-								<div id="minicharttest3" class="minichartWindCO2" style="height:250px; width:250px"></div>
+								<div id="minicharttest3" class="minichartWindCO2" style="height:200px; width:200px"></div>
 							</td>
 							<td id="grid4" data-sensor="4" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Luminosidade</div>
-								<div id="minicharttest4" style="height:250px; width:250px"></div>
+								<div id="minicharttest4" style="height:200px; width:200px"></div>
 							</td>
 							<td id="grid5" data-sensor="5" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Concentração de CO2</div>
-								<div id="minicharttest5" class="minichartWindCO2" style="height:250px; width:250px"></div>
+								<div id="minicharttest5" class="minichartWindCO2" style="height:200px; width:200px"></div>
 							</td>
 							<td id="grid6" data-sensor="6" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
 								<div class="location-font">Concentração de SO2</div>
-								<div id="minicharttest6" style="height:250px; width:250px"></div>
+								<div id="minicharttest6" style="height:200px; width:200px"></div>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-
-			<div class="row" style="margin-top: 1%; margin-left: 2%; margin-right: 2%">
+			<div class="row functions-bar" style="margin-top: 1%; margin-left: 2%; margin-right: 2%">
 				<div class="panel panel-default">
 					<div class="panel-heading">Funções</div>
 					<div class="panel-body">
@@ -210,9 +217,8 @@
 						</div>
 						<div class="col-sm-1">
 							<select class="form-control chart-type">
-								<option value="area" selected="selected">Line chart</option>
+								<option value="line" selected="selected">Line chart</option>
 								<option value="bar">Bar chart</option>
-								<option value="spline">Spline chart</option>
 							</select>
 						</div>
 						<div class="col-sm-2">

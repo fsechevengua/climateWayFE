@@ -55,9 +55,15 @@ async function makeSpiral(device) {
     });
 
     spiralData = await Promise.resolve(spiralFetch).then(function (data) { return data; });
-    
+    let dataWithFullDate = spiralData.filter(obj => {
+      return obj.fullDate !== '';
+    });
+
+    const currentYear = moment(dataWithFullDate[dataWithFullDate.length -1].fullDate).format("YYYY");
+
     for (var i = 0; i < N; i++) {
-      var currentDate = new Date(new Date().getFullYear(), 0, 1);
+      
+      var currentDate = new Date(currentYear, 0, 1);
       
       currentDate.setMonth(currentDate.getMonth());
       currentDate.setDate(currentDate.getDate() + i + 7);

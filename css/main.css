@@ -128,7 +128,6 @@ td:hover {
 
 .weather-cell {
 	background-color: #3c3636;
-	width: 250px;
 }
 
 .cell-selected{
@@ -161,7 +160,6 @@ td:hover {
 }
 
 .location-font {
-	font-size: 20px;
 	color: #FFFFFF;
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
@@ -240,4 +238,8 @@ td:hover {
 
 .modal-open {
 	overflow-y: auto;
+}
+
+.data-bar {
+	width: 50% !important;
 }
