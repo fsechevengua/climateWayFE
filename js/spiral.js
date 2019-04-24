@@ -1,4 +1,4 @@
-async function makeSpiral(device) {
+async function makeSpiral(device, sensor_code) {
   var width = 330,
       height = 330,
       start = 0,
@@ -46,11 +46,11 @@ async function makeSpiral(device) {
 
     // Pega dados para o espiral
     spiralFetch = $.ajax({
-      url: "http://178.128.15.73:9000/heatmap",
+      url: "http://localhost:9000/heatmap",
       type: "GET",
       data: {
           device: device,
-          sensorCode : 0
+          sensorCode : sensor_code
       }
     });
 
@@ -66,7 +66,7 @@ async function makeSpiral(device) {
       var currentDate = new Date(currentYear, 0, 1);
       
       currentDate.setMonth(currentDate.getMonth());
-      currentDate.setDate(currentDate.getDate() + i + 7);
+      currentDate.setDate(currentDate.getDate() + i);
 
       someData.push({
         date: currentDate,
@@ -117,6 +117,7 @@ async function makeSpiral(device) {
       .attr("height", function(d){
         return yScale(d.value);
       })
+      .attr("class", "spiral")
       .style("fill", function(d){return color(d.group);})
       .style("stroke", "none")
       .attr("transform", function(d){
@@ -167,8 +168,6 @@ async function makeSpiral(device) {
     svg.selectAll("rect")
     .on('mouseover', function(d) {
         const date = moment(d.date).format('YYYY-MM-DD');        
-        tooltip.select('.date').html("Date: <b>" + d.date.toDateString() + "</b>");
-        tooltip.select('.value').html("Value: <b>" + Math.round(d.value*100)/100 + "<b>");
 
         d3version4.select(this)
         .style("fill","#FFFFFF")
@@ -179,28 +178,32 @@ async function makeSpiral(device) {
         .style("stroke","#000000")
         .style("stroke-width","4px");
 
-        tooltip.style('display', 'block');
-        tooltip.style('opacity',2);
-    })
-    .on('mousemove', function(d) {
-        tooltip.style('top', (d3version4.event.layerY + 10) + 'px')
-        .style('left', (d3version4.event.layerX - 25) + 'px');
     })
     .on('mouseout', function(d) {
-        const date = moment(d.date).format('YYYY-MM-DD');
-        svg.selectAll("rect")
-        .style("fill", function(d){return color(d.group);})
-        .style("stroke", "none")
-        
-        d3version4.select("#a"+ date)
-        .style("stroke","#E6E6E6")
-        .style("stroke-width","2px");
+      const date = moment(d.date).format('YYYY-MM-DD');
 
-        tooltip.style('display', 'none');
-        tooltip.style('opacity',0);
+      if(!d3version4.select("#a"+ date).classed("selected")){  
+          d3version4.select(this)
+          .style("fill", function(d){return color(d.group);})
+          .style("stroke", "none")
+          
+          d3version4.select("#a"+ date)
+          .style("stroke","#E6E6E6")
+          .style("stroke-width","2px");
+      }
     });
+
+    $('svg rect.spiral').tipsy({ 
+      gravity: 'w', 
+      html: true, 
+      title: function() {
+          const d = this.__data__;
+
+        return "Data: "+ moment(d.date.toDateString()).format('DD/MM/YYYY') +"\nValor: " + Math.round(d.value*100)/100; 
+      }
+  });
 }
 
-makeSpiral(getUrlParameter('device'));
+makeSpiral(device, _sensor_code);
 
   

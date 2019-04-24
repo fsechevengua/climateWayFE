@@ -109,14 +109,20 @@ $(document).on('dblclick', '.chart-area', function(){
             let date = moment(viewData[0][1]).format('YYYY-MM-DD');
             let result = [];
             let day_values = [];
+            let dates = [];
             for(let j = 1; j < viewData[i].length; j++){
                 let current_date = moment(viewData[0][j]).format('YYYY-MM-DD');
+
+                if(j == 1){
+                    dates.push(moment(date).format('DD/MM/YYYY'));
+                }
 
                 // Salva valores do dia e limpa array para um novo dia
                 if(current_date == date){
                     day_values.push(viewData[i][j]);
                 } else {
                     date = current_date;
+                    dates.push(moment(current_date).format('DD/MM/YYYY'));
                     result.push(day_values);
                     day_values = [];
                     day_values.push(viewData[i][j]);
@@ -124,17 +130,16 @@ $(document).on('dblclick', '.chart-area', function(){
             }
             // Salva o último array produzido
             result.push(day_values);
-
             let data = [];
             for(let j = 0; j < result.length; j++){
-                let trace = {
-                    y: result[j],
-                    type: 'box'
-                };
-                data.push({ y: result[j], type: 'box'});
+                data.push({ name: dates[j], y: result[j], type: 'box'});
             }
-            
-            Plotly.newPlot('box-plot-'+removeAcento(viewData[i][0].replace(/\s/g, "-")), data);
+            console.log(data);
+
+            Plotly.newPlot('box-plot-'+removeAcento(viewData[i][0].replace(/\s/g, "-")), data, '',{
+                "displaylogo": false,
+                'modeBarButtonsToRemove': ['pan2d','lasso2d','sendDataToCloud','hoverCompareCartesian']
+            });
         }
 
     }

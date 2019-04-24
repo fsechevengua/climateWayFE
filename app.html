@@ -20,6 +20,7 @@
 	<link href="css/weather-icons-wind.min.css" rel="stylesheet" type="text/css">
 	<link href="css/bootstrap-switch.min.css" rel="stylesheet">
 	<link href="css/heatmap.css" rel="stylesheet">
+	<link href="css/tipsy.css" rel="stylesheet" type="text/css" />
 	<link href="css/main.css" rel="stylesheet">
 	<link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
@@ -54,6 +55,7 @@
 	<script src="js/bootstrap-switch.min.js"></script>
 	<script src="js/plotly.min.js"></script>
 	<script src="js/echarts.min.js"></script>
+	<script type="text/javascript" src="js/jquery.tipsy.js"></script>
 	<script type="text/javascript" src="js/thermal-amplitude.js"></script>
 	<script type="text/javascript" src="js/script.js"></script>
 	<script type="text/javascript" src="js/box-plot-window.js"></script>
@@ -63,23 +65,102 @@
 <body>
 	<div class='app'>
 		<nav class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-					    aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand title-project" href="">Weather Workstation</a>
+			<div class="row">
+				<div class="col-sm-1" style="margin-left: 50px;">
+					<div id="main">
+						<button class="openbtn" onclick="openNav()">☰</button>  
+					</div>
 				</div>
-				<div id="navbar" class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li><a class='thermal-amplitude' style="display:none;">Amplitude Térmica</a></li>
-					</ul>
+				<div class="col-sm-offset-4 col-sm-5">
+					<a class="navbar-brand" href="">Weather Workstation</a>
 				</div>
 			</div>
+			<div id="mySidebar" class="sidebar">
+				<div class="row">
+					<div class="col-sm-4">
+						<h2 style="color:#9d9d9d">Filtros</h2>
+					</div>
+					<div class="">
+						<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label style="color:#9d9d9d">Conjunto de Sensores:</label>
+							<select class="form-control devices"></select>
+						</div>	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label style="color:#9d9d9d">Tipo de Gráfico:</label>
+							<select class="form-control chart-type">
+								<option value="line" selected="selected">Line chart</option>
+								<option value="bar">Bar chart</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-8">
+						<div class="form-group">
+							<label style="color:#9d9d9d">Propriedades:</label> <br>
+							<button type="button" class="btn btn-default show-media active">Média</button>
+							<button type="button" class="btn btn-default show-min-max active">Mínimo - Máximo</button>
+							<button class="btn btn-primary clear-drag-area">Clear</button>
+						</div>	
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label style="color:#9d9d9d">Tipo do Heatmap:</label> <br>
+							<select class="form-control heatmap-type">
+								<option value="0" selected="selected">Temperatura</option>
+								<option value="1">Pressão</option>
+								<option value="2">Umidade</option>
+								<option value="3">Vento</option>
+								<option value="4">Luminosidade</option>
+								<option value="5">CO2</option>
+								<option value="6">SO2</option>
+								<option value="6">Material Particulado</option>
+								<option value="6">Nível da água</option>
+								<option value="6">Precipitação</option>
+								<option value="6">CO</option>
+								<option value="9">Estatísticas</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label style="color:#9d9d9d">Funcionalidades:</label> <br>
+							<button class="btn btn-primary modal-filtro">
+								<i class="glyphicon glyphicon-filter"></i>
+							</button>
+							<button class="btn btn-primary modal-min-max">
+								<i class="glyphicon glyphicon-plus"></i>
+								<span>Min Max</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				function openNav() {
+				document.getElementById("mySidebar").style.width = "450px";
+				document.getElementById("main").style.marginLeft = "450px";
+				}
+				
+				function closeNav() {
+				document.getElementById("mySidebar").style.width = "0";
+				document.getElementById("main").style.marginLeft= "0";
+				}
+			</script>
 		</nav>
 		<div class='weather-app'>
 			<div class="row" style="display:none;">
@@ -108,40 +189,9 @@
 			<div class="row text-center">
 				
 			</div>
-			<div class="row text-center" style="overflow: auto">
+			
+			<div class="row text-center">
 				<div class="col-sm-4" style="margin-left: 1%;">
-						<div class="col-sm-offset-1 col-sm-4">
-							<select class="form-control heatmap-type">
-								<option value="0" selected="selected">Temperatura</option>
-								<option value="1">Pressão</option>
-								<option value="2">Umidade</option>
-								<option value="3">Vento</option>
-								<option value="4">Luminosidade</option>
-								<option value="5">CO2</option>
-								<option value="6">SO2</option>
-								<option value="6">Material Particulado</option>
-								<option value="6">Nível da água</option>
-								<option value="6">Precipitação</option>
-								<option value="6">CO</option>
-							</select>
-						</div>
-						<div class="col-sm-1">
-							<button class="btn btn-primary" id="refresh-heatmap">
-								<i class="glyphicon glyphicon-refresh"></i>
-							</button>
-						</div>
-						<div class="col-sm-1">
-							<button class="btn btn-primary modal-filtro">
-								<i class="glyphicon glyphicon-filter"></i>
-							</button>
-						</div>
-						<div class="col-sm-1">
-							<button class="btn btn-primary modal-min-max">
-								<i class="glyphicon glyphicon-plus">
-								</i>
-								<span>Min Max</span>
-							</button>
-						</div>
 					<div id="heat-map-months"></div>
 				</div>
 				<div class="col-sm-offset-5 col-sm-2">
@@ -152,11 +202,11 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-1" style="margin-left: 50px; margin-bottom:5px;">
-					<button class="btn btn-primary hide-data">Hide Data</button>
-				</div>
-				<div class="col-sm-1">
-					<button class="btn btn-primary hide-functions">Hide Functions</button>
+				<div class="col-sm-4" style="margin-left:2%;">
+					<div class="form-group">
+						<label style="color:#9d9d9d">Data Selecionada:</label>
+						<input id="data-hoje" type="text" class="form-control" disabled value="">
+					</div>
 				</div>
 			</div>
 			<div class="row data-bar">
@@ -195,38 +245,13 @@
 								<div class="location-font">Concentração de SO2</div>
 								<div id="minicharttest6" style="height:200px; width:200px"></div>
 							</td>
+							<td id="grid9" data-sensor="9" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
+								<div class="location-font">Número de Aves Mortas</div>
+								<div id="minicharttest7" style="height:200px; width:200px"></div>
+							</td>
 						</tr>
 					</tbody>
 				</table>
-			</div>
-			<div class="row functions-bar" style="margin-top: 1%; margin-left: 2%; margin-right: 2%">
-				<div class="panel panel-default">
-					<div class="panel-heading">Funções</div>
-					<div class="panel-body">
-						<div class="col-sm-2">
-						</div>
-						<div class="col-sm-4">
-							<b id="data-hoje"></b>
-						</div>
-						<div class="col-sm-2">
-							<button class="btn btn-primary clear-drag-area">Clear</button>
-						</div>
-						<div class="col-sm-1">
-							<select class="form-control devices">
-							</select>
-						</div>
-						<div class="col-sm-1">
-							<select class="form-control chart-type">
-								<option value="line" selected="selected">Line chart</option>
-								<option value="bar">Bar chart</option>
-							</select>
-						</div>
-						<div class="col-sm-2">
-							<button type="button" class="btn btn-default show-media active">Média</button>
-							<button type="button" class="btn btn-default show-min-max active">Mínimo - Máximo</button>
-						</div>
-					</div>
-				</div>
 			</div>
 			<div id="testando"></div>
 			<div class="row">
@@ -254,32 +279,6 @@
 											<!--	<option>Date</option>-->
 										<!--	</select>-->
 										<!--</div>-->
-										<div class="col-sm-4">
-											<select class="form-control input-sm tipo-valor">
-												<option value="Temperatura" selected="selected">Temperatura</option>
-												<option value="Pressão">Pressão</option>
-												<option value="Umidade relativa do ar">Umidade</option>
-												<option value="Vento">Vento</option>
-												<option value="Luminosidade">Luminosidade</option>
-												<option value="CO2">CO2</option>
-												<option value="SO2">SO2</option>
-												<option value="Material Particulado">Material Particulado</option>
-												<option value="Nível da água">Nível da água</option>
-												<option value="Precipitação">Precipitação</option>
-												<option value="CO">CO</option>
-											</select>
-										</div>
-										<div class="col-sm-2">
-											<select name="comparacao[]"  class="form-control input-sm comparacao">
-												<option selected="">></option>
-												<option><</option>
-												<option >>=</option>
-												<option><=</option>
-											</select>
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm valor" name="valor-dado[]" placeholder="Valor">
-										</div>
 										<div class="col-sm-1">
 											<button type="button" class="btn btn-primary adicionar-form-filtro">
 												<i class="glyphicon glyphicon-plus"></i>
@@ -302,7 +301,7 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								 <h4 class="modal-title">Settings</h4>  
+								 <h4 class="modal-title">Boxplot</h4>  
 							</div>
 							<div class="modal-body">
 								<ul class='nav nav-tabs'>
@@ -311,8 +310,7 @@
 								</div>
 							</div>
 							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-								<button id="loadpage" type="button" class="btn btn-primary">Save</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
 							</div>
 						</div>
 					</div>
@@ -336,6 +334,9 @@
 											<input type="text" class="form-control input-sm temperatura" name="min" placeholder="Min">
 										</div>
 										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm temperatura" name="normal" placeholder="Normal">
+										</div>
+										<div class="col-sm-2">
 											<input type="text" class="form-control input-sm temperatura" name="max" placeholder="Max">
 										</div>
 									</div>
@@ -345,6 +346,9 @@
 										</div>
 										<div class="col-sm-2">
 											<input type="text" class="form-control input-sm pressao" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm pressao" name="normal" placeholder="Normal">
 										</div>
 										<div class="col-sm-2">
 											<input type="text" class="form-control input-sm pressao" name="max" placeholder="Max">
@@ -358,6 +362,9 @@
 											<input type="text" class="form-control input-sm umidade" name="min" placeholder="Min">
 										</div>
 										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm umidade" name="normal" placeholder="Normal">
+										</div>
+										<div class="col-sm-2">
 											<input type="text" class="form-control input-sm umidade" name="max" placeholder="Max">
 										</div>
 									</div>
@@ -367,6 +374,9 @@
 										</div>
 										<div class="col-sm-2">
 											<input type="text" class="form-control input-sm vento" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm vento" name="normal" placeholder="Normal">
 										</div>
 										<div class="col-sm-2">
 											<input type="text" class="form-control input-sm vento" name="max" placeholder="Max">
@@ -380,6 +390,9 @@
 											<input type="text" class="form-control input-sm luminosidade" name="min" placeholder="Min">
 										</div>
 										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm luminosidade" name="normal" placeholder="Normal">
+										</div>
+										<div class="col-sm-2">
 											<input type="text" class="form-control input-sm luminosidade" name="max" placeholder="Max">
 										</div>
 									</div>
@@ -389,6 +402,9 @@
 										</div>
 										<div class="col-sm-2">
 											<input type="text" class="form-control input-sm co2" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm co2" name="normal" placeholder="Normal">
 										</div>
 										<div class="col-sm-2">
 											<input type="text" class="form-control input-sm co2" name="max" placeholder="Max">
@@ -402,7 +418,24 @@
 											<input type="text" class="form-control input-sm so2" name="min" placeholder="Min">
 										</div>
 										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm so2" name="normal" placeholder="Normal">
+										</div>
+										<div class="col-sm-2">
 											<input type="text" class="form-control input-sm so2" name="max" placeholder="Max">
+										</div>
+									</div>
+									<div class="row min-max-item">
+										<div class="col-sm-4">
+											<label> Número de aves mortas: </label>
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm num_aves_mortas" name="min" placeholder="Min">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm num_aves_mortas" name="normal" placeholder="Normal">
+										</div>
+										<div class="col-sm-2">
+											<input type="text" class="form-control input-sm num_aves_mortas" name="max" placeholder="Max">
 										</div>
 									</div>
 								</div>

@@ -14,6 +14,7 @@ var sensorCodeObjects = [
     {id:6,name:"Nível da água", measure:"m"},
     {id:6,name:"Precipitação", measure:"mm"},
     {id:6,name:"CO", measure:"ppm"},
+    {id:9, name: "Número de aves mortas", measure:""}
 ];
 
 var marginYear = {
@@ -131,7 +132,7 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
 
     // Pega dados para o calendário
     heatmapFetch = $.ajax({
-        url: "http://178.128.15.73:9000/heatmap",
+        url: "http://localhost:9000/heatmap",
         type: "GET",
         data: {
             device: deviceCode,
@@ -142,7 +143,7 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
     data = await Promise.resolve(heatmapFetch).then(function (data) {
         return data;
     });
-
+    
     var heatmapChart = function (tsvFile) {
         var colorScale = d3version3.scale.quantile()
             .domain([0, buckets - 1, d3version3.max(data, function (d) {
@@ -164,7 +165,7 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
         .data(data, function (d) {
             return d.day + ':' + d.week;
         });
-        
+
         var cardsEnter = cards.enter().append("rect")
             .attr("x", function (d) {
                 return (d.week - 1) * gridSize;
@@ -178,6 +179,9 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
             .attr("data-date", function (d) {
                 return d.fullDate;
             })
+            .attr("data-cycle", function (d) {
+                return d.cycle != null ? d.cycle : '';
+            })
             .attr("id", function (d) {
                 const date = moment(d.fullDate).format('YYYY-MM-DD');
                 return 'a'+date;
@@ -185,14 +189,15 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
             .attr("data-cell", function (d) {
                 return d.day + '-' + d.week;
             })
-            .attr("width", gridSize)
-            .attr("height", gridSize)
+            .attr("width", gridSize - 3)
+            .attr("height", gridSize - 3)
             .style("fill", colors[0]);
 
         texts.enter().append('text')
             .text( function (d) {
-                return  d.dateDay;
+                return  Math.round(d.value);
             })
+            .attr('font-size', '13px')
             .attr('pointer-events', 'none')
             .attr("class", "week bordered day-cell")
             .attr("data-date", function (d) {
@@ -214,38 +219,63 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
         cardsEnter.append("title").text((d) => d.value);
 
         cards.select("title").text(function (d) {
-            var name = search(sensorCode, sensorCodeObjects).name;//sensorCodeObjects.find(x => x.id === sensorCode).name;
-            var measure = search(sensorCode, sensorCodeObjects).measure;//sensorCodeObjects.find(x => x.id === sensorCode).measure;
+            var name = search(sensorCode, sensorCodeObjects).name;
+            var measure = search(sensorCode, sensorCodeObjects).measure;
 
-            return name+": " + Math.round(d.value) + measure;
+            return "Date: "+ moment(d.fullDate).format('DD/MM/YYYY') +"\n"+name+": " + Math.round(d.value) + measure;
         });
 
         cards.exit().remove();
 
-        let oldColor;
-
         svg.selectAll("rect")
         .on('mouseover', function(d) {
-            d3version3.select(this)
-            .style("stroke","#000000")
-            .style("stroke-width","4px");
-            const date = moment(d.fullDate).format('YYYY-MM-DD');
-            if(d3version3.select("#b"+ date)[0][0] != null){
-                oldColor = d3version3.select("#b"+ date).style("fill");
+            if(!d3version3.select(this).classed("selected")){
+                d3version3.select(this)
+                .style("stroke","#000000")
+                .style("stroke-width","4px");
+                const date = moment(d.fullDate).format('YYYY-MM-DD');
+
+                d3version3.select("#b"+ date)
+                .style("stroke","#000000")
+                .style("stroke-width","2px");
+                if(d.cycle !== ''){
+                    d3version3.selectAll('rect[data-cycle="'+ d.cycle + '"]')
+                    .style("stroke","#000000")
+                    .style("stroke-width","2px");
+                }
             }
-            d3version3.select("#b"+ date)
-            .style("stroke","#000000")
-            .style("stroke-width","2px");
-
         }).on('mouseout', function(d) {
-            svg.selectAll("rect")
-            .style("stroke","#E6E6E6")
-            .style("stroke-width","2px");
+            if(!d3version3.select(this).classed("selected")){
+                d3version3.select(this)
+                .style("stroke","#E6E6E6")
+                .style("stroke-width","2px");
+    
+                const date = moment(d.fullDate).format('YYYY-MM-DD');
+                d3version4.select("#b"+ date)
+                .style("stroke","");
 
-            const date = moment(d.fullDate).format('YYYY-MM-DD');
-            d3version4.select("#b"+ date)
-            .style("fill", oldColor)
-            .style("stroke","");
+                if(d.cycle !== ''){
+                    d3version3.selectAll('rect[data-cycle="'+ d.cycle + '"]')
+                    .style("stroke","#E6E6E6")
+                    .style("stroke-width","2px");
+                }
+            }
+        });
+        
+        $('svg rect.day-cell').tipsy({ 
+            gravity: 'w', 
+            html: true, 
+            title: function() {
+                const d = this.__data__;
+                const $this = $(this);
+                const name = search(sensorCode, sensorCodeObjects).name;
+                const measure = search(sensorCode, sensorCodeObjects).measure;
+                console.log($this.data('cycle'));
+                if($this.data('cycle') != ""){
+                    return "Data: "+ moment(d.fullDate).format('DD/MM/YYYY') +"<br>"+name+": " + Math.round(d.value) + measure+"<br>"+ "Ciclo:"+$this.data('cycle'); 
+                }
+                return "Data: "+ moment(d.fullDate).format('DD/MM/YYYY') +"<br>"+name+": " + Math.round(d.value) + measure; 
+            }
         });
 
         var legend = svg.selectAll(".legend")
@@ -284,11 +314,16 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
 };
 
 $(document).ready(function () {
-    generateHeatmap("#heat-map-months", configYear, true, 0, getUrlParameter('device'));
+    generateHeatmap("#heat-map-months", configYear, true, 0, device);
 
     $(document).on('change', ".heatmap-type", function () {
+        beginSelection = '';
+        endSelection = '';
         $("#heat-map-months").empty();
-        generateHeatmap("#heat-map-months", configYear, true, $(this).val(), getUrlParameter('device'));
+        _sensor_code = $(this).val();
+        generateHeatmap("#heat-map-months", configYear, true, $(this).val(), device);
+        $('#spiral-chart').empty();
+        makeSpiral(device, _sensor_code);
     });
 
     // Ctrl + Click para selecionar dias
@@ -305,11 +340,15 @@ $(document).ready(function () {
 
     function heatMapSelection(begin, end, $this){
         if($this.hasClass("selected")){
-            $this.css({ 'fill': 'blue'});
-            $this.removeClass("selected");
+            $('rect.day-cell.selected').css({ 'stroke': ''});
+            $('rect.day-cell.selected').removeClass("selected");
         } else{
             $this.addClass("selected");
-            $this.css({ 'fill': 'green'});
+            $this.css({
+                 'stroke': 'rgb(0, 0, 0)',
+                 'stroke-width' : '4px'
+            });
+            
         }
 
         if(begin){
@@ -343,21 +382,33 @@ $(document).ready(function () {
         if(begin && end){
             begin.nextUntil(end, 'rect').each(function(){
                 $(this).addClass("selected");
-                $(this).css({ 'fill': 'green'});
+                $(this).css({
+                    'stroke': 'rgb(0, 0, 0)',
+                    'stroke-width' : '4px'
+               });
             });
         }
         return [begin , end];
     }
 
-    $(document).on('click', "#refresh-heatmap", function () {
-        beginSelection = '';
-        endSelection = '';
-        $('#heat-map-months').empty();
-        generateHeatmap("#heat-map-months", configYear, true, 0, getUrlParameter('device'));
-    });
-
     $('body').on('click', '.day-cell', function () {
         const $this = $(this);
+        const heatmaptype = $('.heatmap-type').find(":selected").val();
+
+        // Estatísticas de mortalidade das aves
+        if(heatmaptype == 9){
+            beginSelection = $("#heat-map-months").find('[data-cycle='+$this.data('cycle')+']').first();
+            endSelection = $("#heat-map-months").find('[data-cycle='+$this.data('cycle')+']').last();
+            $(".cell-selected").each(function (index) {
+                const gridNumber = $(this).attr("id")
+                $('.chart-area').html("<div id=\"timeSeriesArea5\" ondrop=\"drop(event)\" ondragover=\"allowDrop(event)\" class=\"drag-text\"><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>");
+                const weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
+                const sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
+                getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5', 'heatmap');
+            });
+            makeWeatherData();
+        }
+
         const date = $this.data('date').substr(0,10);
         weatherDate = $this.data('date').substr(0,10);
         // Se pressionou control junto do click, carrega dados com dia ou dias selecionados.
@@ -373,9 +424,13 @@ $(document).ready(function () {
                     getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5', 'heatmap');
                 });
                 makeWeatherData();
+                $('#data-hoje').val($.format.date(new Date(beginSelection.data('date')), "dd/MM/yyyy")+ ' - '+$.format.date(new Date(endSelection.data('date')), "dd/MM/yyyy"));
             }
         } else {
             // Gera gráfico
+            $('rect').css({ 'stroke': ''});
+            $('rect.day-cell.selected').removeClass("selected");
+            
             $(".cell-selected").each(function (index) {
                 const gridNumber = $(this).attr("id")
                 $('.chart-area').html("<div id=\"timeSeriesArea5\" ondrop=\"drop(event)\" ondragover=\"allowDrop(event)\" class=\"drag-text\"><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>");
@@ -383,6 +438,10 @@ $(document).ready(function () {
                 const sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
                 getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5', 'heatmap');
             });
+            console.log(date);
+            console.log($.format.date(new Date(date+'.000'), "dd/MM/yyyy"));
+            
+            $('#data-hoje').val($.format.date(new Date(date+' 00:00:00'), "dd/MM/yyyy"));
             makeWeatherData(date);
         }
     });

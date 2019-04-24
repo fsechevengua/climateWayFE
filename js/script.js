@@ -1,10 +1,12 @@
 var appHost = window.location.host;
 var dataX = [];
 //var weatherDate = $.format.date(new Date(), "yyyy-MM-dd");
-var weatherDate = "2018-10-31";
+var weatherDate = "2018-11-01";
 var weatherCache;
-var sensorOrder = [0, 1, 2, 3, 4, 5, 6];
+var sensorOrder = [0, 1, 2, 3, 4, 5, 6,9];
+var sensorOrderNames = ['temperatura', 'pressao', 'umidade', 'vento', 'luminosidade', 'co2', 'so2', 'num_aves_mortas'];
 var device = getUrlParameter('device');
+var _sensor_code = 0;
 var _filtro = [];
 var _array_posicoes_filtradas = []; // Posições no viewData a serem filtradas
 var _elementos_filtrados = []; // Controle de filtro para cada dado
@@ -18,58 +20,42 @@ function getUrlParameter(name) {
 
 function loadDevicesCombo(){
     const getDevices = $.ajax({
-        url: "http://178.128.15.73:9000/loadDevices",
+        url: "http://localhost:9000/loadDevices",
         type: "get"
     });
     
     Promise.resolve(getDevices).then(function (data) {
         //$('.devices').append()
         data.forEach(function (elem, index) {
+            if(index == 0){ //Popula o device com o primeiro elemento vindo do banco
+                device = elem;
+            }
             $('.devices').append("<option value='"+elem+"' >"+elem+"</option>")
         });
-        /*<option value="area" selected="selected">Line chart</option>
-        <option value="bar">Bar chart</option>
-        <option value="spline">Spline chart</option>
-        console.log(data);*/
     });
 }
 
-$(document).ready(function () {
-    $('#data-hoje').html($.format.date(new Date(), "dd/MM/yyyy hh:mm:ss"));
-    makeWeatherData();
+function start(){
+    $('#data-hoje').val($.format.date(new Date(), "dd/MM/yyyy hh:mm:ss"));
     loadDevicesCombo();
-    // Inicia mix e max de cada variável
-    const getMinMaxCall = $.ajax({
-        url: "http://178.128.15.73:9000/min-max",
-        type: "get"
-    });
-    
-    Promise.resolve(getMinMaxCall).then(function (data) {
-    });
+    makeWeatherData();
+    $('.data-bar').find('tr:first').find('td:first').trigger('click');
+}
 
-    /*const $minMax = $('.min-max-item');
-    const minMaxData = [];
-    const tiposData = ['temperatura', 'pressao', 'umidade', 'vento', 'luminosidade', 'co2', 'so2'];
-    
-    $this.button('loading');
-
-    $.each($minMax, function (i, $elem) {
-        minMaxData.push({
-            tipo: tiposData[i],
-            min : $(this).find('input[name="min"]').val(),
-            max : $(this).find('input[name="max"]').val(),
-        });
-    });*/
-
-    
-    
+$(document).ready(function () {
+    start();    
 });
+
 $(document).on('change', ".devices", function(){
+    beginSelection = '';
+    endSelection = '';
     $("#heat-map-months").empty();
-    generateHeatmap("#heat-map-months", configYear, true, 0, $(this).val());
+    device = $(this).val();
+    generateHeatmap("#heat-map-months", configYear, true, _sensor_code, device);
     $('#spiral-chart').empty();
-    makeSpiral($(this).val());
+    makeSpiral(device, _sensor_code);
 });
+
 //Gerar gráfico em diálogo
 var dialogData;
 var dataYDialog;
@@ -165,15 +151,10 @@ let viewDataCanvas = [];
 function generateChartDrop(DropAreaId, chartType, dataY) {
     if (viewData.length == 0)
         viewData = [dataX];
+
     //Remove o x para substituir pelo novo eixo x que veio do servidor
     viewData.shift();
     viewData.unshift(dataX);
-
-    let dataYAux = dataY.slice();
-    let dataWihoutLabel = dataYAux.splice(1, dataYAux.length);
-
-    let dataXAux = dataX.slice();
-    let dataXWihoutLabel = dataXAux.splice(1, dataXAux.length);
 
     // Verifica se não tem repetição de dados
     var substituiu = false;
@@ -228,8 +209,9 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
     });
 
     // Filtro
-    if(dataY.length != 0){ // Não faz filtragem quando está tirando uma célula selecionada
-        const filtro = _filtro;
+    const filtro = _filtro;
+    if(dataY.length != 0 && filtro.length > 0){ // Não faz filtragem quando está tirando uma célula selecionada
+        
         let array_posicoes_filtradas = [];//_array_posicoes_filtradas.slice();
         filtro.forEach(function (elem, index) {
             for(let i = 0; i < viewData.length; i++){
@@ -243,14 +225,6 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
                             }
                         }
                     }
-                } else {
-                    inicio = moment(elem.dataInicio).format("YYYY/MM/DD h:mm")
-                    fim = moment(elem.dataFim).format("YYYY/MM/DD h:mm") 
-                    for(let i = 1; i < viewData[0].length; i++){
-                        if(!(viewData[0][i] >= inicio && viewData[0][i] <= fim)){
-                            //viewData[0].splice(i,1);
-                        }
-                    }                
                 }
             }
         });
@@ -277,95 +251,14 @@ function generateChartDrop(DropAreaId, chartType, dataY) {
     let dataCanvas = [];
     let dataXCanvas = [];
     let dataAuxCanvas = JSON.parse(JSON.stringify(viewData));// Clone array
-
+        
     for(let i = 1; i < dataAuxCanvas.length; i++){
         dataCanvas.push(dataAuxCanvas[i].splice(1, dataAuxCanvas[0].length)); // Valores de cada elemento do eixo y
     }
+    
+
     dataXCanvas = dataAuxCanvas[0].splice(1, dataAuxCanvas[0].length); // Valores das datas do eixo x
-
     generateCanvasChart(dataCanvas, dataXCanvas, chartType);
-
-    /*c3.generate({
-        bindto: "#" + DropAreaId,
-        data: {
-            x: 'x',
-            xFormat: '%Y/%m/%d %H:%M',
-            columns: viewData,
-            type: chartType ? chartType : 'area',
-            color: function (color, d) {
-                return d.value === max ? "red" : (d.value === min ? "yellow" : "#1f77b4");
-            },
-        },
-        point: {
-            r: function(d) { 
-               return d.value === max || d.value === min ? 10 : 5;
-            }
-        },
-        grid: {
-            x: {
-                lines: [{value: '2017/09/18 01:20', text: '2017/09/18'}]
-            },
-            y: {
-                lines: medias//[{value: media, class: 'linha-media', text: 'Média: '+media.toFixed(2)}]
-            }
-        },
-        zoom: {
-            enabled: true
-        },
-        axis: {
-            x: {
-                type: 'timeseries',
-                localtime: true,
-                tick: {
-                    rotate: 75,
-                    format: '%d/%m/%Y %H:%M',
-                    culling: {
-                        max: 12 // the number of tick texts will be adjusted to less than this value
-                    }
-                },
-                y: {
-                    max: Math.max.apply(Math, dataWihoutLabel) + 1,
-                    min: Math.min.apply(Math, dataWihoutLabel),
-                }
-            }
-        }
-    });
-
-    
-
-    $(document).on('zoomStart', function() {
-        pontosVento = d3.selectAll(".c3-circles-Vento circle");
-        pontosVento[0].forEach(function (point, index) {
-            d3.select(".c3-circles-Vento").append('svg:foreignObject')
-            .attr("width", 20)
-            .attr("height", 20)
-            .attr("x", function(d){
-                return d3.select(point).attr("cx") - 10
-            })
-            .attr("y", function(d){
-                return d3.select(point).attr("cy") - 10
-            })
-            .append("xhtml:body")
-            .style("background-color", "transparent")
-            .html(function(d) { return '<i class="wi wi-wind towards-'+getWeatherDataFromResult(weatherCache.payload, 7)[index + 1]+'-deg" style="color:#000000; font-size: 20px"></i>' });
-        });
-    });
-    
-    pontosVento = d3.selectAll(".c3-circles-Vento circle");
-    pontosVento[0].forEach(function (point, index) {
-        d3.select(".c3-circles-Vento").append('svg:foreignObject')
-        .attr("width", 20)
-        .attr("height", 20)
-        .attr("x", function(d){
-            return d3.select(point).attr("cx") - 10
-        })
-        .attr("y", function(d){
-            return d3.select(point).attr("cy") - 10
-        })
-        .append("xhtml:body")
-        .style("background-color", "transparent")
-        .html(function(d) { return '<i class="wi wi-wind towards-'+getWeatherDataFromResult(weatherCache.payload, 7)[index + 1]+'-deg" style="color:#000000; font-size: 20px"></i>' });
-    });*/
 
     // Remove array vazio da estrutura
     if(dataY !== undefined && dataY.length === 0){
@@ -473,7 +366,7 @@ $("#datetimepicker1").on("dp.change", function (e) {
 
     weatherDate = date;
 
-    loadTableData();
+    //loadTableData();
 });
 
 document.addEventListener("getWeatherData", function (e) {
@@ -507,11 +400,12 @@ function getWeatherData(weatherVarName, sensor_code, target) {
     }
 
     var weatherDataCall = $.ajax({
-        url: "http://178.128.15.73:9000/dateWeatherData",
+        url: "http://localhost:9000/dateWeatherData",
         type: "POST",
         data: {
             date: weatherDate,
             sensor_code: sensor_code,
+            device: device,
             dateRange: dateRange
         }
     });
@@ -546,7 +440,7 @@ function getRaining() {
         return "Não";
 }
 
-function loadTableData() {
+/*function loadTableData() {
     // Line one
     $(".celcius-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[0])[1]);
     $(".pressure-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[1])[1]);
@@ -569,7 +463,7 @@ function loadTableData() {
     $(".pricipitation-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[9])[1]);
     $(".co-data").html(getWeatherDataFromResult(weatherCache.payload, sensorOrder[10])[1]);
     $(".raining-data").html(getRaining());
-}
+}*/
 
 $("#dayslist a").click(function (e) {
     e.preventDefault()
@@ -582,7 +476,7 @@ $("#dayslist a").click(function (e) {
         changeDate = 0;
         generateLightnessBar(560);
     }
-    loadTableData();
+    //loadTableData();
 })
 
 $("li[role='presentation'] a").each(function (index) {
@@ -606,6 +500,8 @@ function getWeatherValue(result, code){
             return result.precipitation != null ? result.precipitation : 0;
         case 5:
             return result.barometricPressure != null ? result.barometricPressure : 0;
+        case 9:
+            return result.deaths ? result.deaths : 0;
         default:
             return  result.solarIrradiation != null ? result.solarIrradiation : 0;
     }
@@ -667,7 +563,7 @@ function makeWeatherData(dateParam) {
     }
 
     var weatherDataCall = $.ajax({
-        url: "http://178.128.15.73:9000/weatherData",
+        url: "http://localhost:9000/weatherData",
         type: "GET",
         data: {
             date: dateParam,
@@ -678,20 +574,17 @@ function makeWeatherData(dateParam) {
 
     var weatherDataPromise = Promise.resolve(weatherDataCall).then(function (data) {
         weatherCache = data;
-        var colors = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c', '#98df8a', '#d62728', '#ff9896', '#9467bd', '#c5b0d5', '#8c564b', '#c49c94', '#e377c2', '#f7b6d2', '#7f7f7f', '#c7c7c7', '#bcbd22', '#dbdb8d', '#17becf', '#9edae5'];
-        var stringFormatter = ['°C', 'bar', '%', 'm/s', 'uv', 'ppm', 'ppm']
-        const dataNames = ['Temperatura', 'Pressão Atmosférica', 'Umidade Relativa do Ar', 'Velocidade', 'Luminosidade', 'Concentração de CO2', 'Concentração de SO2']
-        const tiposData = ['temperatura', 'pressao', 'umidade', 'vento', 'luminosidade', 'co2', 'so2'];
+        var stringFormatter = ['°C', 'bar', '%', 'm/s', 'uv', 'ppm', 'ppm', ''];
+        const dataNames = ['Temperatura', 'Pressão Atmosférica', 'Umidade Relativa do Ar', 'Velocidade', 'Luminosidade', 'Concentração de CO2', 'Concentração de SO2', 'Número de Aves Mortas']
         
         // Inicia mix e max de cada variável
         const getMinMaxCall = $.ajax({
-            url: "http://178.128.15.73:9000/min-max",
+            url: "http://localhost:9000/min-max",
             type: "get"
         });
         
         Promise.resolve(getMinMaxCall).then(function (data) {
-            console.log(data);
-            for (i = 0; i < 7; i++) {
+            for (i = 0; i < 8; i++) {
                 let windDirection;
                 if(i == 3){
                     windDirection = { 
@@ -774,6 +667,10 @@ function makeWeatherData(dateParam) {
                     }
                 }
 
+                let dataMinMax = data.filter(function(obj) {
+                    return obj.minMaxTipo == sensorOrderNames[i];
+                })[0];
+
                 option = {
                     tooltip : {
                         formatter: "{a} <br/>{b} : {c}"
@@ -782,13 +679,13 @@ function makeWeatherData(dateParam) {
                         {
                             name: dataNames[i],
                             type: 'gauge',
-                            min: data[i] ? data[i].min : 0,
-                            max: data[i] ? data[i].max : 100,
+                            min:  0,
+                            max:  (dataMinMax ? dataMinMax.max : 100),
                             axisLine: { // Grossura do círculo   
                                 lineStyle: {
-                                    color: [
-                                        [0.2, '#67e0e3'],
-                                        [0.6, '#37a2da'],
+                                    color: [ // Mínimo, normal e máximo
+                                        [(dataMinMax ? dataMinMax.min : 0)/dataMinMax.max, '#67e0e3'],
+                                        [(dataMinMax ? dataMinMax.normal : 0)/dataMinMax.max, '#37a2da'],
                                         [1, '#fd666d']
                                     ],
                                     width: 7
@@ -821,7 +718,7 @@ function makeWeatherData(dateParam) {
                 var chart = echarts.init(chart_id);
                 chart.setOption(option);
             }
-            loadTableData();
+            //loadTableData();
         });
     });
 };
@@ -859,19 +756,12 @@ $(document).on('click', ".adicionar-form-filtro", function () {
     countForms = $(this).length;
     
     $.get("filter.html", function(data){
-        $(".form-filtro").append(data);
-    });
-
-    // Remove os outros botões de adivionar duplicados;
-    $this.each(function( index ) {
-        if(index < countForms){
-            $(this).replaceWith("<button type='button' class='btn btn-danger remover-form-filtro' color='red'><i class='glyphicon glyphicon-remove'></i></button>");
-        }
+        $(".form-filtro").before(data);
     });
 });
 
 $(document).on('click', ".remover-form-filtro", function () {
-    $(this).parents('.row').remove();
+    $(this).parents('.row').first().remove();
 });
 
 $(document).on('change', ".tipo-dado", function () {
@@ -939,15 +829,61 @@ $(document).on('click', ".apply-filter", function () {
 
     $btn.button('reset');
     $('#filtro').modal('hide');
+
+    // Percorre todas as células selecionadas e faz a chamada para todas
+    $(".cell-selected").each(function (index) {
+        const gridNumber = $(this).attr("id")
+        $('.chart-area').html("<div id=\"timeSeriesArea5\" ondrop=\"drop(event)\" ondragover=\"allowDrop(event)\" class=\"drag-text\"><span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span></div>");
+        const weatherVarName = document.getElementById(gridNumber).getElementsByClassName('location-font')[0].innerText;
+        const sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
+        getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5', 'heatmap');
+    });
 });
 
 function generateCanvasChart(data, date, type){
     let dataElements = [];
-    const dataNames = ['Temperatura', 'Pressão Atmosférica', 'Umidade Relativa do Ar', 'Velocidade', 'Luminosidade', 'Concentração de CO2', 'Concentração de SO2']
+    let dataNames = [];
+    const $selectedItems = $('.cell-selected');
+
+    $selectedItems.each(function(index) {
+        dataNames.push($(this).text().trim());
+    });
+    
     for(let i = 0; i < data.length; i++){
         dataElements.push({
             name: dataNames[i],
             type: type,
+            markPoint: {
+                data: [
+                    {
+                        type: 'max', 
+                        itemStyle: {
+                            color: 'rgb(255, 0, 0)'
+                        },
+                        label:{
+                            emphasis :{
+                                formatter : 'Máximo: {@score}'
+                            }
+                        },
+                    },
+                    {
+                        type: 'min', 
+                        itemStyle: {
+                            color: 'rgb(0, 0, 255)'
+                        },
+                        label:{
+                            emphasis :{
+                                formatter : 'Mínimo: {@score}'
+                            }
+                        },
+                    }
+                ]
+            },
+            markLine: {
+                data: [
+                    {type: 'average'}
+                ]
+            },
             sampling: 'average',
             itemStyle: {
                 color: 'rgb(255, 70, 131)'
@@ -1024,21 +960,20 @@ function generateCanvasChart(data, date, type){
 $(document).on('click', "#save-min-max", function () {
     let $this = $(this);
     const $minMax = $('.min-max-item');
-    const minMaxData = [];
-    const tiposData = ['temperatura', 'pressao', 'umidade', 'vento', 'luminosidade', 'co2', 'so2'];
-    
+    const minMaxData = [];    
     $this.button('loading');
 
     $.each($minMax, function (i, $elem) {
         minMaxData.push({
-            tipo: tiposData[i],
+            tipo: sensorOrderNames[i],
             min : $(this).find('input[name="min"]').val(),
+            normal : $(this).find('input[name="normal"]').val(),
             max : $(this).find('input[name="max"]').val(),
         });
     });
 
     const saveMinMaxCall = $.ajax({
-        url: "http://178.128.15.73:9000/save-min-max",
+        url: "http://localhost:9000/save-min-max",
         type: "POST",
         data: {
             minMax: minMaxData,
@@ -1050,28 +985,4 @@ $(document).on('click', "#save-min-max", function () {
         $('#min-max').modal('hide');
         makeWeatherData();
     });
-});
-
-$(document).on('click', '.hide-data', function() {
-    const $this = $(this);
-    const $bar = $('.data-bar'); 
-    if($bar.is(":visible")){
-        $bar.hide();
-        $(this).text('Show Data');
-    } else {
-        $bar.show();
-        $(this).text('Hide Data');
-    }
-});
-
-$(document).on('click', '.hide-functions', function() {
-    const $this = $(this);
-    const $bar = $('.functions-bar'); 
-    if($bar.is(":visible")){
-        $bar.hide();
-        $(this).text('Show Functions');
-    } else {
-        $bar.show();
-        $(this).text('Hide Funtions');
-    }
 });
