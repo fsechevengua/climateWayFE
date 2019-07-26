@@ -297,3 +297,33 @@ td:hover {
 	.sidebar {padding-top: 15px;}
 	.sidebar a {font-size: 18px;}
 }
+
+.tooltip-planta {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: rgba(0,0,0,.8);
+    color: white;
+    font-size: 14px;
+    padding: 5px;
+    line-height: 18px;
+    display: none;
+}
+
+.legend-area {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    background: white;
+    outline: 3px solid black;
+    line-height: 1em;
+}
+
+#min {
+    float: left;
+}
+
+#max {
+    float: right;
+}

@@ -91,6 +91,8 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
     var svg = d3version3.select(id).append("svg")
         .attr("width", configHeatmap.width + margin.left + margin.right)
         .attr("height", configHeatmap.height + margin.top + margin.bottom)
+        .attr("class", "step-6")
+        .attr("data-step", "6")
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -175,7 +177,12 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
             })
             .attr("rx", 4)
             .attr("ry", 4)
-            .attr("class", "week bordered day-cell")
+            .attr("class",  function (d) {
+                console.log(d);
+                if(d.day == 1 && d.week == 1){
+                    return "week bordered day-cell";
+                }
+            })
             .attr("data-date", function (d) {
                 return d.fullDate;
             })
