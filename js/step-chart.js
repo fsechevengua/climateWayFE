@@ -56,7 +56,7 @@ $(document).ready(function () {
 
     function getThermalAmplitude() {
         var weatherDataCall = $.ajax({
-            url: "http://178.128.15.73:9000/thermalAmplitude",
+            url: "http://localhost:9000/thermalAmplitude",
             type: "GET",
             data: {
                 date: month,

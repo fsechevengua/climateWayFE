@@ -1,10 +1,9 @@
-async function makeSpiral(device, sensor_code) {
+async function makeSpiral(device, sensor_code, data) {
   var width = 330,
       height = 330,
       start = 0,
       end = 2.80,
       numSpirals = 3
-      margin = {top:10,bottom:1,left:1,right:1};
 
     var theta = function(r) {
       return numSpirals * Math.PI * r;
@@ -20,8 +19,8 @@ async function makeSpiral(device, sensor_code) {
       .range([40, r]);
 
     var svg = d3version4.select("#spiral-chart").append("svg")
-      .attr("width", width + margin.right + margin.left)
-      .attr("height", height + margin.left + margin.right)
+      .attr("width", width)
+      .attr("height", height)
       .append("g")
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
@@ -44,17 +43,9 @@ async function makeSpiral(device, sensor_code) {
         barWidth = (spiralLength / N) - 1;
     var someData = [];
 
-    // Pega dados para o espiral
-    spiralFetch = $.ajax({
-      url: "http://178.128.15.73:9000/heatmap",
-      type: "GET",
-      data: {
-          device: device,
-          sensorCode : sensor_code
-      }
-    });
-
-    spiralData = await Promise.resolve(spiralFetch).then(function (data) { return data; });
+    // Dados do Heatmap
+    spiralData = data;
+    
     let dataWithFullDate = spiralData.filter(obj => {
       return obj.fullDate !== '';
     });
@@ -203,7 +194,4 @@ async function makeSpiral(device, sensor_code) {
       }
   });
 }
-
-makeSpiral(device, _sensor_code);
-
   

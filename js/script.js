@@ -11,6 +11,10 @@ var _filtro = [];
 var _array_posicoes_filtradas = []; // Posições no viewData a serem filtradas
 var _elementos_filtrados = []; // Controle de filtro para cada dado
 
+$(document).ajaxStop(function () {
+    $(".se-pre-con").fadeOut("slow");
+});
+
 function getUrlParameter(name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
     var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -20,7 +24,7 @@ function getUrlParameter(name) {
 
 function loadDevicesCombo(){
     const getDevices = $.ajax({
-        url: "http://178.128.15.73:9000/loadDevices",
+        url: "http://localhost:9000/loadDevices",
         type: "get"
     });
     
@@ -400,7 +404,7 @@ function getWeatherData(weatherVarName, sensor_code, target) {
     }
 
     var weatherDataCall = $.ajax({
-        url: "http://178.128.15.73:9000/dateWeatherData",
+        url: "http://localhost:9000/dateWeatherData",
         type: "POST",
         data: {
             date: weatherDate,
@@ -509,7 +513,7 @@ function getWeatherValue(result, code){
 
 function getWeatherDataFromResult(data, sensorCode) {
     var result = ['sample'];
-    result.push(Math.round(getWeatherValue(data[data.length-1], sensorCode) * 100) / 100);
+    data.length > 0 ? result.push(Math.round(getWeatherValue(data[data.length-1], sensorCode) * 100) / 100) : '';
     return result;
 };
 
@@ -563,7 +567,7 @@ function makeWeatherData(dateParam) {
     }
 
     var weatherDataCall = $.ajax({
-        url: "http://178.128.15.73:9000/weatherData",
+        url: "http://localhost:9000/weatherData",
         type: "GET",
         data: {
             date: dateParam,
@@ -579,7 +583,7 @@ function makeWeatherData(dateParam) {
         
         // Inicia mix e max de cada variável
         const getMinMaxCall = $.ajax({
-            url: "http://178.128.15.73:9000/min-max",
+            url: "http://localhost:9000/min-max",
             type: "get"
         });
         
@@ -671,6 +675,8 @@ function makeWeatherData(dateParam) {
                     return obj.minMaxTipo == sensorOrderNames[i];
                 })[0];
 
+                var valor_gauge = getWeatherDataFromResult(weatherCache.payload, sensorOrder[i])[1];
+
                 option = {
                     tooltip : {
                         formatter: "{a} <br/>{b} : {c}"
@@ -708,7 +714,7 @@ function makeWeatherData(dateParam) {
                                 }
                             },
                             splitNumber: 5,
-                            data: [{value: getWeatherDataFromResult(weatherCache.payload, sensorOrder[i])[1]}]
+                            data: [{value: valor_gauge ? valor_gauge : 0}]
                         },
                         windDirection
                     ]
@@ -854,6 +860,7 @@ function generateCanvasChart(data, date, type){
             name: dataNames[i],
             type: type,
             markPoint: {
+                symbol: 'arrow',
                 data: [
                     {
                         type: 'max', 
@@ -861,8 +868,13 @@ function generateCanvasChart(data, date, type){
                             color: 'rgb(255, 0, 0)'
                         },
                         label:{
+                            formatter: function(params) {
+                                return params.value.toFixed(2);
+                            },
                             emphasis :{
-                                formatter : 'Máximo: {@score}'
+                                formatter: function(params) {
+                                    return 'Máximo: '+params.value.toFixed(2);
+                                }
                             }
                         },
                     },
@@ -872,8 +884,13 @@ function generateCanvasChart(data, date, type){
                             color: 'rgb(0, 0, 255)'
                         },
                         label:{
+                            formatter: function(params) {
+                                return params.value.toFixed(2);
+                            },
                             emphasis :{
-                                formatter : 'Mínimo: {@score}'
+                                formatter: function(params) {
+                                    return 'Mínimo: '+params.value.toFixed(2);
+                                }
                             }
                         },
                     }
@@ -893,6 +910,9 @@ function generateCanvasChart(data, date, type){
     }
 
     option = {
+        grid:{
+           // bottom:'20%'
+        },
         tooltip: {
             trigger: 'axis',
             position: function (pt) {
@@ -973,7 +993,7 @@ $(document).on('click', "#save-min-max", function () {
     });
 
     const saveMinMaxCall = $.ajax({
-        url: "http://178.128.15.73:9000/save-min-max",
+        url: "http://localhost:9000/save-min-max",
         type: "POST",
         data: {
             minMax: minMaxData,

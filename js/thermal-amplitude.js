@@ -57,12 +57,14 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 };
 
+var heatmapFetch;
+
 // Monta o Heatmap
 async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
     var configHeatmap = jQuery.extend(true, {}, config);
 
     var margin = {
-        top: 50,
+        top: 20,
         right: 0,
         bottom: 100,
         left: 30
@@ -134,7 +136,7 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
 
     // Pega dados para o calendário
     heatmapFetch = $.ajax({
-        url: "http://178.128.15.73:9000/heatmap",
+        url: "http://localhost:9000/heatmap",
         type: "GET",
         data: {
             device: deviceCode,
@@ -145,6 +147,9 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
     data = await Promise.resolve(heatmapFetch).then(function (data) {
         return data;
     });
+    
+    $('#spiral-chart').empty();
+    makeSpiral(device, _sensor_code, data);
     
     var heatmapChart = function (tsvFile) {
         var colorScale = d3version3.scale.quantile()
@@ -178,8 +183,9 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
             .attr("rx", 4)
             .attr("ry", 4)
             .attr("class",  function (d) {
-                console.log(d);
                 if(d.day == 1 && d.week == 1){
+                    return "week bordered day-cell step7";
+                } else{
                     return "week bordered day-cell";
                 }
             })
@@ -228,7 +234,7 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
         cards.select("title").text(function (d) {
             var name = search(sensorCode, sensorCodeObjects).name;
             var measure = search(sensorCode, sensorCodeObjects).measure;
-
+            
             return "Date: "+ moment(d.fullDate).format('DD/MM/YYYY') +"\n"+name+": " + Math.round(d.value) + measure;
         });
 
@@ -245,7 +251,8 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
                 d3version3.select("#b"+ date)
                 .style("stroke","#000000")
                 .style("stroke-width","2px");
-                if(d.cycle !== ''){
+                
+                if(d.cycle !== '' && d.value != null){
                     d3version3.selectAll('rect[data-cycle="'+ d.cycle + '"]')
                     .style("stroke","#000000")
                     .style("stroke-width","2px");
@@ -277,9 +284,13 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
                 const $this = $(this);
                 const name = search(sensorCode, sensorCodeObjects).name;
                 const measure = search(sensorCode, sensorCodeObjects).measure;
-                console.log($this.data('cycle'));
-                if($this.data('cycle') != ""){
+
+                var simple = new Date(Date.UTC(2018, 0, d.day + (d.week - 1) * 7));
+                console.log(simple, d.value);
+                if(d.value != null && $this.data('cycle') != ""){
                     return "Data: "+ moment(d.fullDate).format('DD/MM/YYYY') +"<br>"+name+": " + Math.round(d.value) + measure+"<br>"+ "Ciclo:"+$this.data('cycle'); 
+                } else if(d.value == null){
+                    return "Data: "+ moment(d.fullDate).format('DD/MM/YYYY');
                 }
                 return "Data: "+ moment(d.fullDate).format('DD/MM/YYYY') +"<br>"+name+": " + Math.round(d.value) + measure; 
             }
@@ -346,6 +357,13 @@ $(document).ready(function () {
     });
 
     function heatMapSelection(begin, end, $this){
+        if(begin && end){
+            $('rect.day-cell.selected').css({ 'stroke': ''});
+            $('rect.day-cell.selected').removeClass("selected");
+            begin = '';
+            end = '';
+        }
+
         if($this.hasClass("selected")){
             $('rect.day-cell.selected').css({ 'stroke': ''});
             $('rect.day-cell.selected').removeClass("selected");
@@ -355,7 +373,6 @@ $(document).ready(function () {
                  'stroke': 'rgb(0, 0, 0)',
                  'stroke-width' : '4px'
             });
-            
         }
 
         if(begin){
@@ -371,8 +388,8 @@ $(document).ready(function () {
 
         if(begin && end){
             if(begin.index('rect') == end.index('rect')){
-                begin = '';
-                end = '';
+                begin = $this;
+                end = $this;
             } else {
                 if($this.index('rect') > end.index('rect') && $this.index('rect') > begin.index('rect')){
                     begin = end;
@@ -386,13 +403,19 @@ $(document).ready(function () {
             }
         }
         
-        if(begin && end){
+        if(begin && end && begin != end){
             begin.nextUntil(end, 'rect').each(function(){
                 $(this).addClass("selected");
                 $(this).css({
                     'stroke': 'rgb(0, 0, 0)',
                     'stroke-width' : '4px'
                });
+            });
+        } else {
+            begin.addClass("selected");
+            begin.css({
+                'stroke': 'rgb(0, 0, 0)',
+                'stroke-width' : '4px'
             });
         }
         return [begin , end];
@@ -445,8 +468,6 @@ $(document).ready(function () {
                 const sensor_code = document.getElementById(gridNumber).getAttribute('data-sensor');
                 getWeatherData(weatherVarName, sensor_code, 'timeSeriesArea5', 'heatmap');
             });
-            console.log(date);
-            console.log($.format.date(new Date(date+'.000'), "dd/MM/yyyy"));
             
             $('#data-hoje').val($.format.date(new Date(date+' 00:00:00'), "dd/MM/yyyy"));
             makeWeatherData(date);
