@@ -1,311 +1,318 @@
 .axis path,
 .axis line {
-	fill: none;
-	stroke: #000;
+    fill: none;
+    stroke: #000;
 }
 
 .app {
-	margin-top: 60px;
-	margin-left: 2%;
+    margin-top: 60px;
+    margin-left: 2%;
 }
 
 .bar {
-	fill: orange;
+    fill: orange;
 }
 
 .bar:hover {
-	fill: orangered;
+    fill: orangered;
 }
 
 .x.axis path {
-	display: none;
+    display: none;
 }
 
 .d3-tip {
-	line-height: 1;
-	font-weight: bold;
-	padding: 12px;
-	background: rgba(0, 0, 0, 0.8);
-	color: #fff;
-	border-radius: 2px;
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
 }
 
 
 /* Creates a small triangle extender for the tooltip */
 
 .d3-tip:after {
-	box-sizing: border-box;
-	display: inline;
-	font-size: 10px;
-	line-height: 1;
-	color: rgba(0, 0, 0, 0.8);
-	content: "\25BC";
-	position: absolute;
-	text-align: center;
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
 }
 
 
 /* Style northward tooltips differently */
 
 .d3-tip.n:after {
-	margin: -1px 0 0 0;
-	top: 100%;
-	left: 0;
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
 }
 
 .line {
-	fill: none;
-	stroke: steelblue;
-	stroke-width: 1.5px;
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
 }
 
 .grid path,
 .grid line {
-	fill: none;
-	stroke: rgba(0, 0, 0, 0.25);
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.25);
 }
 
 .table {
-	display: table;
-	border-collapse: separate;
-	border-color: grey;
-	border: 1px solid red;
+    display: table;
+    border-collapse: separate;
+    border-color: grey;
+    border: 1px solid red;
 }
 
 .svg-container {
-	display: inline-block;
-	position: relative;
-	width: 100%;
-	padding-bottom: 100%;
-	/* aspect ratio */
-	vertical-align: top;
-	overflow: hidden;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    /* aspect ratio */
+    vertical-align: top;
+    overflow: hidden;
 }
 
 .grid-charts {
-	margin-left: 50px;
+    margin-left: 50px;
 }
 
 .svg-content-responsive {
-	display: inline-block;
-	position: absolute;
-	top: 10px;
-	left: 0;
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 0;
 }
 
 td:hover {
-	background-color: #C0C0C0;
+    background-color: #C0C0C0;
 }
 
 .chart-area {
-	height: 50%;
+    height: 50%;
 }
+
 #timeSeriesArea5 {
-	margin-left: 60px;
-	margin-right: 120px;
-	margin-bottom: 20px;
-	height: 300px;
-	border: 1px solid #aaaaaa;
+    margin-left: 60px;
+    margin-right: 120px;
+    margin-bottom: 20px;
+    height: 300px;
+    border: 1px solid #aaaaaa;
 }
 
 .drag-text {
-	text-align: center;
-	font-size: 30px;
+    text-align: center;
+    font-size: 30px;
 }
 
 .larger-icon {
-	font-size: 40px;
+    font-size: 40px;
 }
 
 .celcius-icon {
-	color: #FFFFFF;
+    color: #FFFFFF;
 }
 
 .celcius-data {
-	display: inline;
+    display: inline;
 }
 
 .weather-cell {
-	background-color: #3c3636;
+    background-color: #3c3636;
 }
 
-.cell-selected{
-	background-color: #8f7880;
-	width: 250px;
+.cell-selected {
+    background-color: #8f7880;
+    width: 250px;
 }
 
 .weather-icon {
-	font-size: 50px;
-	padding-left: 130px;
-	padding-top: 20px;
-	color: #FFFFFF;
-	position: absolute;
+    font-size: 50px;
+    padding-left: 130px;
+    padding-top: 20px;
+    color: #FFFFFF;
+    position: absolute;
 }
 
 .wind-icon {
-	font-size: 80px;
-	color: #FFFFFF;
-	position: absolute;
-	margin-left: 50px;
-	margin-top: -50px;
+    font-size: 80px;
+    color: #FFFFFF;
+    position: absolute;
+    margin-left: 50px;
+    margin-top: -50px;
 }
 
 .chemistry-icon {
-	font-size: 30px;
-	color: #FFFFFF;
-	padding-left: 110px;
-	padding-top: 40px;
-	position: absolute;
+    font-size: 30px;
+    color: #FFFFFF;
+    padding-left: 110px;
+    padding-top: 40px;
+    position: absolute;
 }
 
 .location-font {
-	color: #FFFFFF;
-	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    color: #FFFFFF;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .celcius-font {
-	display: inline;
-	font-size: 25px;
-	color: #FFFFFF;
-	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    display: inline;
+    font-size: 25px;
+    color: #FFFFFF;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .units-font {
-	font-size: 15px;
-	color: #FFFFFF;
-	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 15px;
+    color: #FFFFFF;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .station-title {
-	padding-top: 20px;
-	padding-left: 50px;
-	margin-bottom: 50px;
-	background: #74AFAD;
+    padding-top: 20px;
+    padding-left: 50px;
+    margin-bottom: 50px;
+    background: #74AFAD;
 }
 
 .nav-tabs>li {
-	float: none;
-	display: inline-block;
-	zoom: 1;
+    float: none;
+    display: inline-block;
+    zoom: 1;
 }
 
 .nav-tabs {
-	text-align: center;
+    text-align: center;
 }
 
 .glyphicon-refresh-animate {
-	-animation: spin 1s infinite linear;
-	-webkit-animation: spin2 1s infinite linear;
-}
-.glyphicon-refresh{
-	margin-top: 120px;
-}
-#step-chart {
-	margin-top: 100px;
+    -animation: spin 1s infinite linear;
+    -webkit-animation: spin2 1s infinite linear;
 }
 
-.day-cell{
-	cursor: pointer;
+.glyphicon-refresh {
+    margin-top: 120px;
+}
+
+#step-chart {
+    margin-top: 100px;
+}
+
+.day-cell {
+    cursor: pointer;
 }
 
 @-webkit-keyframes spin2 {
-	from {
-		-webkit-transform: rotate(0deg);
-	}
-	to {
-		-webkit-transform: rotate(360deg);
-	}
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @keyframes spin {
-	from {
-		transform: scale(1) rotate(0deg);
-	}
-	to {
-		transform: scale(1) rotate(360deg);
-	}
+    from {
+        transform: scale(1) rotate(0deg);
+    }
+    to {
+        transform: scale(1) rotate(360deg);
+    }
 }
 
 #box-plot-modal {
-	position: relative;
+    position: relative;
 }
-  
+
 #box-plot-modal .modal-dialog {
-	position: fixed;
-	margin: 0;
-	padding: 10px;
-	width: 40%;
+    position: fixed;
+    margin: 0;
+    padding: 10px;
+    width: 40%;
 }
 
 .modal-open {
-	overflow-y: auto;
+    overflow-y: auto;
 }
 
 .data-bar {
-	width: 50% !important;
+    width: 50% !important;
 }
 
 .sidebar {
-	height: 100%;
-	width: 0;
-	position: fixed;
-	z-index: 1;
-	top: 0;
-	left: 0;
-	background-color: #333;
-	overflow-x: hidden;
-	transition: 0.5s;
-	padding-top: 60px;
-	padding-left: 20px;
-  }
-  
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #333;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    padding-left: 20px;
+}
+
 .sidebar a {
-	padding: 8px 8px 8px 32px;
-	text-decoration: none;
-	font-size: 25px;
-	color: #818181;
-	display: block;
-	transition: 0.3s;
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
 }
 
 .sidebar a:hover {
-	color: #f1f1f1;
+    color: #f1f1f1;
 }
 
 .sidebar .closebtn {
-	position: absolute;
-	top: 0;
-	right: 25px;
-	font-size: 36px;
-	margin-left: 50px;
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
 }
 
 .openbtn {
-	cursor: pointer;
-	background-color: #111;
-	color: white;
-	border: none;
+    cursor: pointer;
+    background-color: #111;
+    color: white;
+    border: none;
 }
 
 .openbtn:hover {
-	background-color: #444;
+    background-color: #444;
 }
 
 #main {
-	transition: margin-left .5s;
-	padding: 16px;
+    transition: margin-left .5s;
+    padding: 16px;
 }
 
 @media screen and (max-height: 450px) {
-	.sidebar {padding-top: 15px;}
-	.sidebar a {font-size: 18px;}
+    .sidebar {
+        padding-top: 15px;
+    }
+    .sidebar a {
+        font-size: 18px;
+    }
 }
 
 .tooltip-planta {
     position: absolute;
     left: 0;
     top: 0;
-    background: rgba(0,0,0,.8);
+    background: rgba(0, 0, 0, .8);
     color: white;
     font-size: 14px;
     padding: 5px;
@@ -331,17 +338,110 @@ td:hover {
     float: right;
 }
 
+
 /* Paste this css to your style sheet file or under head tag */
+
+
 /* This only works with JavaScript, 
 if it's not present, don't show loader */
-.no-js #loader { display: none;  }
-.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+
+.no-js #loader {
+    display: none;
+}
+
+.js #loader {
+    display: block;
+    position: absolute;
+    left: 100px;
+    top: 0;
+}
+
 .se-pre-con {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	background: url(images/Preloader_7.gif) center no-repeat #fff;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url(images/Preloader_7.gif) center no-repeat #fff;
+}
+
+img[src^='http://www.google.com/mapfiles/marker.png?i='] {
+    opacity: 0.5
+}
+
+#marker-tooltip {
+    display: none;
+    position: absolute;
+    width: 800px;
+    height: 600px;
+    background-color: white;
+    border: 1px solid #ccc !important;
+    border-radius: 16px;
+}
+
+.sensor {
+    position: absolute;
+    bottom: 180px;
+    left: 350px;
+    cursor: pointer;
+}
+
+.speech-bubble {
+    position: relative;
+    background: #13f0eb;
+    border-radius: .4em;
+}
+
+.bullet {
+    font: 10px sans-serif;
+}
+
+.bullet .marker {
+    stroke: #000;
+    stroke-width: 2px;
+}
+
+.bullet .tick line {
+    stroke: #666;
+    stroke-width: .5px;
+}
+
+.bullet .range.s0 {
+    fill: #eee;
+}
+
+.bullet .range.s1 {
+    fill: #ddd;
+}
+
+.bullet .range.s2 {
+    fill: #ccc;
+}
+
+.bullet .measure.s0 {
+    fill: lightsteelblue;
+}
+
+.bullet .measure.s1 {
+    fill: steelblue;
+}
+
+.bullet .title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.bullet .subtitle {
+    fill: #999;
+}
+
+.center {
+    display: block;
+    margin-left: 5%;
+    margin-right: 10%;
+    margin-top: 7%;
+    margin-bottom: 10%;
+    width: 100%;
+    height: 100%;
 }

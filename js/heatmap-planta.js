@@ -1,105 +1,83 @@
-$(document).ready(function () {
-    $('body').on('click', '.planta', function () {
+var mantemBullet = false;
 
-        /*  start legend code */
-        // we want to display the gradient, so we have to draw it
-        var legendCanvas = document.createElement('canvas');
-        legendCanvas.width = 100;
-        legendCanvas.height = 10;
-        var min = document.querySelector('#min');
-        var max = document.querySelector('#max');
-        var gradientImg = document.querySelector('#gradient');
-        var legendCtx = legendCanvas.getContext('2d');
-        var gradientCfg = {};
-        function updateLegend(data) {
-            // the onExtremaChange callback gives us min, max, and the gradientConfig
-            // so we can update the legend
-            min.innerHTML = data.min;
-            max.innerHTML = data.max;
-            // regenerate gradient image
-            if (data.gradient != gradientCfg) {
-                gradientCfg = data.gradient;
-                var gradient = legendCtx.createLinearGradient(0, 0, 100, 1);
-                for (var key in gradientCfg) {
-                    gradient.addColorStop(key, gradientCfg[key]);
-                }
-                legendCtx.fillStyle = gradient;
-                legendCtx.fillRect(0, 0, 100, 10);
-                gradientImg.src = legendCanvas.toDataURL();
-            }
+$(document).ready(function() {
+    function randomize(d) {
+        if (!d.randomizer) d.randomizer = randomizer(d);
+        d.ranges = d.ranges.map(d.randomizer);
+        d.markers = d.markers.map(d.randomizer);
+        d.measures = d.measures.map(d.randomizer);
+        return d;
+    }
+
+    function randomizer(d) {
+        var k = d3.max(d.ranges) * .2;
+        return function(d) {
+            return Math.max(0, d + k * (Math.random() - .5));
         };
+    }
 
-        var heatmapInstance = h337.create({
-            container: document.querySelector('.planta-heatmap'),
-            onExtremaChange: function (data) {
-                updateLegend(data);
-            }
+    $('body').on('mouseover', '.sensor', function() {
+        var position = $(this).position();
+
+        $('.bullet-tooltip').css({
+            position: 'absolute',
+            bottom: (position.top - 552) + 'px',
+            left: (position.left - 190) + 'px',
+        }).show();
+
+        // Monta bullet chart
+        var margin = { top: 5, right: 40, bottom: 20, left: 120 },
+            width = 960 - margin.left - margin.right,
+            height = 50 - margin.top - margin.bottom;
+
+        var chart = d3.bullet()
+            .width(width)
+            .height(height);
+
+        var svg = d3.select(".bullet-chart").selectAll("svg")
+            .data(bulletData)
+            .enter().append("svg")
+            .attr("class", "bullet")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+            .call(chart);
+
+        var title = svg.append("g")
+            .style("text-anchor", "end")
+            .attr("transform", "translate(-6," + height / 2 + ")");
+
+        title.append("text")
+            .attr("class", "title")
+            .text(function(d) { return d.title; });
+
+        title.append("text")
+            .attr("class", "subtitle")
+            .attr("dy", "1em")
+            .text(function(d) { return d.subtitle; });
+
+        d3.selectAll("button").on("click", function() {
+            svg.datum(randomize).call(chart.duration(1000)); // TODO automatic transition
         });
+    });
 
-        //Tooltip
-        var wrapper = document.querySelector('.wrapper');
-        var tooltip = document.querySelector('.tooltip-planta');
-        function updateTooltip(x, y, value) {
-            // + 15 for distance to cursor
-            var transl = 'translate(' + (x + 20) + 'px, ' + (y + 20) + 'px)';
-            tooltip.style.webkitTransform = transl;
-            tooltip.innerHTML = value;
-        };
-        
-        wrapper.onmousemove = function (ev) {
-            var x = ev.layerX;
-            var y = ev.layerY;
-            // getValueAt gives us the value for a point p(x/y)
-            var value = heatmapInstance.getValueAt({
-                x: x,
-                y: y
-            });
-            tooltip.style.display = 'block';
-            updateTooltip(x, y, value);
-        };
+    $('body').on('mouseout', '.sensor', function() {
+        if (!mantemBullet) {
+            $('.bullet-tooltip').hide();
+        }
+    });
 
-        // hide tooltip on mouseout
-        wrapper.onmouseout = function () {
-            tooltip.style.display = 'none';
-        };
-        /* tooltip code end */
+    $('body').on('click', '.sensor', function() {
+        mantemBullet = !mantemBullet;
+        if(mantemBullet){
+            $(this).css({color: 'gray'});
+        } else {
+            $(this).css({color: 'black'});
+        }
+    });
 
-        // now generate some random data
-        var points = [];
-
-        var point1 = {
-            x: 150,
-            y: 400,
-            value: 90
-        };
-
-        var point2 = {
-            x: 300,
-            y: 400,
-            value: 90
-        };
-
-        var point3 = {
-            x: 500,
-            y: 400,
-            value: 90
-        };
-
-        points.push(point1);
-        points.push(point2);
-        points.push(point3);
-
-
-        // heatmap data format
-        var data = {
-            max: 100,
-            data: points
-        };
-
-        // if you have a set of datapoints always use setData instead of addData
-        // for data initialization
-        heatmapInstance.setData(data);
-
-        $("#planta-modal").modal();
+    $('body').on('click', '.abrir-aplicacao', function() {
+        window.open("http://" + appHost + "/app?device=1"); //+ device.device_code);
     });
 });
