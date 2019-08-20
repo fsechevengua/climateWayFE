@@ -15,7 +15,7 @@ function initMap() {
 async function loadDevices() {
     // Busca os dados
     const bulletPromise = $.ajax({
-        url: "http://localhost:9000/bullet",
+        url: "http://178.128.15.73:9000/bullet",
         type: "GET",
         data: {
             device: 1,

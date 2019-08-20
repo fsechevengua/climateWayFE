@@ -1,6 +1,6 @@
 function loadMinMax(){
     const getMinMaxCall = $.ajax({
-        url: "http://localhost:9000/min-max",
+        url: "http://178.128.15.73:9000/min-max",
         type: "get"
     });
     
