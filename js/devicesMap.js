@@ -25,7 +25,7 @@ async function loadDevices() {
     bulletData = await Promise.resolve(bulletPromise).then(function(data) {
         return data;
     });
-    console.log(bulletData);
+
     $.getJSON('resources/dots.json', function(devices) {
         $.each(devices, function(index, device) {
             var marker = new google.maps.Marker({

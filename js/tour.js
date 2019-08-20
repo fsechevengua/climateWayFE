@@ -1,9 +1,11 @@
+// Setar true para ligar o tour
+var _tourOn = false;
+
 $(document).ready(function () {
-    var intro = true;
     $(document).ajaxStop(function () {
-        if(intro)
+        if(_tourOn)
         {
-          intro = false;
+          _intro = false;
           // do other stuff load is completed
 
           var step1_texto = "Bem vindo a aplicação de monitoramento e análise metereológica. Nós próximos passos apresentaremos as funcionalidades.";
@@ -67,7 +69,7 @@ $(document).ready(function () {
           intro.onbeforechange(function(targetElement) {
               if($(targetElement).hasClass('step5')){
                   $('.openbtn').click();
-              };
+              }
           });
 
           intro.start();
