@@ -87,18 +87,40 @@
     <div id="map">
     </div>
     <div id="marker-tooltip">
+        <i class="fa fa-times pull-right fechar" style="margin:10px; cursor: pointer;" aria-hidden="true"></i>
         <div class="wrapper">
             <div class="planta-heatmap" style="height:500px; width:700px;">
                 <img src="images/PLANTA_TERREO.jpg" class="center" alt="Planta Baixa">
-                <i class="fas fa-microchip fa-2x sensor"></i>
+                <i class="fas fa-microchip fa-2x sensor sensor-style" data-device="1"></i>
+                <i class="fas fa-microchip fa-2x sensor sensor-style-2" data-device="2"></i>
+                <i class="fas fa-microchip fa-2x sensor sensor-style-3" data-device="3"></i>
             </div>
             <div class="tooltip-planta"></div>
-            <div class="bullet-tooltip" style="display:none">
+            <div class="bullet-tooltip" data-device="1" style="display:none">
                 <hgroup class="speech-bubble">
-                    <div class="bullet-chart"></div>
-                    <button class="btn btn-primary abrir-aplicacao" style="margin:10px">
+                    <i class="fa fa-times pull-right bullet-fechar" data-device="1" style="margin:10px; cursor: pointer;" aria-hidden="true"></i>
+                    <div class="bullet-chart" data-device="1"></div>
+                    <button class="btn btn-primary abrir-aplicacao" data-device="1" style="margin:10px">
 						Abrir Aplicação
 					</button>
+                </hgroup>
+            </div>
+            <div class="bullet-tooltip" data-device="2" style="display:none">
+                <hgroup class="speech-bubble">
+                    <i class="fa fa-times pull-right bullet-fechar" data-device="2" style="margin:10px; cursor: pointer;" aria-hidden="true"></i>
+                    <div class="bullet-chart" data-device="2"></div>
+                    <button class="btn btn-primary abrir-aplicacao" data-device="2" style="margin:10px">
+                        Abrir Aplicação
+                    </button>
+                </hgroup>
+            </div>
+            <div class="bullet-tooltip" data-device="3" style="display:none">
+                <hgroup class="speech-bubble">
+                    <i class="fa fa-times pull-right bullet-fechar" data-device="3" style="margin:10px; cursor: pointer;" aria-hidden="true"></i>
+                    <div class="bullet-chart" data-device="3"></div>
+                    <button class="btn btn-primary abrir-aplicacao" data-device="3" style="margin:10px">
+                        Abrir Aplicação
+                    </button>
                 </hgroup>
             </div>
         </div>

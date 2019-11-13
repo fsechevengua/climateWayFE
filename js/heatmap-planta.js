@@ -1,4 +1,4 @@
-var mantemBullet = false;
+var mantemBullet = [false, false, false];
 
 $(document).ready(function() {
     function randomize(d) {
@@ -19,7 +19,7 @@ $(document).ready(function() {
     $('body').on('mouseover', '.sensor', function() {
         var position = $(this).position();
 
-        $('.bullet-tooltip').css({
+        $('.bullet-tooltip[data-device="' + $(this).data('device') + '"]').css({
             position: 'absolute',
             bottom: (position.top - 552) + 'px',
             left: (position.left - 190) + 'px',
@@ -34,8 +34,8 @@ $(document).ready(function() {
             .width(width)
             .height(height);
 
-        var svg = d3.select(".bullet-chart").selectAll("svg")
-            .data(bulletData)
+        var svg = d3.select('.bullet-chart[data-device="' + $(this).data('device') + '"]').selectAll("svg")
+            .data(bulletData[$(this).data('device') - 1])
             .enter().append("svg")
             .attr("class", "bullet")
             .attr("width", width + margin.left + margin.right)
@@ -62,22 +62,31 @@ $(document).ready(function() {
         });
     });
 
+    $('body').on('click', '.bullet-fechar', function() {
+        $('.bullet-tooltip').hide();
+        mantemBullet[$(this).data('device') - 1] = false;
+        $('.sensor').each(function() {
+            $(this).css({ color: 'black' });
+        });
+    });
+
     $('body').on('mouseout', '.sensor', function() {
-        if (!mantemBullet) {
+        if (!mantemBullet[$(this).data('device') - 1]) {
             $('.bullet-tooltip').hide();
         }
     });
 
     $('body').on('click', '.sensor', function() {
-        mantemBullet = !mantemBullet;
-        if(mantemBullet){
-            $(this).css({color: 'gray'});
+        mantemBullet[$(this).data('device') - 1] = !mantemBullet[$(this).data('device') - 1];
+        if (mantemBullet[$(this).data('device') - 1]) {
+            $(this).css({ color: 'gray' });
         } else {
-            $(this).css({color: 'black'});
+            $(this).css({ color: 'black' });
         }
     });
 
     $('body').on('click', '.abrir-aplicacao', function() {
-        window.open("http://" + appHost + "/app?device=1"); //+ device.device_code);
+        console.log("http://" + appHost + "/app?device=" + $(this).data('device'));
+        window.open("http://" + appHost + "/app?device=" + $(this).data('device')); //+ device.device_code);
     });
 });

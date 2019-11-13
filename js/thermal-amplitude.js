@@ -60,7 +60,7 @@ function getUrlParameter(name) {
 var heatmapFetch;
 
 // Monta o Heatmap
-async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
+async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode, tipo) {
     var configHeatmap = jQuery.extend(true, {}, config);
 
     var margin = {
@@ -136,20 +136,20 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
 
     // Pega dados para o calendário
     heatmapFetch = $.ajax({
-        url: "http://178.128.15.73:9000/heatmap",
+        url: "http://127.0.0.1:9000/heatmap",
         type: "GET",
         data: {
             device: deviceCode,
-            sensorCode : sensorCode
+            sensorCode : sensorCode,
+            tipo: tipo
         }
     });
 
     data = await Promise.resolve(heatmapFetch).then(function (data) {
+        $('#spiral-chart').empty();
+        makeSpiral(device, _sensor_code, data);
         return data;
     });
-    
-    $('#spiral-chart').empty();
-    makeSpiral(device, _sensor_code, data);
     
     var heatmapChart = function (tsvFile) {
         var colorScale = d3version3.scale.quantile()
@@ -286,7 +286,6 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
                 const measure = search(sensorCode, sensorCodeObjects).measure;
 
                 var simple = new Date(Date.UTC(2018, 0, d.day + (d.week - 1) * 7));
-                console.log(simple, d.value);
                 if(d.value != null && $this.data('cycle') != ""){
                     return "Data: "+ moment(d.fullDate).format('DD/MM/YYYY') +"<br>"+name+": " + Math.round(d.value) + measure+"<br>"+ "Ciclo:"+$this.data('cycle'); 
                 } else if(d.value == null){
@@ -332,16 +331,24 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode) {
 };
 
 $(document).ready(function () {
-    generateHeatmap("#heat-map-months", configYear, true, 0, device);
+    generateHeatmap("#heat-map-months", configYear, true, 0, device, $('select[name="tipo-heatmap"]').val());
 
     $(document).on('change', ".heatmap-type", function () {
         beginSelection = '';
         endSelection = '';
         $("#heat-map-months").empty();
-        _sensor_code = $(this).val();
-        generateHeatmap("#heat-map-months", configYear, true, $(this).val(), device);
         $('#spiral-chart').empty();
-        makeSpiral(device, _sensor_code);
+        _sensor_code = $(this).val();
+        generateHeatmap("#heat-map-months", configYear, true, _sensor_code, device, $('select[name="tipo-heatmap"]').val());
+    });
+
+    $(document).on('change', 'select[name="tipo-heatmap"]', function () {
+        beginSelection = '';
+        endSelection = '';
+        $("#heat-map-months").empty();
+        _sensor_code = $('.heatmap-type').val();
+        $('#spiral-chart').empty();
+        generateHeatmap("#heat-map-months", configYear, true, _sensor_code, device, $(this).val());
     });
 
     // Ctrl + Click para selecionar dias

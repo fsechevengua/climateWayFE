@@ -49,7 +49,7 @@ async function makeSpiral(device, sensor_code, data) {
     let dataWithFullDate = spiralData.filter(obj => {
       return obj.fullDate !== '';
     });
-
+    
     const currentYear = moment(dataWithFullDate[dataWithFullDate.length -1].fullDate).format("YYYY");
 
     for (var i = 0; i < N; i++) {

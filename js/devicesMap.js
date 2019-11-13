@@ -1,7 +1,7 @@
 var map;
 var appHost = window.location.host;
 var mantemPlanta = false;
-var bulletData;
+var bulletData = [];
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -14,18 +14,42 @@ function initMap() {
 
 async function loadDevices() {
     // Busca os dados
-    const bulletPromise = $.ajax({
-        url: "http://178.128.15.73:9000/bullet",
+    const bulletPromise1 = $.ajax({
+        url: "http://127.0.0.1:9000/bullet",
         type: "GET",
         data: {
             device: 1,
         }
     });
 
-    bulletData = await Promise.resolve(bulletPromise).then(function(data) {
+    bulletData.push(await Promise.resolve(bulletPromise1).then(function(data) {
         return data;
+    }));
+
+    const bulletPromise2 = $.ajax({
+        url: "http://127.0.0.1:9000/bullet",
+        type: "GET",
+        data: {
+            device: 2,
+        }
     });
 
+    bulletData.push(await Promise.resolve(bulletPromise2).then(function(data) {
+        return data;
+    }));
+
+    const bulletPromise3 = $.ajax({
+        url: "http://127.0.0.1:9000/bullet",
+        type: "GET",
+        data: {
+            device: 3,
+        }
+    });
+
+    bulletData.push(await Promise.resolve(bulletPromise3).then(function(data) {
+        return data;
+    }));
+    console.log(bulletData);
     $.getJSON('resources/dots.json', function(devices) {
         $.each(devices, function(index, device) {
             var marker = new google.maps.Marker({
@@ -49,6 +73,10 @@ async function loadDevices() {
                     'left': 0,
                     'top': 380,
                 }).show();
+
+                $('body').on('click', '#marker-tooltip .fechar', function(){
+                    $('#marker-tooltip').hide();
+                });
 
             });
 

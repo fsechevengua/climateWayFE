@@ -124,7 +124,19 @@
 				<div class="row">
 					<div class="col-sm-6">
 						<div class="form-group">
-							<label style="color:#9d9d9d">Tipo do Heatmap:</label> <br>
+							<label style="color:#9d9d9d">Tipo de Heatmap :</label> <br>
+							<select class="form-control" name="tipo-heatmap">
+								<option value="minima">Mínima</option>
+								<option value="media" selected="selected">Média</option>
+								<option value="maxima">Máxima</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label style="color:#9d9d9d">Dado do Heatmap:</label> <br>
 							<select class="form-control heatmap-type">
 								<option value="0" selected="selected">Temperatura</option>
 								<option value="1">Pressão</option>

@@ -54,10 +54,9 @@ $(document).on('change', ".devices", function(){
     beginSelection = '';
     endSelection = '';
     $("#heat-map-months").empty();
-    device = $(this).val();
-    generateHeatmap("#heat-map-months", configYear, true, _sensor_code, device);
     $('#spiral-chart').empty();
-    makeSpiral(device, _sensor_code);
+    device = $(this).val();
+    generateHeatmap("#heat-map-months", configYear, true, _sensor_code, device, $('select[name="tipo-heatmap"]').val());
 });
 
 //Gerar gráfico em diálogo
