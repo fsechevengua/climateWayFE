@@ -3,7 +3,7 @@ async function makeSpiral(device, sensor_code, data) {
       height = 330,
       start = 0,
       end = 2.80,
-      numSpirals = 3
+      numSpirals = 3;
 
     var theta = function(r) {
       return numSpirals * Math.PI * r;
@@ -50,8 +50,7 @@ async function makeSpiral(device, sensor_code, data) {
       return obj.fullDate !== '';
     });
     
-    const currentYear = moment(dataWithFullDate[dataWithFullDate.length -1].fullDate).format("YYYY");
-
+    const currentYear = moment(dataWithFullDate[1].fullDate).format("YYYY");
     for (var i = 0; i < N; i++) {
       
       var currentDate = new Date(currentYear, 0, 1);
@@ -151,17 +150,15 @@ async function makeSpiral(device, sensor_code, data) {
     .append('div')
     .attr('class', 'tooltip');
 
-    tooltip.append('div')
-    .attr('class', 'date');
-    tooltip.append('div')
-    .attr('class', 'value');
+    tooltip.append('div').attr('class', 'date');
+    tooltip.append('div').attr('class', 'value');
 
     svg.selectAll("rect")
     .on('mouseover', function(d) {
         const date = moment(d.date).format('YYYY-MM-DD');        
 
         d3version4.select(this)
-        .style("fill","#FFFFFF")
+        //.style("fill","#FFFFFF")
         .style("stroke","#000000")
         .style("stroke-width","2px");
 
@@ -176,7 +173,7 @@ async function makeSpiral(device, sensor_code, data) {
       if(!d3version4.select("#a"+ date).classed("selected")){  
           d3version4.select(this)
           .style("fill", function(d){return color(d.group);})
-          .style("stroke", "none")
+          .style("stroke", "none");
           
           d3version4.select("#a"+ date)
           .style("stroke","#E6E6E6")

@@ -86,7 +86,6 @@ $(document).ready(function() {
     });
 
     $('body').on('click', '.abrir-aplicacao', function() {
-        console.log("http://" + appHost + "/app?device=" + $(this).data('device'));
         window.open("http://" + appHost + "/app?device=" + $(this).data('device')); //+ device.device_code);
     });
 });

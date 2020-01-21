@@ -49,7 +49,7 @@ async function loadDevices() {
     bulletData.push(await Promise.resolve(bulletPromise3).then(function(data) {
         return data;
     }));
-    console.log(bulletData);
+
     $.getJSON('resources/dots.json', function(devices) {
         $.each(devices, function(index, device) {
             var marker = new google.maps.Marker({
@@ -74,7 +74,7 @@ async function loadDevices() {
                     'top': 380,
                 }).show();
 
-                $('body').on('click', '#marker-tooltip .fechar', function(){
+                $('body').on('click', '#marker-tooltip .fechar', function() {
                     $('#marker-tooltip').hide();
                 });
 

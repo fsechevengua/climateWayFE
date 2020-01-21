@@ -2,41 +2,41 @@
 <html lang="en">
 
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="">
-	<meta name="author" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <meta charset="utf-8">
-	<link rel="icon" href="https://getbootstrap.com/docs/3.3/favicon.ico">
+    <link rel="icon" href="https://getbootstrap.com/docs/3.3/favicon.ico">
 
-	<title>Weather Workstation</title>
+    <title>Weather Workstation</title>
 
-	<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
-	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="c3-0.4.11/c3.css" rel="stylesheet" type="text/css">
-	<link href="css/weather-icons.min.css" rel="stylesheet" type="text/css">
-	<link href="css/weather-icons-wind.min.css" rel="stylesheet" type="text/css">
-	<link href="css/bootstrap-switch.min.css" rel="stylesheet">
-	<link href="css/heatmap.css" rel="stylesheet">
-	<link href="css/tipsy.css" rel="stylesheet" type="text/css" />
-	<link href="css/main.css" rel="stylesheet">
-	<link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-	<link href="css/introjs.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css">
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="c3-0.4.11/c3.css" rel="stylesheet" type="text/css">
+    <link href="css/weather-icons.min.css" rel="stylesheet" type="text/css">
+    <link href="css/weather-icons-wind.min.css" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap-switch.min.css" rel="stylesheet">
+    <link href="css/heatmap.css" rel="stylesheet">
+    <link href="css/tipsy.css" rel="stylesheet" type="text/css" />
+    <link href="css/main.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link href="css/introjs.css" rel="stylesheet">
 
-	<script src="https://code.highcharts.com/highcharts.js"></script>
-	<script src="https://code.highcharts.com/modules/windbarb.js"></script>
-	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/windbarb.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
-	<script src="js/jquery-2.2.4.min.js"></script>
-	<script src="bootstrap/js/bootstrap.min.js"></script>
-	<script src="js/intro.js/"></script>
-	<script src="js/tour.js"></script>
+    <script src="js/jquery-2.2.4.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/intro.js/"></script>
+    <script src="js/tour.js"></script>
 
-	<script data-require="d3@4.0.0" data-semver="4.0.0" src="https://d3js.org/d3.v4.js"></script>
+    <script data-require="d3@4.0.0" data-semver="4.0.0" src="https://d3js.org/d3.v4.js"></script>
 
-	<script>
+    <script>
         d3version4 = d3;
         window.d3 = null;
     </script>
@@ -46,98 +46,98 @@
         window.d3 = null;
     </script>
 
-	<script src="js/d3.tip.v0.6.3.js"></script>
-	<script src="js/jquery-dateFormat.js"></script>
-	<script src="c3-0.4.11/c3.js"></script>
-	<script src="js/gradient-progress-bar.js"></script>
+    <script src="js/d3.tip.v0.6.3.js"></script>
+    <script src="js/jquery-dateFormat.js"></script>
+    <script src="c3-0.4.11/c3.js"></script>
+    <script src="js/gradient-progress-bar.js"></script>
 
-	<script src="js/moment.js"></script>
-	<script src="bootstrap/js/transition.js"></script>
-	<script src="bootstrap/js/collapse.js"></script>
-	<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
-	<script src="js/bootstrap-switch.min.js"></script>
-	<script src="js/plotly.min.js"></script>
-	<script src="js/echarts.min.js"></script>
-	<script type="text/javascript" src="js/jquery.tipsy.js"></script>
-	<script type="text/javascript" src="js/thermal-amplitude.js"></script>
-	<script type="text/javascript" src="js/script.js"></script>
-	<script type="text/javascript" src="js/box-plot-window.js"></script>
-	<script type="text/javascript" src="js/min-max.js"></script>
-	<script type="text/javascript" src="js/heatmap.min.js"></script>
-	<script type="text/javascript" src="js/heatmap-planta.js"></script>
-	<script type="text/javascript" src="js/modernizr.js"></script>
+    <script src="js/moment.js"></script>
+    <script src="bootstrap/js/transition.js"></script>
+    <script src="bootstrap/js/collapse.js"></script>
+    <script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
+    <script src="js/bootstrap-switch.min.js"></script>
+    <script src="js/plotly.min.js"></script>
+    <script src="js/echarts.min.js"></script>
+    <script type="text/javascript" src="js/jquery.tipsy.js"></script>
+    <script type="text/javascript" src="js/thermal-amplitude.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/box-plot-window.js"></script>
+    <script type="text/javascript" src="js/min-max.js"></script>
+    <script type="text/javascript" src="js/heatmap.min.js"></script>
+    <script type="text/javascript" src="js/heatmap-planta.js"></script>
+    <script type="text/javascript" src="js/modernizr.js"></script>
 </head>
 
 <body>
-	<div class="se-pre-con"></div>
-	<div class='app'>
-		<nav class="navbar navbar-inverse navbar-fixed-top">
-			<div class="row">
-				<div class="col-sm-1" style="margin-left: 50px;">
-					<div id="main">
-						<button class="openbtn" onclick="openNav()">☰</button>  
-					</div>
-				</div>
-				<div class="col-sm-offset-4 col-sm-5">
-					<a class="navbar-brand step1" href="">Weather Workstation</a>
-				</div>
-			</div>
-			<div id="mySidebar" class="sidebar">
-				<div class="row">
-					<div class="col-sm-4">
-						<h2 style="color:#9d9d9d">Filtros</h2>
-					</div>
-					<div class="">
-						<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="form-group step8">
-							<label style="color:#9d9d9d">Conjunto de Sensores:</label>
-							<select class="form-control devices"></select>
-						</div>	
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label style="color:#9d9d9d">Tipo de Gráfico:</label>
-							<select class="form-control chart-type">
+    <div class="se-pre-con"></div>
+    <div class='app'>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="row">
+                <div class="col-sm-1" style="margin-left: 50px;">
+                    <div id="main">
+                        <button class="openbtn" onclick="openNav()">☰</button>
+                    </div>
+                </div>
+                <div class="col-sm-offset-4 col-sm-5">
+                    <a class="navbar-brand step1" href="">Weather Workstation</a>
+                </div>
+            </div>
+            <div id="mySidebar" class="sidebar">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h2 style="color:#9d9d9d">Filtros</h2>
+                    </div>
+                    <div class="">
+                        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group step8">
+                            <label style="color:#9d9d9d">Conjunto de Sensores:</label>
+                            <select class="form-control devices"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label style="color:#9d9d9d">Tipo de Gráfico:</label>
+                            <select class="form-control chart-type">
 								<option value="line" selected="selected">Line chart</option>
 								<option value="bar">Bar chart</option>
 							</select>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-8">
-						<div class="form-group">
-							<label style="color:#9d9d9d">Propriedades:</label> <br>
-							<button type="button" class="btn btn-default show-media active">Média</button>
-							<button type="button" class="btn btn-default show-min-max active">Mínimo - Máximo</button>
-							<button class="btn btn-primary clear-drag-area">Clear</button>
-						</div>	
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label style="color:#9d9d9d">Tipo de Heatmap :</label> <br>
-							<select class="form-control" name="tipo-heatmap">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <label style="color:#9d9d9d">Propriedades:</label> <br>
+                            <button type="button" class="btn btn-default show-media active">Média</button>
+                            <button type="button" class="btn btn-default show-min-max active">Mínimo - Máximo</button>
+                            <button class="btn btn-primary clear-drag-area">Clear</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label style="color:#9d9d9d">Tipo de Heatmap :</label> <br>
+                            <select class="form-control" name="tipo-heatmap">
 								<option value="minima">Mínima</option>
 								<option value="media" selected="selected">Média</option>
 								<option value="maxima">Máxima</option>
 							</select>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label style="color:#9d9d9d">Dado do Heatmap:</label> <br>
-							<select class="form-control heatmap-type">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label style="color:#9d9d9d">Dado do Heatmap:</label> <br>
+                            <select class="form-control heatmap-type">
 								<option value="0" selected="selected">Temperatura</option>
 								<option value="1">Pressão</option>
 								<option value="2">Umidade</option>
@@ -151,355 +151,353 @@
 								<option value="6">CO</option>
 								<option value="9">Estatísticas</option>
 							</select>
-						</div>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-6">
-						<div class="form-group">
-							<label style="color:#9d9d9d">Funcionalidades:</label> <br>
-							<button class="btn btn-primary modal-filtro">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label style="color:#9d9d9d">Funcionalidades:</label> <br>
+                            <button class="btn btn-primary modal-filtro">
 								<i class="glyphicon glyphicon-filter"></i>
 							</button>
-							<button class="btn btn-primary modal-min-max">
+                            <button class="btn btn-primary modal-min-max">
 								<i class="glyphicon glyphicon-plus"></i>
 								<span>Min Max</span>
 							</button>
-						</div>
-					</div>
-				</div>
-				<button class="btn btn-primary planta">
-					<span>Planta Baixa</span>
-				</button>
-			</div>
-			<script>
-				function openNav() {
-				document.getElementById("mySidebar").style.width = "450px";
-				document.getElementById("main").style.marginLeft = "450px";
-				}
-				
-				function closeNav() {
-				document.getElementById("mySidebar").style.width = "0";
-				document.getElementById("main").style.marginLeft= "0";
-				}
-			</script>
-		</nav>
-		<div class='weather-app'>
-			<div class="row" style="display:none;">
-				<div class="col-sm-4">
-				</div>
-				<div class="col-sm-1">
-					<div class="form-group">
-						<select class="form-control" id="selectdatemode">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function openNav() {
+                    document.getElementById("mySidebar").style.width = "450px";
+                    document.getElementById("main").style.marginLeft = "450px";
+                }
+
+                function closeNav() {
+                    document.getElementById("mySidebar").style.width = "0";
+                    document.getElementById("main").style.marginLeft = "0";
+                }
+            </script>
+        </nav>
+        <div class='weather-app'>
+            <div class="row" style="display:none;">
+                <div class="col-sm-4">
+                </div>
+                <div class="col-sm-1">
+                    <div class="form-group">
+                        <select class="form-control" id="selectdatemode">
 						<option value="DD/MM/YYYY">Dia</option>
 						<option value="MM/YYYY">Mês</option>
 						<option value="YYYY">Ano</option>
 					</select>
-					</div>
-				</div>
-				<div class="col-sm-2">
-					<div class="form-group">
-						<div class="input-group date" id="datetimepicker1">
-							<input type="text" class="form-control" />
-							<span class="input-group-addon">
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <div class="input-group date" id="datetimepicker1">
+                            <input type="text" class="form-control" />
+                            <span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row text-center">
-				
-			</div>
-			
-			<div class="row">
-				<div class="col-sm-4" style="margin-left: 1%;">
-					<div id="heat-map-months"></div>
-					<div class="row">
-						<div class="col-sm-offset-1 col-sm-6">
-							<div class="form-group">
-								<label style="color:#9d9d9d">Data Selecionada:</label>
-								<input id="data-hoje" type="text" class="form-control" disabled value="">
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-offset-4 col-sm-2">
-					<div id="spiral-chart">
-						
-					</div>
-					<script type="text/javascript" src="js/spiral.js"></script>
-				</div>
-			</div>
-			<div class="row data-bar">
-				<table class="table table-bordered grid-charts step2" data-intro=''>
-					<tbody>
-						<tr>
-							<td id="grid0" data-sensor="0" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell step4">
-								<div class="location-font">Temperatura</div>
-								<div id="minicharttest0" class="step3" style="height:200px; width:200px"></div>
-							</td>
-							<td id="grid1" data-sensor="1" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Pressao Atmosférica</div>
-								<div id="minicharttest1" style="height:200px; width:200px"></div>
-							</td>
-							<td id="grid2" data-sensor="2" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Umidade relativa do ar</div>
-								<div id="minicharttest2" style="height:200px; width:200px"></div>
-							</td>
-							
-							<td id="grid3" data-sensor="3" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Vento</div>
-								<!--<div style="">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center">
+
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4" style="margin-left: 1%;">
+                    <div id="heat-map-months"></div>
+                    <div class="row">
+                        <div class="col-sm-offset-1 col-sm-6">
+                            <div class="form-group">
+                                <label style="color:#9d9d9d">Data Selecionada:</label>
+                                <input id="data-hoje" type="text" class="form-control" disabled value="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-offset-4 col-sm-2">
+                    <div id="spiral-chart">
+
+                    </div>
+                    <script type="text/javascript" src="js/spiral.js"></script>
+                </div>
+            </div>
+            <div class="row data-bar">
+                <table class="table table-bordered grid-charts step2" data-intro=''>
+                    <tbody>
+                        <tr>
+                            <td id="grid0" data-sensor="0" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell step4" data-name="Temperatura">
+                                <div class="location-font">Temperatura</div>
+                                <div id="minicharttest0" class="step3" style="height:200px; width:200px"></div>
+                            </td>
+                            <td id="grid1" data-sensor="1" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell" data-name="Pressao Atmosférica">
+                                <div class="location-font">Pressao Atmosférica</div>
+                                <div id="minicharttest1" style="height:200px; width:200px"></div>
+                            </td>
+                            <td id="grid2" data-sensor="2" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell" data-name="Umidade relativa do ar">
+                                <div class="location-font">Umidade relativa do ar</div>
+                                <div id="minicharttest2" style="height:200px; width:200px"></div>
+                            </td>
+
+                            <td id="grid3" data-sensor="3" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell" data-name="Vento">
+                                <div class="location-font">Vento</div>
+                                <!--<div style="">
 									<i class="wind-icon wi wi-wind towards-90-deg"></i>
 								</div>-->
-								<div id="minicharttest3" class="minichartWindCO2" style="height:200px; width:200px"></div>
-							</td>
-							<td id="grid4" data-sensor="4" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Luminosidade</div>
-								<div id="minicharttest4" style="height:200px; width:200px"></div>
-							</td>
-							<td id="grid5" data-sensor="5" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Concentração de CO2</div>
-								<div id="minicharttest5" class="minichartWindCO2" style="height:200px; width:200px"></div>
-							</td>
-							<td id="grid6" data-sensor="6" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Concentração de SO2</div>
-								<div id="minicharttest6" style="height:200px; width:200px"></div>
-							</td>
-							<td id="grid9" data-sensor="9" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell">
-								<div class="location-font">Número de Aves Mortas</div>
-								<div id="minicharttest7" style="height:200px; width:200px"></div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div id="testando"></div>
-			<div class="row">
-				<div class="chart-area step5">
-					<div id="timeSeriesArea5" ondrop="drop(event)" ondragover="allowDrop(event)" class="drag-text">
-						<span>Drag Here to generate chart</span>
-					</div>
-				</div>
-				<!-- Modal dos Filtros -->	
-				<div class="modal fade" id="filtro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h3 class="modal-title" id="exampleModalLabel">Filter</h3>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <div id="minicharttest3" class="minichartWindCO2" style="height:200px; width:200px"></div>
+                            </td>
+                            <td id="grid4" data-sensor="4" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell" data-name="Luminosidade">
+                                <div class="location-font">Luminosidade</div>
+                                <div id="minicharttest4" style="height:200px; width:200px"></div>
+                            </td>
+                            <td id="grid5" data-sensor="5" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell" data-name="Concentração de CO2">
+                                <div class="location-font">Concentração de CO2</div>
+                                <div id="minicharttest5" class="minichartWindCO2" style="height:200px; width:200px"></div>
+                            </td>
+                            <div class="location-font">Concentração de SO2</div>
+                            <td id="grid6" data-sensor="6" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell" data-name="Concentração de SO2">
+                                <div class="location-font">Concentração de SO2</div>
+                                <div id="minicharttest6" style="height:200px; width:200px"></div>
+                            </td>
+                            <td id="grid9" data-sensor="9" draggable="true" ondragstart="drag(event)" class="center-chart weather-cell" data-name="Número de Aves Mortas">
+                                <div class="location-font">Número de Aves Mortas</div>
+                                <div id="minicharttest7" style="height:200px; width:200px"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="testando"></div>
+            <div class="row">
+                <div class="chart-area step5">
+                    <div id="timeSeriesArea5" ondrop="drop(event)" ondragover="allowDrop(event)" class="drag-text">
+                        <span>Drag Here to generate chart</span>
+                    </div>
+                </div>
+                <!-- Modal dos Filtros -->
+                <div class="modal fade" id="filtro" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title" id="exampleModalLabel">Filter</h3>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 								</button>
-							</div>
-							<div class="modal-body">
-								<div class="form-filtro">
-									<div class="row">
-										<!--<div class="col-sm-2">-->
-											<!--<select name="tipo-dado[]" class="form-control input-sm tipo-dado">-->
-											<!--	<option selected="">Value</option>-->
-											<!--	<option>Date</option>-->
-										<!--	</select>-->
-										<!--</div>-->
-										<div class="col-sm-1">
-											<button type="button" class="btn btn-primary adicionar-form-filtro">
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-filtro">
+                                    <div class="row">
+                                        <!--<div class="col-sm-2">-->
+                                        <!--<select name="tipo-dado[]" class="form-control input-sm tipo-dado">-->
+                                        <!--	<option selected="">Value</option>-->
+                                        <!--	<option>Date</option>-->
+                                        <!--	</select>-->
+                                        <!--</div>-->
+                                        <div class="col-sm-1">
+                                            <button type="button" class="btn btn-primary adicionar-form-filtro">
 												<i class="glyphicon glyphicon-plus"></i>
 											</button>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-								<button type="button" data-loading-text="Applying..." autocomplete="off" class="btn btn-primary apply-filter">Apply filter</button>
-							</div>
-						</div>
-					</div>
-				</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" data-loading-text="Applying..." autocomplete="off" class="btn btn-primary apply-filter">Apply filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-				<!--Modal do box-plot-->
-				<div id="box-plot-modal" class="modal fade">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								 <h4 class="modal-title">Boxplot</h4>  
-							</div>
-							<div class="modal-body">
-								<ul class='nav nav-tabs'>
-								</ul>
-								<div class='tab-content'>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-							</div>
-						</div>
-					</div>
-				</div>
+                <!--Modal do box-plot-->
+                <div id="box-plot-modal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Boxplot</h4>
+                            </div>
+                            <div class="modal-body">
+                                <ul class='nav nav-tabs'>
+                                </ul>
+                                <div class='tab-content'>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-				<!--Modal de cadastro mínimos e máximos-->
-				<div id="min-max" class="modal fade">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								 <h4 class="modal-title">Minimum and Maximum</h4>  
-							</div>
-							<div class="modal-body">
-								<div class="form-min-max">
-									<div class="row min-max-item">
-										<div class="col-sm-4">
-											<label> Temperatura: </label>
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm temperatura" name="min" placeholder="Min">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm temperatura" name="normal" placeholder="Normal">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm temperatura" name="max" placeholder="Max">
-										</div>
-									</div>
-									<div class="row min-max-item">
-										<div class="col-sm-4">
-											<label> Pressão: </label>
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm pressao" name="min" placeholder="Min">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm pressao" name="normal" placeholder="Normal">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm pressao" name="max" placeholder="Max">
-										</div>
-									</div>
-									<div class="row min-max-item">
-										<div class="col-sm-4">
-											<label> Umidade relativa do ar: </label>
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm umidade" name="min" placeholder="Min">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm umidade" name="normal" placeholder="Normal">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm umidade" name="max" placeholder="Max">
-										</div>
-									</div>
-									<div class="row min-max-item">
-										<div class="col-sm-4">
-											<label> Vento: </label>
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm vento" name="min" placeholder="Min">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm vento" name="normal" placeholder="Normal">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm vento" name="max" placeholder="Max">
-										</div>
-									</div>
-									<div class="row min-max-item">
-										<div class="col-sm-4">
-											<label> Luminosidade: </label>
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm luminosidade" name="min" placeholder="Min">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm luminosidade" name="normal" placeholder="Normal">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm luminosidade" name="max" placeholder="Max">
-										</div>
-									</div>
-									<div class="row min-max-item">
-										<div class="col-sm-4">
-											<label> CO2: </label>
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm co2" name="min" placeholder="Min">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm co2" name="normal" placeholder="Normal">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm co2" name="max" placeholder="Max">
-										</div>
-									</div>
-									<div class="row min-max-item">
-										<div class="col-sm-4">
-											<label> SO2: </label>
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm so2" name="min" placeholder="Min">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm so2" name="normal" placeholder="Normal">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm so2" name="max" placeholder="Max">
-										</div>
-									</div>
-									<div class="row min-max-item">
-										<div class="col-sm-4">
-											<label> Número de aves mortas: </label>
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm num_aves_mortas" name="min" placeholder="Min">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm num_aves_mortas" name="normal" placeholder="Normal">
-										</div>
-										<div class="col-sm-2">
-											<input type="text" class="form-control input-sm num_aves_mortas" name="max" placeholder="Max">
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-								<button id="save-min-max" type="button" class="btn btn-primary">Save</button>
-							</div>
-						</div>
-					</div>
-				</div>
-					
-				<!--Modal do box-plot-->
-				<div id="planta-modal" class="modal fade">
-					<div class="modal-dialog modal-lg">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h4 class="modal-title">Planta Baixa</h4>  
-							</div>
-							<div class="modal-body text-center">
-								<div class="wrapper">
-									<div class="planta-heatmap" style="height:600px; width:800px;">
-										<img src="images/PLANTA_TERREO.jpg" height="600" width="800" alt="Planta Baixa">
-									</div>
-									<div class="tooltip-planta"></div>
-									<div class="legend-area">
-										<h4>Legend Title</h4>
-										<span id="min"></span>
-										<span id="max"></span>
-										<img id="gradient" src="" style="width:100%">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+                <!--Modal de cadastro mínimos e máximos-->
+                <div id="min-max" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Minimum and Maximum</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-min-max">
+                                    <div class="row min-max-item">
+                                        <div class="col-sm-4">
+                                            <label> Temperatura: </label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm temperatura" name="min" placeholder="Min">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm temperatura" name="normal" placeholder="Normal">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm temperatura" name="max" placeholder="Max">
+                                        </div>
+                                    </div>
+                                    <div class="row min-max-item">
+                                        <div class="col-sm-4">
+                                            <label> Pressão: </label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm pressao" name="min" placeholder="Min">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm pressao" name="normal" placeholder="Normal">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm pressao" name="max" placeholder="Max">
+                                        </div>
+                                    </div>
+                                    <div class="row min-max-item">
+                                        <div class="col-sm-4">
+                                            <label> Umidade relativa do ar: </label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm umidade" name="min" placeholder="Min">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm umidade" name="normal" placeholder="Normal">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm umidade" name="max" placeholder="Max">
+                                        </div>
+                                    </div>
+                                    <div class="row min-max-item">
+                                        <div class="col-sm-4">
+                                            <label> Vento: </label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm vento" name="min" placeholder="Min">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm vento" name="normal" placeholder="Normal">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm vento" name="max" placeholder="Max">
+                                        </div>
+                                    </div>
+                                    <div class="row min-max-item">
+                                        <div class="col-sm-4">
+                                            <label> Luminosidade: </label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm luminosidade" name="min" placeholder="Min">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm luminosidade" name="normal" placeholder="Normal">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm luminosidade" name="max" placeholder="Max">
+                                        </div>
+                                    </div>
+                                    <div class="row min-max-item">
+                                        <div class="col-sm-4">
+                                            <label> CO2: </label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm co2" name="min" placeholder="Min">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm co2" name="normal" placeholder="Normal">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm co2" name="max" placeholder="Max">
+                                        </div>
+                                    </div>
+                                    <div class="row min-max-item">
+                                        <div class="col-sm-4">
+                                            <label> SO2: </label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm so2" name="min" placeholder="Min">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm so2" name="normal" placeholder="Normal">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm so2" name="max" placeholder="Max">
+                                        </div>
+                                    </div>
+                                    <div class="row min-max-item">
+                                        <div class="col-sm-4">
+                                            <label> Número de aves mortas: </label>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm num_aves_mortas" name="min" placeholder="Min">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm num_aves_mortas" name="normal" placeholder="Normal">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control input-sm num_aves_mortas" name="max" placeholder="Max">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button id="save-min-max" type="button" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-			</div>
-		</div>
-	</div>
+                <!--Modal do box-plot-->
+                <div id="planta-modal" class="modal fade">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Planta Baixa</h4>
+                            </div>
+                            <div class="modal-body text-center">
+                                <div class="wrapper">
+                                    <div class="planta-heatmap" style="height:600px; width:800px;">
+                                        <img src="images/PLANTA_TERREO.jpg" height="600" width="800" alt="Planta Baixa">
+                                    </div>
+                                    <div class="tooltip-planta"></div>
+                                    <div class="legend-area">
+                                        <h4>Legend Title</h4>
+                                        <span id="min"></span>
+                                        <span id="max"></span>
+                                        <img id="gradient" src="" style="width:100%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    </div>
 </body>
 
 </html>

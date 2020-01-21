@@ -1,6 +1,6 @@
-$(document).ready(function () {
-    $('.thermal-amplitude').click(function (e) {
-        $('.weather-app').load("/view/thermal-amplitude.html", function () {
+$(document).ready(function() {
+    $('.thermal-amplitude').click(function(e) {
+        $('.weather-app').load("/view/thermal-amplitude.html", function() {
             generateStepChart();
             //$.getScript("js/heatmap.js", function () {
             //    alert("Script loaded but not necessarily executed.");
@@ -35,7 +35,7 @@ $(document).ready(function () {
                     Frio: 'area-step'
                 },
                 colors: {
-                    'data': function (d) {
+                    'data': function(d) {
                         return d.value < 150 ? '#f44242' : '#62f441';
                     }
                 }
@@ -49,7 +49,7 @@ $(document).ready(function () {
         });
     }
 
-    $("#datestepchart").on("dp.change", function (e) {
+    $("#datestepchart").on("dp.change", function(e) {
         e.preventDefault();
         alert("oi");
     });
@@ -63,7 +63,7 @@ $(document).ready(function () {
             }
         });
 
-        var weatherDataPromise = Promise.resolve(weatherDataCall).then(function (data) {
+        var weatherDataPromise = Promise.resolve(weatherDataCall).then(function(data) {
 
         });
     }

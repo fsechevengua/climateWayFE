@@ -1,11 +1,11 @@
-function loadMinMax(){
+function loadMinMax() {
     const getMinMaxCall = $.ajax({
         url: "http://178.128.15.73:9000/min-max",
         type: "get"
     });
-    
-    Promise.resolve(getMinMaxCall).then(function (data) {
-        data.forEach(function (elem, index) {
+
+    Promise.resolve(getMinMaxCall).then(function(data) {
+        data.forEach(function(elem, index) {
             $('input.' + elem.minMaxTipo + '[name="min"]').val(elem.min)
             $('input.' + elem.minMaxTipo + '[name="normal"]').val(elem.normal)
             $('input.' + elem.minMaxTipo + '[name="max"]').val(elem.max)
@@ -14,16 +14,16 @@ function loadMinMax(){
     });
 }
 
-$(document).on('click', ".modal-min-max", function () {
+$(document).on('click', ".modal-min-max", function() {
     loadMinMax();
 });
 
-$(document).on('click', ".adicionar-form-min-max", function () {
-    $.get("min-max.html", function(data){
+$(document).on('click', ".adicionar-form-min-max", function() {
+    $.get("min-max.html", function(data) {
         $(".form-min-max").append(data);
     });
 });
 
-$(document).on('click', ".remover-form-min-max", function () {
-   $(this).parent().parent().remove();
+$(document).on('click', ".remover-form-min-max", function() {
+    $(this).parent().parent().remove();
 });
