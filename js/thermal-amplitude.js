@@ -139,7 +139,7 @@ async function generateHeatmap(id, config, isMonths, sensorCode, deviceCode, tip
 
     // Pega dados para o calendário
     heatmapFetch = $.ajax({
-        url: "http://127.0.0.1:9000/heatmap",
+        url: "http://178.128.15.73:9000/heatmap",
         type: "GET",
         data: {
             device: deviceCode,

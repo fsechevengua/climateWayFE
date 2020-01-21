@@ -15,7 +15,7 @@ function initMap() {
 async function loadDevices() {
     // Busca os dados
     const bulletPromise1 = $.ajax({
-        url: "http://127.0.0.1:9000/bullet",
+        url: "http://178.128.15.73:9000/bullet",
         type: "GET",
         data: {
             device: 1,
@@ -27,7 +27,7 @@ async function loadDevices() {
     }));
 
     const bulletPromise2 = $.ajax({
-        url: "http://127.0.0.1:9000/bullet",
+        url: "http://178.128.15.73:9000/bullet",
         type: "GET",
         data: {
             device: 2,
@@ -39,7 +39,7 @@ async function loadDevices() {
     }));
 
     const bulletPromise3 = $.ajax({
-        url: "http://127.0.0.1:9000/bullet",
+        url: "http://178.128.15.73:9000/bullet",
         type: "GET",
         data: {
             device: 3,
