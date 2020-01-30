@@ -71,7 +71,7 @@ async function loadDevices() {
 
                 $('#marker-tooltip').html($div.innerHTML).css({
                     'left': 0,
-                    'top': 380,
+                    'top': 180,
                 }).show();
 
                 $('body').on('click', '#marker-tooltip .fechar', function() {

@@ -21,7 +21,7 @@ $(document).ready(function() {
 
         $('.bullet-tooltip[data-device="' + $(this).data('device') + '"]').css({
             position: 'absolute',
-            bottom: (position.top - 552) + 'px',
+            bottom: (position.top - 352) + 'px',
             left: (position.left - 190) + 'px',
         }).show();
 
