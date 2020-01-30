@@ -2,7 +2,7 @@ var appHost = window.location.host;
 var dataX = [];
 var weatherDate = "2018-11-01";
 var weatherCache;
-var sensorOrder = [0, 1, 2, 3, 4, 5, 6, 9];
+var sensorOrder = [0, 5, 1, 2, 10, 10, 10, 10];
 var sensorOrderNames = ['temperatura', 'pressao', 'umidade', 'vento', 'luminosidade', 'co2', 'so2', 'num_aves_mortas'];
 var device = getUrlParameter('device');
 var _sensor_code = 0;
@@ -52,6 +52,7 @@ $(document).on('change', ".devices", function() {
     $("#heat-map-months").empty();
     $('#spiral-chart').empty();
     device = $(this).val();
+    console.log($('select[name="tipo-heatmap"]').val());
     generateHeatmap("#heat-map-months", configYear, true, _sensor_code, device, $('select[name="tipo-heatmap"]').val());
 });
 
@@ -661,7 +662,7 @@ function makeWeatherData(dateParam) {
                             }
                         },
                         data: [{
-                            value: getWeatherDataFromResult(weatherCache.payload, sensorOrder[4])[1],
+                            value: getWeatherDataFromResult(weatherCache.payload, 3)[1],
                             name: ''
                         }]
                     };
@@ -851,6 +852,7 @@ function generateCanvasChart(data, date, type) {
     });
 
     for (let i = 0; i < data.length; i++) {
+        console.log(data[i]);
         dataElements.push({
             name: _ordemNomes[i],
             type: type,
